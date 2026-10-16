@@ -158,11 +158,12 @@ try{
     if(role==='OWNER'){
       for(const [width,height] of [[375,844],[390,844],[430,844],[375,667]]){
         await tab.call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:true,screenWidth:width,screenHeight:height});
-        const sheet=await tab.evaluate(`(()=>{const dialog=document.querySelector('#socleMobileMoreDialog'),rect=dialog.getBoundingClientRect(),close=dialog.querySelector('[data-mobile-menu-close]').getBoundingClientRect(),groups=dialog.querySelector('.socle-mobile-menu-groups'),style=getComputedStyle(dialog);return{open:dialog.open,ratio:rect.height/innerHeight,top:rect.top,bottomGap:innerHeight-rect.bottom,radius:parseFloat(style.borderTopLeftRadius)||0,closeWidth:close.width,closeHeight:close.height,scrollClient:groups.clientHeight,scrollHeight:groups.scrollHeight}})()`,'plus-sheet:'+width+'x'+height);
+        await tab.evaluate(`(async()=>{window.dispatchEvent(new Event('resize'));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));return true})()`,'plus-sheet-viewport-ready:'+width+'x'+height);
+        const sheet=await tab.evaluate(`(()=>{const dialog=document.querySelector('#socleMobileMoreDialog'),rect=dialog.getBoundingClientRect(),close=dialog.querySelector('[data-mobile-menu-close]').getBoundingClientRect(),groups=dialog.querySelector('.socle-mobile-menu-groups'),style=getComputedStyle(dialog),viewport=window.visualViewport;return{open:dialog.open,ratio:rect.height/(viewport?.height||innerHeight),top:rect.top,bottomGap:(viewport?.offsetTop||0)+(viewport?.height||innerHeight)-rect.bottom,viewportTop:viewport?.offsetTop||0,radius:parseFloat(style.borderTopLeftRadius)||0,closeWidth:close.width,closeHeight:close.height,scrollClient:groups.clientHeight,scrollHeight:groups.scrollHeight}})()`,'plus-sheet:'+width+'x'+height);
         console.log('PLUS_SHEET_'+width+'x'+height+'='+JSON.stringify(sheet));
         assert.equal(sheet.open,true,'Le panneau reste ouvert au format '+width+'x'+height);
         assert.ok(sheet.ratio>=0.89&&sheet.ratio<=0.95,'Le panneau occupe environ 90–95 % de la hauteur (tolérance sous-pixel) '+width+'x'+height);
-        assert.ok(sheet.top>0&&sheet.top<=height*.12,'Le panneau commence près du haut '+width+'x'+height);
+        assert.ok(sheet.top>sheet.viewportTop&&sheet.top<=sheet.viewportTop+height*.12,'Le panneau commence près du haut visible '+width+'x'+height);
         assert.ok(Math.abs(sheet.bottomGap)<=2,'Le panneau reste ancré en bas '+width+'x'+height);
         assert.ok(sheet.radius>=12,'Les coins supérieurs restent arrondis '+width+'x'+height);
         assert.ok(sheet.closeWidth>=44&&sheet.closeHeight>=44,'Le bouton X reste accessible '+width+'x'+height);
