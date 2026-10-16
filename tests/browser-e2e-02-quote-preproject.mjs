@@ -31,7 +31,9 @@ try{
     }
     await e2e02EnsureCustomers();
     globalThis.e2e02BrowserCustomerId=customer.id;
-    return {customerId:customer.id,jobsCount:jobs.length,jobsSnapshot:JSON.stringify(jobs)};
+    const beforeRender=JSON.stringify(jobs);
+    ensureBlankRecords(); // Initialize legacy records before measuring quote side effects.
+    return {customerId:customer.id,jobsCount:jobs.length,jobsSnapshot:JSON.stringify(jobs),beforeRender};
   })()`,'e2e02-setup');
   assert.ok(setup.customerId);
 
@@ -126,6 +128,13 @@ try{
   assert.equal(created.quote.customerId,setup.customerId,'customer canonique');
   assert.equal(created.quote.client,'Client E2E-02 Browser','libellé canonique');
   assert.equal(created.jobsCount,setup.jobsCount,'aucun chantier local créé');
+  function snapshotChanges(before,after,path='$'){
+    if(Object.is(before,after))return [];
+    if(before&&after&&typeof before==='object'&&typeof after==='object')return [...new Set([...Object.keys(before),...Object.keys(after)])].flatMap(key=>snapshotChanges(before[key],after[key],path+'.'+key));
+    return [{path,before:before===undefined?'[undefined]':before,after:after===undefined?'[undefined]':after}];
+  }
+  console.log('PREQUOTE_NORMALIZATION_DIFF='+JSON.stringify(snapshotChanges(JSON.parse(setup.beforeRender),JSON.parse(setup.jobsSnapshot))));
+  console.log('JOBS_SNAPSHOT_DIFF='+JSON.stringify(snapshotChanges(JSON.parse(setup.jobsSnapshot),JSON.parse(created.jobsSnapshot))));
   assert.equal(created.jobsSnapshot,setup.jobsSnapshot,'liste chantiers inchangée');
 
   await tab.evaluate(`iaCUpdateQuoteStatus(${JSON.stringify(created.quote.id)},'Accepté')`,'e2e02-accept');
