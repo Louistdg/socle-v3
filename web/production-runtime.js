@@ -1,0 +1,3 @@
+globalThis.SOCLE_PRODUCTION=true;globalThis.SOCLE_BLANK=true;
+const productionFetch=globalThis.fetch;globalThis.fetch=async function(...args){const response=await productionFetch(...args);if(response.status===401&&new URL(typeof args[0]==='string'?args[0]:args[0].url,location.href).origin===location.origin)location.replace('/login');return response;};
+document.addEventListener('DOMContentLoaded',()=>{const host=document.querySelector('.header-right');if(!host)return;const form=document.createElement('form');form.method='post';form.action='/auth/logout';const button=document.createElement('button');button.textContent='Se déconnecter';button.className='btn';form.append(button);host.append(form);});

@@ -1,0 +1,31 @@
+import fs from 'node:fs/promises';
+import esbuild from 'esbuild';
+
+await esbuild.build({entryPoints:['scripts/stock-zxing-entry.js'],bundle:true,minify:true,format:'iife',target:'es2020',legalComments:'inline',outfile:'web/stock-zxing.js'});
+await esbuild.build({entryPoints:['scripts/pdfjs-entry.js'],bundle:true,minify:true,format:'iife',target:'es2022',legalComments:'inline',outfile:'web/pdfjs.js'});
+await esbuild.build({entryPoints:['scripts/roofing-metre-entry.js'],bundle:true,minify:true,format:'iife',target:'es2020',legalComments:'inline',outfile:'web/roofing-metre.js'});
+await fs.copyFile('node_modules/pdfjs-dist/build/pdf.worker.min.mjs','web/pdfjs-worker.mjs');
+await fs.copyFile('node_modules/tesseract.js/dist/tesseract.min.js','web/tesseract.js');
+await fs.copyFile('node_modules/tesseract.js/dist/worker.min.js','web/tesseract-worker.js');
+await fs.copyFile('node_modules/tesseract.js-core/tesseract-core-lstm.wasm.js','web/tesseract-core-lstm.wasm.js');
+await fs.mkdir('web/tessdata',{recursive:true});
+await fs.copyFile('node_modules/@tesseract.js-data/fra/4.0.0_best_int/fra.traineddata.gz','web/tessdata/fra.traineddata.gz');
+
+const names=['v3-themes.js','v3-themes.css','v3-money.js','v3.js','v3.css','index.html','style.css','organization.css','planning.css','ia-a-ui.css','ui-foundation.css','stock-catalog-v2.css','stock-barcode.css','profile-avatar.css','mobile-nav.css','quote-roofing-metre.css','document-triage.css','app.js','cockpit.js','admin.js','business.js','refinement.js','permissions.js','organization.js','archives.js','realistic-demo.js','workflow-improvements.js','server-modules.js','field-workflows.js','quick-intervention.js','production-runtime.js','free-entry.js','contacts.js','quote-preproject.js','workspace-config.js','blank-workspace.js','partners.js','onboarding.js','procurement.js','local-test-auth.js','field-server.js','planning.js','documents-server.js','quote-visit-capture.js','supplier-allocations.js','supplier-invoice-pdf.js','document-triage.js','tesseract.js','tesseract-worker.js','tesseract-core-lstm.wasm.js','pdfjs.js','pdfjs-worker.mjs','project-hub.js','field-portal.js','ia-a-ui.js','ui-foundation.js','stock-catalog-v2.js','stock-zxing.js','stock-barcode.js','delivery-scans.js','invite-activation.js','navigation-registry.js','profile-avatar.js','mobile-nav.js','roofing-metre.js','quote-roofing-metre.js'];
+const files={};
+for(const name of names){
+  const extension=name.slice(name.lastIndexOf('.'));
+  const type=extension==='.html'?'text/html;charset=utf-8':extension==='.css'?'text/css;charset=utf-8':'application/javascript;charset=utf-8';
+  files['/'+name]={body:(await fs.readFile('web/'+name,'utf8')).replace(/\r\n/g,'\n'),type};
+}
+files['/tessdata/fra.traineddata.gz']={body:(await fs.readFile('web/tessdata/fra.traineddata.gz')).toString('base64'),type:'application/gzip',encoding:'base64'};
+await fs.rm('dist',{recursive:true,force:true});
+await fs.mkdir('dist/server',{recursive:true});
+await fs.mkdir('dist/.openai',{recursive:true});
+await fs.writeFile('dist/server/index.js','const FILES='+JSON.stringify(files)+';\n'+(await fs.readFile('worker/index.js','utf8')).replace(/\r\n/g,'\n'));
+await fs.copyFile('worker/project-financial-revenue.js','dist/server/project-financial-revenue.js');
+await fs.copyFile('worker/delivery-scans.js','dist/server/delivery-scans.js');
+await fs.copyFile('worker/batinova-invitation-roster.js','dist/server/batinova-invitation-roster.js');
+await fs.copyFile('worker/time-entry-monthly.js','dist/server/time-entry-monthly.js');
+await fs.copyFile('.openai/hosting.json','dist/.openai/hosting.json');
+console.log('Worker and interface built.');

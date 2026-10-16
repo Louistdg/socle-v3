@@ -1,0 +1,19 @@
+# Local simulation data; the immutable snapshot remains inside reference/.
+/node_modules/
+data/
+tests/
+!tests/
+tests/*
+!tests/time-entry-monthly-20261012.mjs
+!tests/time-entry-monthly-ui-20261012.mjs
+!tests/document-triage-20261012.mjs
+reports/
+private/
+.env
+.env.*
+data/*.sqlite
+data/*.sqlite-*
+tests/artifacts/
+
+private/
+reports/

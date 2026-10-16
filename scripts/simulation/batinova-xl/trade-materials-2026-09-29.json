@@ -1,0 +1,1390 @@
+{
+  "schemaVersion": 1,
+  "catalogCode": "BATXL-TRADE-MATERIALS-BE-2026-09-29",
+  "frozenAt": "2026-09-29",
+  "country": "BE",
+  "currency": "EUR",
+  "purpose": "Calibration métier déterministe pour BatiNova XL / Script 3. Les désignations et compositions reflètent les usages belges; les prix sont des repères publics ou tarifs bruts observés, jamais des remises professionnelles inventées.",
+  "pricingPolicy": {
+    "runtimeNetworkAccess": false,
+    "professionalDiscountsInvented": false,
+    "preferredSourceOrder": [
+      "tarif brut distributeur spécialisé HTVA",
+      "tarif marchand belge HTVA",
+      "prix public belge TTC",
+      "valeur dérivée explicitement documentée"
+    ],
+    "rules": [
+      "Conserver priceBasis et taxBasis sur chaque article.",
+      "Une valeur dérivée doit porter derived=true et sa formule.",
+      "Une hypothèse de pose doit porter designAssumption=true.",
+      "Ne jamais convertir automatiquement un prix public TTC en prix d'achat professionnel.",
+      "Ne jamais remplacer une donnée manquante par un prix arbitraire: utiliser requiresQuote=true.",
+      "Les métrés par m² ne doivent pas absorber les éléments linéaires: faîtages, rives, noues, gouttières, descentes et solins restent calculés depuis la géométrie du chantier."
+    ]
+  },
+  "sources": {
+    "cupa_overlap": {
+      "authority": "CUPA PIZARRAS Belgique",
+      "subject": "recouvrement, pureau, quantité ardoises et liteaux",
+      "url": "https://www.cupapizarras.com/be-fr/actualite/comment-calculer-le-recouvement-des-ardoises-naturelles/"
+    },
+    "cupa_hooks": {
+      "authority": "CUPA PIZARRAS Belgique",
+      "subject": "crochets d'ardoises",
+      "url": "https://www.cupapizarras.com/be-fr/actualite/comment-choisir-les-crochets-pour-ardoises-naturelles/"
+    },
+    "toitmat_slate": {
+      "authority": "Toitmat",
+      "subject": "ardoises naturelles CUPA / Gruesa",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/toiture-en-pente/ardoises-naturelles"
+    },
+    "toitmat_hooks": {
+      "authority": "Toitmat",
+      "subject": "crochets d'ardoises",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/toiture-en-pente/ardoises-naturelles/crochets-et-pointes"
+    },
+    "bouwkampioen_timber": {
+      "authority": "Bouwkampioen",
+      "subject": "liteaux et contre-lattes bois traité",
+      "priceBasis": "prix HTVA affiché",
+      "url": "https://www.bouwkampioen.be/fr/bois/bois-de-construction/lattes-de-toit"
+    },
+    "toitmat_sarking": {
+      "authority": "Toitmat",
+      "subject": "Unilin Utherm Sarking",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/isolation/isolation-pir/unilin"
+    },
+    "bouwkampioen_sarking_screws": {
+      "authority": "Bouwkampioen",
+      "subject": "vis sarking",
+      "priceBasis": "prix HTVA affiché",
+      "url": "https://www.bouwkampioen.be/fr/isolation/isolation-toiture/sarking"
+    },
+    "fakro_underlay": {
+      "authority": "Gamma Belgique / Fakro",
+      "subject": "sous-toiture Eurotop N35",
+      "priceBasis": "prix public affiché",
+      "url": "https://www.gamma.be/fr/assortiment/ecran-de-sous-toiture-fakro-eurotop-n35-1-5x25-m/p/B183825"
+    },
+    "wienerberger_alegra": {
+      "authority": "Wienerberger Belgique",
+      "subject": "Alegra 10 TE caractéristiques de pose",
+      "url": "https://www.wienerberger.be/fr/produits/toiture/tuiles-en-terre-cuite/alegra-10-te.html"
+    },
+    "toitmat_tiles": {
+      "authority": "Toitmat",
+      "subject": "Alegra 10 TE et accessoires",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/toiture-en-pente/tuiles"
+    },
+    "toitmat_ridge": {
+      "authority": "Toitmat",
+      "subject": "closoirs ventilés faîtage/arêtier",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/toiture-en-pente/accessoires-de-toiture/closoirs"
+    },
+    "toitmat_zinc": {
+      "authority": "Toitmat",
+      "subject": "zinc feuilles, gouttières et accessoires",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/zinc-cuivre-plomb-et-alu/zinc"
+    },
+    "toitmat_epdm": {
+      "authority": "Toitmat",
+      "subject": "Elevate EPDM et accessoires",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/toiture-plate/epdm/elevate"
+    },
+    "gamma_osb": {
+      "authority": "Gamma Belgique",
+      "subject": "OSB3 18 mm rainuré-languetté",
+      "priceBasis": "prix public TTC affiché",
+      "url": "https://www.gamma.be/fr/assortiment/osb-3-rainure-et-languette-244x59-cm-18mm/p/B5768"
+    },
+    "bouwkampioen_blocks": {
+      "authority": "Bouwkampioen",
+      "subject": "blocs béton et blocs terre cuite",
+      "priceBasis": "prix HTVA affiché",
+      "url": "https://www.bouwkampioen.be/fr/gros-oeuvre/blocs"
+    },
+    "gamma_mortar": {
+      "authority": "Gamma Belgique",
+      "subject": "mortier de maçonnerie prêt à l'emploi 25 kg",
+      "priceBasis": "prix public TTC affiché",
+      "url": "https://www.gamma.be/fr/assortiment/mortier-de-maconnerie-25-kg/p/B141489"
+    },
+    "bouwkampioen_murfor": {
+      "authority": "Bouwkampioen",
+      "subject": "Murfor Compact",
+      "priceBasis": "prix HTVA affiché",
+      "url": "https://www.bouwkampioen.be/fr/murfor-compact-i-100-30m"
+    },
+    "bouwkampioen_ties": {
+      "authority": "Bouwkampioen",
+      "subject": "crochets / attaches de mur",
+      "priceBasis": "prix HTVA affiché",
+      "url": "https://www.bouwkampioen.be/fr/gros-oeuvre/accessoires-maconnerie/crochets-de-mur"
+    },
+    "vandemoortel_ties": {
+      "authority": "Vandersanden / documentation technique maçonnerie",
+      "subject": "densité indicative des crochets de mur selon exposition",
+      "url": "https://www.vandersanden.com/fr-be/conseils-et-inspiration/conseils-techniques"
+    },
+    "knauf_cavity": {
+      "authority": "Knauf Insulation Belgique",
+      "subject": "fixation isolation mur creux",
+      "url": "https://www.knaufinsulation.be/fr"
+    },
+    "bouwkampioen_wall_pir": {
+      "authority": "Bouwkampioen",
+      "subject": "Unilin Utherm Wall L",
+      "priceBasis": "prix HTVA affiché",
+      "url": "https://www.bouwkampioen.be/fr/isolation/mur-creux/panneaux-pir"
+    },
+    "toitmat_cedral": {
+      "authority": "Toitmat",
+      "subject": "Cedral Board et accessoires",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/bardage/cedral"
+    },
+    "bouwkampioen_dpc": {
+      "authority": "Bouwkampioen",
+      "subject": "folies DPC",
+      "priceBasis": "prix HTVA affiché",
+      "url": "https://www.bouwkampioen.be/nl/bouwmaterialen/vochtwering/folies/dpc.html"
+    },
+    "gamma_concrete": {
+      "authority": "Gamma Belgique",
+      "subject": "béton mortier prêt à l'emploi C20/25 25 kg",
+      "priceBasis": "prix public TTC affiché",
+      "url": "https://www.gamma.be/nl/assortiment/gamma-betonmortel-25-kg/p/B239895"
+    },
+    "bouwkampioen_rebar": {
+      "authority": "Bouwkampioen",
+      "subject": "barre d'armature torsadée Ø8 mm × 6 m",
+      "priceBasis": "prix HTVA affiché",
+      "url": "https://www.bouwkampioen.be/fr/barre-de-beton-8-mm-x-6-m.html"
+    },
+    "bouwkampioen_timber_current": {
+      "authority": "Bouwkampioen",
+      "subject": "bois de construction, liteaux et panneaux OSB",
+      "priceBasis": "prix HTVA affiché",
+      "url": "https://www.bouwkampioen.be/fr/materiaux-de-construction/bois/poutres-lattes-et-planches.html"
+    },
+    "bouwkampioen_osb": {
+      "authority": "Bouwkampioen",
+      "subject": "OSB3 18 mm rainuré-languetté 244×59,5 cm",
+      "priceBasis": "prix HTVA affiché",
+      "url": "https://www.bouwkampioen.be/nl/bouwmaterialen/hout.html"
+    },
+    "toitmat_internal_insulation": {
+      "authority": "Toitmat",
+      "subject": "laine minérale Isover Isoconfort 32",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/isolation/laine-minerale/toit-incline/isover/isoconfort-32"
+    },
+    "toitmat_air_tightness": {
+      "authority": "Toitmat",
+      "subject": "frein-vapeur Pro Clima Intello Plus",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/toiture/sous-toiture"
+    },
+    "toitmat_flatroof_pir": {
+      "authority": "Toitmat",
+      "subject": "Recticel Euroroof PIR toiture plate",
+      "priceBasis": "tarif brut HTVA affiché",
+      "url": "https://www.toitmat.be/fr/isolation/panneaux-polyurethene-pir-pur/recticel"
+    }
+  },
+  "items": [
+    {
+      "id": "BATXL-MAT-SLATE-CUPA10-3222",
+      "family": "ardoises",
+      "trade": "couverture",
+      "designation": "Ardoise naturelle CUPA 10 Excellence 32×22 cm",
+      "unit": "piece",
+      "price": {
+        "value": 1.92121,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_slate",
+      "notes": "Tarif 1 921,21 €/1000 pièces."
+    },
+    {
+      "id": "BATXL-MAT-SLATE-GRUESA-3222",
+      "family": "ardoises",
+      "trade": "couverture",
+      "designation": "Ardoise naturelle Gruesa 32×22 cm — qualité ardoisier",
+      "unit": "piece",
+      "price": {
+        "value": 1.65167,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_slate",
+      "notes": "Alternative réaliste; ne pas substituer automatiquement à CUPA."
+    },
+    {
+      "id": "BATXL-MAT-HOOK-430-110",
+      "family": "fixations_toiture",
+      "trade": "couverture",
+      "designation": "Crochet ardoise inox AISI 430 110×2,70 mm clair",
+      "unit": "box_700",
+      "price": {
+        "value": 55.26,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_hooks"
+    },
+    {
+      "id": "BATXL-MAT-HOOK-A2-110",
+      "family": "fixations_toiture",
+      "trade": "couverture",
+      "designation": "Crochet ardoise inox A2 110×2,70 mm clair",
+      "unit": "box_700",
+      "price": {
+        "value": 84.28,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_hooks"
+    },
+    {
+      "id": "BATXL-MAT-NAIL-A2-30",
+      "family": "fixations_toiture",
+      "trade": "couverture",
+      "designation": "Pointe inox A2 30×2,70 mm pour ardoise",
+      "unit": "box_5kg",
+      "price": {
+        "value": 71.42,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_hooks"
+    },
+    {
+      "id": "BATXL-MAT-LATH-2436",
+      "family": "bois_toiture",
+      "trade": "charpente_couverture",
+      "designation": "Liteau bois traité ~24×36 mm",
+      "unit": "linear_meter",
+      "price": {
+        "value": 0.5475,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "derived_from_piece"
+      },
+      "source": "bouwkampioen_timber_current",
+      "derived": true,
+      "derivation": "2,19 € HTVA / pièce de 4,00 m = 0,5475 €/ml",
+      "notes": "Produit observé: latte imprégnée env. 23×36/24×36 mm, longueur 4 m. Le dimensionnement réel reste celui du chantier."
+    },
+    {
+      "id": "BATXL-MAT-COUNTERLATH-2436",
+      "family": "bois_toiture",
+      "trade": "charpente_couverture",
+      "designation": "Contre-latte bois traité ~24×36 mm",
+      "unit": "linear_meter",
+      "price": {
+        "value": 0.5475,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "derived_from_piece"
+      },
+      "source": "bouwkampioen_timber_current",
+      "derived": true,
+      "derivation": "2,19 € HTVA / pièce de 4,00 m = 0,5475 €/ml",
+      "notes": "Produit observé: latte imprégnée env. 23×36/24×36 mm, longueur 4 m. Le dimensionnement réel reste celui du chantier."
+    },
+    {
+      "id": "BATXL-MAT-UNDERLAY-N35",
+      "family": "membranes",
+      "trade": "couverture",
+      "designation": "Écran de sous-toiture respirant Fakro Eurotop N35 1,5×25 m",
+      "unit": "square_meter",
+      "price": {
+        "value": 1.5,
+        "taxBasis": "RETAIL_DISPLAYED",
+        "priceBasis": "prix_public"
+      },
+      "source": "fakro_underlay",
+      "notes": "Rouleau 37,5 m² à 56,09 € observé; prix unitaire calculé.",
+      "derived": true
+    },
+    {
+      "id": "BATXL-MAT-SARKING-K-120",
+      "family": "isolation",
+      "trade": "isolation_toiture",
+      "designation": "PIR Unilin Utherm Sarking K 120 mm — R≈5,45",
+      "unit": "square_meter",
+      "price": {
+        "value": 25.49,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_sarking"
+    },
+    {
+      "id": "BATXL-MAT-SARKING-LPLUS-120",
+      "family": "isolation",
+      "trade": "isolation_toiture",
+      "designation": "PIR Unilin Utherm Sarking L Plus 120 mm avec écran supérieur intégré",
+      "unit": "square_meter",
+      "price": {
+        "value": 33.75,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_sarking",
+      "notes": "Éviter de compter une sous-toiture séparée si l'assemblage retenu exploite l'écran intégré conformément au système."
+    },
+    {
+      "id": "BATXL-MAT-SARKING-SCREW-220",
+      "family": "fixations_isolation",
+      "trade": "isolation_toiture",
+      "designation": "Vis de sarking 220 mm",
+      "unit": "box_50",
+      "price": {
+        "value": 67.98,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "prix_marchand"
+      },
+      "source": "bouwkampioen_sarking_screws"
+    },
+    {
+      "id": "BATXL-MAT-SARKING-SCREW-240",
+      "family": "fixations_isolation",
+      "trade": "isolation_toiture",
+      "designation": "Vis de sarking 240 mm",
+      "unit": "box_50",
+      "price": {
+        "value": 77.02,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "prix_marchand"
+      },
+      "source": "bouwkampioen_sarking_screws"
+    },
+    {
+      "id": "BATXL-MAT-TILE-ALEGRA10TE-703",
+      "family": "tuiles",
+      "trade": "couverture",
+      "designation": "Tuile terre cuite Wienerberger Alegra 10 TE Ardoisé 703",
+      "unit": "piece",
+      "price": {
+        "value": 2.711,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_tiles",
+      "notes": "Tarif 2 711 €/1000 pièces."
+    },
+    {
+      "id": "BATXL-MAT-TILE-VENT-ALEGRA10TE",
+      "family": "tuiles_accessoires",
+      "trade": "couverture",
+      "designation": "Tuile de ventilation Alegra 10 TE Ardoisé",
+      "unit": "piece",
+      "price": {
+        "value": 41.72,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_tiles"
+    },
+    {
+      "id": "BATXL-MAT-TILE-VERGE-ALEGRA10TE",
+      "family": "tuiles_accessoires",
+      "trade": "couverture",
+      "designation": "Tuile de rive Alegra 10 TE Ardoisé",
+      "unit": "piece",
+      "price": {
+        "value": 17.4,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_tiles"
+    },
+    {
+      "id": "BATXL-MAT-RIDGE-VARIO-225",
+      "family": "tuiles_accessoires",
+      "trade": "couverture",
+      "designation": "Faîtière/arêtier demi-rond Vario 225",
+      "unit": "piece",
+      "price": {
+        "value": 17.88,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_tiles"
+    },
+    {
+      "id": "BATXL-MAT-RIDGE-ROLL-320",
+      "family": "ventilation_toiture",
+      "trade": "couverture",
+      "designation": "Closoir ventilé souple faîtage/arêtier 320 mm",
+      "unit": "linear_meter",
+      "price": {
+        "value": 8.51,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_ridge"
+    },
+    {
+      "id": "BATXL-MAT-ZINC-SHEET-08",
+      "family": "zinc",
+      "trade": "zinguerie",
+      "designation": "Feuille zinc naturel 0,80 mm — 2250×1000 mm — 12,96 kg",
+      "unit": "sheet_2.25m2",
+      "price": {
+        "value": 73.872,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "derived_from_kg_price"
+      },
+      "source": "toitmat_zinc",
+      "derived": true,
+      "derivation": "5,700 €/kg × 12,96 kg"
+    },
+    {
+      "id": "BATXL-MAT-ZINC-VMZ-SHEET-08",
+      "family": "zinc",
+      "trade": "zinguerie",
+      "designation": "Feuille VMZINC naturel 0,80 mm — 2250×1000 mm — 12,96 kg",
+      "unit": "sheet_2.25m2",
+      "price": {
+        "value": 77.92848,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "derived_from_kg_price"
+      },
+      "source": "toitmat_zinc",
+      "derived": true,
+      "derivation": "6,013 €/kg × 12,96 kg"
+    },
+    {
+      "id": "BATXL-MAT-GUTTER-ZINC-333",
+      "family": "evacuation_eaux",
+      "trade": "zinguerie",
+      "designation": "Gouttière zinc naturel demi-ronde 333 mm — 0,80 mm",
+      "unit": "linear_meter",
+      "price": {
+        "value": 13.84,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_zinc"
+    },
+    {
+      "id": "BATXL-MAT-GUTTER-ZINC-360",
+      "family": "evacuation_eaux",
+      "trade": "zinguerie",
+      "designation": "Gouttière zinc naturel demi-ronde 360 mm — 0,80 mm",
+      "unit": "linear_meter",
+      "price": {
+        "value": 15.24,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_zinc"
+    },
+    {
+      "id": "BATXL-MAT-ZINC-ELBOW-8080-72",
+      "family": "evacuation_eaux",
+      "trade": "zinguerie",
+      "designation": "Coude zinc naturel 80×80 mm — 72°",
+      "unit": "piece",
+      "price": {
+        "value": 7.29,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_zinc"
+    },
+    {
+      "id": "BATXL-MAT-ZINC-OUTLET-76100",
+      "family": "evacuation_eaux",
+      "trade": "zinguerie",
+      "designation": "Moignon / naissance zinc 76/100",
+      "unit": "piece",
+      "price": {
+        "value": 2.34,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_zinc"
+    },
+    {
+      "id": "BATXL-MAT-EPDM-ELEVATE-11",
+      "family": "etancheite",
+      "trade": "toiture_plate",
+      "designation": "Membrane Elevate EPDM 1,10 mm",
+      "unit": "square_meter",
+      "price": {
+        "value": 22.29,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_epdm"
+    },
+    {
+      "id": "BATXL-MAT-EPDM-ADHESIVE-10",
+      "family": "colles_etancheite",
+      "trade": "toiture_plate",
+      "designation": "Elevate Bonding Adhesive BA-2012 — 10 L",
+      "unit": "pot_10l",
+      "price": {
+        "value": 206.82,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_epdm",
+      "coverage": "2,35–3,0 m² de surface par litre au rouleau selon support et méthode; collage sur les deux faces."
+    },
+    {
+      "id": "BATXL-MAT-EPDM-PRIMER-38",
+      "family": "primaires_etancheite",
+      "trade": "toiture_plate",
+      "designation": "Elevate QuickPrime Plus — 3,8 L",
+      "unit": "pot_3.8l",
+      "price": {
+        "value": 94.38,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_epdm"
+    },
+    {
+      "id": "BATXL-MAT-EPDM-SAFLASH-150",
+      "family": "bandes_etancheite",
+      "trade": "toiture_plate",
+      "designation": "Elevate SA Flashing 150 mm",
+      "unit": "linear_meter",
+      "price": {
+        "value": 15.06,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_epdm"
+    },
+    {
+      "id": "BATXL-MAT-EPDM-SPLICE-76",
+      "family": "bandes_etancheite",
+      "trade": "toiture_plate",
+      "designation": "Elevate Splice Tape 76,2 mm",
+      "unit": "linear_meter",
+      "price": {
+        "value": 4.64,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_epdm"
+    },
+    {
+      "id": "BATXL-MAT-EPDM-DRAIN-75",
+      "family": "evacuation_toiture_plate",
+      "trade": "toiture_plate",
+      "designation": "Naissance/évacuation PE Ø75 avec bavette EPDM auto-adhésive",
+      "unit": "piece",
+      "price": {
+        "value": 60.81,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_epdm"
+    },
+    {
+      "id": "BATXL-MAT-OSB3-18",
+      "family": "panneaux",
+      "trade": "charpente_toiture_plate",
+      "designation": "OSB3 rainuré-languetté 2440×595×18 mm",
+      "unit": "square_meter",
+      "price": {
+        "value": 8.5136,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "derived_from_panel"
+      },
+      "source": "bouwkampioen_osb",
+      "derived": true,
+      "derivation": "12,36 € HTVA / (2,44 × 0,595 = 1,4518 m²) ≈ 8,51 €/m²",
+      "notes": "Prix marchand belge observé; remplace le benchmark retail Gamma dans le BOM principal."
+    },
+    {
+      "id": "BATXL-MAT-BLOCK-HOLLOW-391419",
+      "family": "blocs",
+      "trade": "maconnerie",
+      "designation": "Bloc béton creux BENOR 39×14×19 cm",
+      "unit": "piece",
+      "price": {
+        "value": 1.34,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "prix_marchand"
+      },
+      "source": "bouwkampioen_blocks"
+    },
+    {
+      "id": "BATXL-MAT-BLOCK-SOLID-391419",
+      "family": "blocs",
+      "trade": "maconnerie",
+      "designation": "Bloc béton plein 39×14×19 cm",
+      "unit": "piece",
+      "price": {
+        "value": 1.57,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "prix_marchand"
+      },
+      "source": "bouwkampioen_blocks"
+    },
+    {
+      "id": "BATXL-MAT-FASTBUILD-291914",
+      "family": "blocs_terre_cuite",
+      "trade": "maconnerie",
+      "designation": "Bloc terre cuite type fast-build 29×19×14 cm",
+      "unit": "piece",
+      "price": {
+        "value": 1.35,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "prix_marchand"
+      },
+      "source": "bouwkampioen_blocks"
+    },
+    {
+      "id": "BATXL-MAT-FACING-RIJNFORM",
+      "family": "briques_parement",
+      "trade": "maconnerie",
+      "designation": "Brique de parement format Rijnvorm ~178×83×48 mm",
+      "unit": "piece",
+      "price": {
+        "value": 0.61,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "prix_marchand"
+      },
+      "source": "bouwkampioen_blocks",
+      "notes": "Exemple calibré sur une brique de parement Wienerberger/Tongerse Rijnvorm; la teinte/référence du chantier reste spécifique."
+    },
+    {
+      "id": "BATXL-MAT-MORTAR-25",
+      "family": "mortiers",
+      "trade": "maconnerie",
+      "designation": "Mortier de maçonnerie prêt à l'emploi M5 — sac 25 kg",
+      "unit": "bag_25kg",
+      "price": {
+        "value": 5.39,
+        "taxBasis": "RETAIL_DISPLAYED",
+        "priceBasis": "prix_public"
+      },
+      "source": "gamma_mortar"
+    },
+    {
+      "id": "BATXL-MAT-MURFOR-I100",
+      "family": "armatures_maconnerie",
+      "trade": "maconnerie",
+      "designation": "Bekaert Murfor Compact I-100 — rouleau 30 m",
+      "unit": "roll_30m",
+      "price": {
+        "value": 31.18,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "prix_marchand"
+      },
+      "source": "bouwkampioen_murfor",
+      "notes": "À utiliser seulement si le plan/les règles structurelles l'exigent; pas sur chaque mur par défaut."
+    },
+    {
+      "id": "BATXL-MAT-WALLTIE-260",
+      "family": "crochets_mur",
+      "trade": "maconnerie",
+      "designation": "Crochet/attache de mur 260×4 mm",
+      "unit": "piece",
+      "price": {
+        "value": 0.19,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "prix_marchand"
+      },
+      "source": "bouwkampioen_ties"
+    },
+    {
+      "id": "BATXL-MAT-WALL-PIR-120",
+      "family": "isolation_mur",
+      "trade": "maconnerie_isolation",
+      "designation": "PIR Unilin Utherm Wall L 120 mm",
+      "unit": "square_meter",
+      "price": {
+        "value": 21.28125,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "derived_from_pack"
+      },
+      "source": "bouwkampioen_wall_pir",
+      "derived": true,
+      "derivation": "61,29 € HTVA / 2,88 m²"
+    },
+    {
+      "id": "BATXL-MAT-DPC-150",
+      "family": "etancheite_mur",
+      "trade": "maconnerie",
+      "designation": "Bande DPC / coupure capillaire 150 mm",
+      "unit": "linear_meter",
+      "requiresQuote": false,
+      "notes": "Bande DPC 150 mm; quantité basée sur les longueurs de coupure capillaire et baies, pas sur les m² de mur.",
+      "price": {
+        "value": 0.1736667,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "derived_from_roll"
+      },
+      "source": "bouwkampioen_dpc",
+      "derived": true,
+      "derivation": "5,21 € HTVA / rouleau 30 m = 0,1737 €/ml"
+    },
+    {
+      "id": "BATXL-MAT-CEDRAL-BOARD-9",
+      "family": "bardage",
+      "trade": "bardage",
+      "designation": "Cedral Board fibres-ciment 9 mm — 3050×1220 mm",
+      "unit": "square_meter",
+      "price": {
+        "value": 69.15,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_cedral"
+    },
+    {
+      "id": "BATXL-MAT-CEDRAL-SCREW-A4",
+      "family": "fixations_bardage",
+      "trade": "bardage",
+      "designation": "Vis façade Cedral inox A4 4,8×38 mm",
+      "unit": "box_100",
+      "price": {
+        "value": 36.62,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_cedral"
+    },
+    {
+      "id": "BATXL-MAT-CEDRAL-EDGE-200",
+      "family": "finitions_bardage",
+      "trade": "bardage",
+      "designation": "Bande de rive/fascia Cedral 200×2500 mm",
+      "unit": "piece",
+      "price": {
+        "value": 36.33,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_cedral"
+    },
+    {
+      "id": "BATXL-MAT-CONCRETE-C2025-25",
+      "family": "betons",
+      "trade": "maconnerie",
+      "designation": "Béton mortier prêt à l'emploi C20/25 — sac 25 kg",
+      "unit": "bag_25kg",
+      "price": {
+        "value": 5.39,
+        "taxBasis": "RETAIL_DISPLAYED",
+        "priceBasis": "prix_public"
+      },
+      "source": "gamma_concrete",
+      "yieldLitersPerKg": 0.53,
+      "yieldLitersPerBag": 13.25,
+      "notes": "Réservé aux petites reprises, scellements et petits ouvrages. Pour volumes significatifs, utiliser béton prêt à l'emploi livré et devis fournisseur."
+    },
+    {
+      "id": "BATXL-MAT-REBAR-08-6M",
+      "family": "armatures_beton",
+      "trade": "maconnerie",
+      "designation": "Barre d'armature torsadée Ø8 mm × 6 m",
+      "unit": "bar_6m",
+      "price": {
+        "value": 5.6,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "prix_marchand"
+      },
+      "source": "bouwkampioen_rebar"
+    },
+    {
+      "id": "BATXL-MAT-SLATEBOARD-23100",
+      "family": "bois_toiture",
+      "trade": "charpente_couverture",
+      "designation": "Planche/volige imprégnée ~23×100 mm — 4 m",
+      "unit": "linear_meter",
+      "price": {
+        "value": 1.28,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "derived_from_piece"
+      },
+      "source": "bouwkampioen_timber_current",
+      "derived": true,
+      "derivation": "5,12 € HTVA / 4 m = 1,28 €/ml",
+      "notes": "Utilisable pour planche de rive, support local ou volige selon détail; pas substitut structurel automatique."
+    },
+    {
+      "id": "BATXL-MAT-INTELLO-PLUS",
+      "family": "etancheite_air",
+      "trade": "isolation_toiture",
+      "designation": "Frein-vapeur hygrovariable Pro Clima Intello Plus",
+      "unit": "square_meter",
+      "price": {
+        "value": 4.12,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_air_tightness"
+    },
+    {
+      "id": "BATXL-MAT-ISOCONFORT32-220",
+      "family": "isolation",
+      "trade": "isolation_toiture",
+      "designation": "Laine minérale Isover Isoconfort 32 — 220 mm — R≈6,85",
+      "unit": "square_meter",
+      "price": {
+        "value": 29.2,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_internal_insulation"
+    },
+    {
+      "id": "BATXL-MAT-EUROROOF-120",
+      "family": "isolation_toiture_plate",
+      "trade": "toiture_plate",
+      "designation": "PIR Recticel Euroroof 120 mm rainuré-languetté — R≈5,45",
+      "unit": "square_meter",
+      "price": {
+        "value": 26.57,
+        "taxBasis": "EX_VAT",
+        "priceBasis": "tarif_brut_distributeur"
+      },
+      "source": "toitmat_flatroof_pir"
+    }
+  ],
+  "assemblies": [
+    {
+      "code": "BATXL-ASM-ROOF-SLATE-3222",
+      "trade": "couverture",
+      "title": "Toiture inclinée — ardoise naturelle 32×22 sur sous-toiture",
+      "quantityBasis": "per_square_meter_roof_slope",
+      "technicalSource": [
+        "cupa_overlap",
+        "cupa_hooks"
+      ],
+      "assumptions": {
+        "referenceOverlapMm": 92,
+        "referenceGaugeMm": 114,
+        "slateCountPerM2": 39.3,
+        "battenLmPerM2": 8.77,
+        "hookLengthRule": "longueur du crochet = recouvrement + 3 mm, arrondie au cm supérieur selon CUPA; la longueur finale dépend du chantier",
+        "wastePercent": 5,
+        "counterBattenRafterSpacingM": 0.6,
+        "counterBattenSpacingIsDesignAssumption": true
+      },
+      "components": [
+        {
+          "itemId": "BATXL-MAT-SLATE-CUPA10-3222",
+          "quantity": 41.265,
+          "unit": "piece",
+          "derived": true,
+          "derivation": "39,3 × 1,05"
+        },
+        {
+          "itemId": "BATXL-MAT-HOOK-430-110",
+          "quantity": 41.265,
+          "unit": "hook",
+          "derived": true,
+          "derivation": "1 crochet/ardoise × pertes; convertir en boîtes de 700",
+          "selectionNote": "Valider longueur exacte à partir du recouvrement réel; 110 mm est une référence de stock, pas une règle universelle."
+        },
+        {
+          "itemId": "BATXL-MAT-LATH-2436",
+          "quantity": 9.2085,
+          "unit": "linear_meter",
+          "derived": true,
+          "derivation": "8,77 lm/m² × 1,05"
+        },
+        {
+          "itemId": "BATXL-MAT-COUNTERLATH-2436",
+          "quantity": 1.75,
+          "unit": "linear_meter",
+          "derived": true,
+          "designAssumption": true,
+          "derivation": "1 / 0,60 m d'entraxe × 1,05"
+        },
+        {
+          "itemId": "BATXL-MAT-UNDERLAY-N35",
+          "quantity": 1.1,
+          "unit": "square_meter",
+          "derived": true,
+          "designAssumption": true,
+          "derivation": "1,00 m² utile + 10% recouvrements/chutes"
+        }
+      ],
+      "geometryDrivenExtras": [
+        "faîtage/arêtiers",
+        "rives",
+        "noues",
+        "solins/abergements",
+        "gouttières",
+        "descentes EP",
+        "ventilation",
+        "échafaudage et protections collectives"
+      ]
+    },
+    {
+      "code": "BATXL-ASM-ROOF-SLATE-SARKING120",
+      "trade": "couverture_isolation",
+      "title": "Toiture ardoise naturelle 32×22 + sarking PIR 120 mm",
+      "inherits": "BATXL-ASM-ROOF-SLATE-3222",
+      "componentsAdd": [
+        {
+          "itemId": "BATXL-MAT-SARKING-K-120",
+          "quantity": 1.05,
+          "unit": "square_meter",
+          "derived": true,
+          "derivation": "surface × 1,05 pour chutes"
+        },
+        {
+          "itemId": "BATXL-MAT-SARKING-SCREW-240",
+          "quantityFormula": "layout_engineering",
+          "unit": "piece",
+          "designAssumption": true,
+          "notes": "Quantité et longueur à déterminer d'après épaisseur, contre-latte, support, pente et schéma de fixation; ne pas convertir arbitrairement en quantité/m²."
+        }
+      ],
+      "alternativeSystem": {
+        "itemId": "BATXL-MAT-SARKING-LPLUS-120",
+        "rule": "Si Utherm Sarking L Plus avec écran intégré est retenu, ne pas compter automatiquement une sous-toiture séparée; appliquer le système du fabricant."
+      }
+    },
+    {
+      "code": "BATXL-ASM-ROOF-TILE-ALEGRA10TE",
+      "trade": "couverture",
+      "title": "Toiture inclinée — tuile terre cuite Alegra 10 TE",
+      "quantityBasis": "per_square_meter_roof_slope",
+      "technicalSource": [
+        "wienerberger_alegra"
+      ],
+      "assumptions": {
+        "manufacturerRangeTilesPerM2": "11,60–11,80",
+        "manufacturerLathingMm": "333–370",
+        "simulationReferenceTilesPerM2": 11.7,
+        "wastePercent": 5,
+        "counterBattenRafterSpacingM": 0.6
+      },
+      "components": [
+        {
+          "itemId": "BATXL-MAT-TILE-ALEGRA10TE-703",
+          "quantity": 12.285,
+          "unit": "piece",
+          "derived": true,
+          "derivation": "11,70 × 1,05"
+        },
+        {
+          "itemId": "BATXL-MAT-LATH-2436",
+          "quantityFormula": "(1/gauge_m) × 1.05",
+          "unit": "linear_meter",
+          "notes": "Utiliser le pureau réel dans la plage fabricant 333–370 mm."
+        },
+        {
+          "itemId": "BATXL-MAT-COUNTERLATH-2436",
+          "quantity": 1.75,
+          "unit": "linear_meter",
+          "derived": true,
+          "designAssumption": true,
+          "derivation": "1 / 0,60 × 1,05"
+        },
+        {
+          "itemId": "BATXL-MAT-UNDERLAY-N35",
+          "quantity": 1.1,
+          "unit": "square_meter",
+          "derived": true,
+          "designAssumption": true
+        }
+      ],
+      "linearExtras": [
+        {
+          "itemId": "BATXL-MAT-RIDGE-VARIO-225",
+          "quantityPerLm": 3.05,
+          "unit": "piece",
+          "derived": true,
+          "derivation": "milieu de la plage fabricant 3–3,1 pièces/ml"
+        },
+        {
+          "itemId": "BATXL-MAT-RIDGE-ROLL-320",
+          "quantityPerLm": 1.05,
+          "unit": "linear_meter",
+          "derived": true,
+          "derivation": "5% de recouvrement/chute"
+        },
+        {
+          "itemId": "BATXL-MAT-TILE-VERGE-ALEGRA10TE",
+          "quantityPerLm": 2.7,
+          "unit": "piece",
+          "notes": "À appliquer uniquement aux rives utilisant la tuile de rive correspondante."
+        }
+      ]
+    },
+    {
+      "code": "BATXL-ASM-ROOF-FLAT-EPDM-WARM",
+      "trade": "toiture_plate",
+      "title": "Toiture plate chaude — support OSB + PIR + EPDM",
+      "quantityBasis": "per_square_meter_roof",
+      "components": [
+        {
+          "itemId": "BATXL-MAT-OSB3-18",
+          "quantity": 1.05,
+          "unit": "square_meter",
+          "derived": true,
+          "designAssumption": true,
+          "derivation": "surface +5% chutes"
+        },
+        {
+          "itemId": "BATXL-MAT-EUROROOF-120",
+          "quantity": 1.05,
+          "unit": "square_meter",
+          "derived": true,
+          "derivation": "surface ×1,05 pour coupes/chutes"
+        },
+        {
+          "itemId": "BATXL-MAT-EPDM-ELEVATE-11",
+          "quantity": 1.1,
+          "unit": "square_meter",
+          "derived": true,
+          "designAssumption": true,
+          "derivation": "surface +10% relevés/chutes; recalculer avec dimensions réelles du rouleau"
+        },
+        {
+          "itemId": "BATXL-MAT-EPDM-ADHESIVE-10",
+          "quantity": 0.374,
+          "unit": "liter",
+          "derived": true,
+          "derivation": "1 / 2,675 m²/L, milieu de la plage fabricant 2,35–3,0; recalculer selon support et méthode"
+        }
+      ],
+      "systemSpecific": [
+        {
+          "designation": "Pare-vapeur",
+          "quantityFormula": "surface + recouvrements + relevés",
+          "requiresTechnicalSelection": true
+        },
+        {
+          "itemId": "BATXL-MAT-EPDM-PRIMER-38",
+          "quantityFormula": "joints_et_details"
+        },
+        {
+          "itemId": "BATXL-MAT-EPDM-SAFLASH-150",
+          "quantityFormula": "releves_solins_details_linear_m"
+        },
+        {
+          "itemId": "BATXL-MAT-EPDM-SPLICE-76",
+          "quantityFormula": "joints_linear_m"
+        },
+        {
+          "itemId": "BATXL-MAT-EPDM-DRAIN-75",
+          "quantityFormula": "nombre_evacuations"
+        }
+      ],
+      "geometryDrivenExtras": [
+        "costières",
+        "relevés",
+        "couvertines",
+        "sorties de toiture",
+        "trop-pleins",
+        "évacuations",
+        "raccords muraux"
+      ]
+    },
+    {
+      "code": "BATXL-ASM-ZINC-GUTTER-333",
+      "trade": "zinguerie",
+      "title": "Gouttière pendante zinc demi-ronde 333",
+      "quantityBasis": "per_finished_linear_meter",
+      "components": [
+        {
+          "itemId": "BATXL-MAT-GUTTER-ZINC-333",
+          "quantity": 1.05,
+          "unit": "linear_meter",
+          "derived": true,
+          "designAssumption": true,
+          "derivation": "1,00 ml fini +5% pertes/coupes"
+        },
+        {
+          "designation": "Crochet de gouttière compatible",
+          "quantity": 2.5,
+          "unit": "piece",
+          "designAssumption": true,
+          "requiresQuote": true,
+          "derivation": "hypothèse d'entraxe 0,40 m; recalculer selon support, section et prescription fabricant"
+        }
+      ],
+      "perRunExtras": [
+        {
+          "designation": "Fond de gouttière",
+          "quantityFormula": "selon extrémités",
+          "requiresQuote": true
+        },
+        {
+          "itemId": "BATXL-MAT-ZINC-OUTLET-76100",
+          "quantityFormula": "selon nombre de descentes"
+        },
+        {
+          "designation": "Descente zinc 80×80",
+          "quantityFormula": "hauteur utile + emboîtements",
+          "requiresQuote": true
+        },
+        {
+          "itemId": "BATXL-MAT-ZINC-ELBOW-8080-72",
+          "quantityFormula": "selon dévoiements"
+        },
+        {
+          "designation": "Colliers de descente",
+          "quantityFormula": "selon hauteur et support",
+          "requiresQuote": true
+        }
+      ]
+    },
+    {
+      "code": "BATXL-ASM-MASONRY-BLOCK14",
+      "trade": "maconnerie",
+      "title": "Maçonnerie bloc béton creux 14 cm",
+      "quantityBasis": "per_square_meter_wall",
+      "components": [
+        {
+          "itemId": "BATXL-MAT-BLOCK-HOLLOW-391419",
+          "quantity": 13.65,
+          "unit": "piece",
+          "derived": true,
+          "derivation": "13 blocs/m² × 1,05 pertes"
+        },
+        {
+          "itemId": "BATXL-MAT-MORTAR-25",
+          "quantityFormula": "joint_volume_geometry",
+          "unit": "bag_25kg",
+          "notes": "Calculer avec dimensions des blocs, épaisseur des joints et rendement du mortier. Ne pas appliquer le rendement d'une brique de parement à un bloc béton."
+        }
+      ],
+      "optionalStructural": [
+        {
+          "itemId": "BATXL-MAT-MURFOR-I100",
+          "quantityFormula": "structural_design",
+          "notes": "Armature horizontale uniquement si prévue par conception/prescription."
+        },
+        {
+          "designation": "Ancrages au support existant",
+          "quantityFormula": "support_and_design",
+          "requiresQuote": true
+        },
+        {
+          "designation": "Linteau / poutre / prélinteau",
+          "quantityFormula": "openings",
+          "requiresQuote": true
+        }
+      ]
+    },
+    {
+      "code": "BATXL-ASM-CAVITY-WALL-BRICK-PIR120",
+      "trade": "maconnerie_isolation",
+      "title": "Mur creux — bloc terre cuite 14 + PIR 120 + brique de parement",
+      "quantityBasis": "per_square_meter_wall",
+      "components": [
+        {
+          "itemId": "BATXL-MAT-FASTBUILD-291914",
+          "quantity": 17.5,
+          "unit": "piece",
+          "derived": true,
+          "designAssumption": true,
+          "derivation": "≈16,67 pièces/m² géométriques × 1,05 pertes; recalculer selon module/joints exacts"
+        },
+        {
+          "itemId": "BATXL-MAT-WALL-PIR-120",
+          "quantity": 1.05,
+          "unit": "square_meter",
+          "derived": true,
+          "derivation": "surface ×1,05"
+        },
+        {
+          "itemId": "BATXL-MAT-WALLTIE-260",
+          "quantity": 5,
+          "unit": "piece",
+          "notes": "Référence basse réaliste pour situation intérieure; la documentation technique donne typiquement 5–8/m² selon exposition, vent, type de mur et attache. Recalcul obligatoire."
+        },
+        {
+          "designation": "Fixation/rosace isolation compatible attache",
+          "quantity": 5,
+          "unit": "piece",
+          "requiresQuote": true,
+          "notes": "Minimum indicatif 5/m² pour fixation d'isolant; adapter au système."
+        },
+        {
+          "itemId": "BATXL-MAT-FACING-RIJNFORM",
+          "quantity": 91.35,
+          "unit": "piece",
+          "derived": true,
+          "derivation": "87 briques/m² ×1,05 pertes"
+        },
+        {
+          "itemId": "BATXL-MAT-MORTAR-25",
+          "quantityFormula": "facing_brick_joint_geometry",
+          "unit": "bag_25kg",
+          "notes": "Le benchmark Gamma indique ~25 kg pour 0,5 m² d'un mur demi-brique en format Waal avec joints 10 mm; transposer seulement après contrôle du format réel."
+        },
+        {
+          "itemId": "BATXL-MAT-DPC-150",
+          "quantityFormula": "base_wall_and_openings_linear_m"
+        }
+      ],
+      "optionalStructural": [
+        {
+          "itemId": "BATXL-MAT-MURFOR-I100",
+          "quantityFormula": "structural_design"
+        },
+        {
+          "designation": "Linteaux / cornières de support de parement",
+          "quantityFormula": "openings_and_facade_design",
+          "requiresQuote": true
+        }
+      ]
+    },
+    {
+      "code": "BATXL-ASM-CLADDING-CEDRAL-BOARD",
+      "trade": "bardage",
+      "title": "Bardage fibres-ciment Cedral Board sur ossature ventilée",
+      "quantityBasis": "per_square_meter_facade",
+      "components": [
+        {
+          "itemId": "BATXL-MAT-CEDRAL-BOARD-9",
+          "quantity": 1.05,
+          "unit": "square_meter",
+          "derived": true,
+          "derivation": "surface ×1,05 chutes"
+        },
+        {
+          "designation": "Ossature ventilée bois traité 30×48 mm",
+          "quantity": 1.75,
+          "unit": "linear_meter",
+          "designAssumption": true,
+          "requiresQuote": true,
+          "derivation": "entraxe 0,60 m ×1,05; adapter au calepinage et prescriptions"
+        },
+        {
+          "itemId": "BATXL-MAT-CEDRAL-SCREW-A4",
+          "quantityFormula": "manufacturer_fixing_layout",
+          "notes": "Ne pas fixer un nombre/m² arbitraire; dépend du format, entraxe, zones de vent et calepinage."
+        }
+      ],
+      "geometryDrivenExtras": [
+        {
+          "itemId": "BATXL-MAT-CEDRAL-EDGE-200",
+          "quantityFormula": "edges_and_openings_linear_m"
+        },
+        {
+          "designation": "Profil de départ / ventilation basse",
+          "quantityFormula": "base_linear_m",
+          "requiresQuote": true
+        },
+        {
+          "designation": "Profil de fermeture / grille anti-insectes",
+          "quantityFormula": "ventilation_openings_linear_m",
+          "requiresQuote": true
+        },
+        {
+          "designation": "Membrane pare-pluie façade",
+          "quantityFormula": "facade_area_plus_overlaps",
+          "requiresQuote": true
+        }
+      ]
+    },
+    {
+      "code": "BATXL-ASM-ZINC-FLASHING-CUSTOM",
+      "trade": "zinguerie",
+      "title": "Façonnage zinc 0,80 mm — solin/noue/bavette sur mesure",
+      "quantityBasis": "per_square_meter_raw_sheet",
+      "components": [
+        {
+          "itemId": "BATXL-MAT-ZINC-VMZ-SHEET-08",
+          "quantity": 0.4888889,
+          "unit": "sheet_2.25m2",
+          "derived": true,
+          "derivation": "1,10 m² brut / 2,25 m² par feuille, soit 10% de chute par m² façonné"
+        }
+      ],
+      "notes": "Le métré final est linéaire et dépend du développé de la pièce. La composition sert à valoriser le zinc brut, pas le temps de façonnage ni les fixations."
+    },
+    {
+      "code": "BATXL-ASM-SMALL-CONCRETE-REPAIR",
+      "trade": "maconnerie",
+      "title": "Petite reprise béton / scellement / petit socle",
+      "quantityBasis": "per_cubic_meter_theoretical_but_small_volume_only",
+      "components": [
+        {
+          "itemId": "BATXL-MAT-CONCRETE-C2025-25",
+          "quantityFormula": "ceil(volume_liters / 13.25)",
+          "unit": "bag_25kg",
+          "notes": "Rendement produit 0,53 L/kg, soit 13,25 L par sac de 25 kg."
+        },
+        {
+          "itemId": "BATXL-MAT-REBAR-08-6M",
+          "quantityFormula": "structural_layout",
+          "unit": "bar_6m",
+          "notes": "Uniquement si armature prévue; diamètre/espacement doivent provenir du détail constructif."
+        }
+      ],
+      "guardrail": {
+        "maxDefaultBaggedConcreteVolumeM3": 0.2,
+        "rule": "Au-delà de 0,20 m³ par défaut, ne pas multiplier les sacs dans la simulation. Créer une fourniture de béton prêt à l'emploi/toupie avec requiresQuote=true, sauf justification explicite."
+      }
+    },
+    {
+      "code": "BATXL-ASM-ROOF-INTERNAL-WOOL-220",
+      "trade": "isolation_toiture",
+      "title": "Isolation intérieure d'un versant — laine minérale 220 mm + frein-vapeur hygrovariable",
+      "quantityBasis": "per_square_meter_roof_slope",
+      "components": [
+        {
+          "itemId": "BATXL-MAT-ISOCONFORT32-220",
+          "quantity": 1.05,
+          "unit": "square_meter",
+          "derived": true,
+          "derivation": "surface ×1,05 pour coupes"
+        },
+        {
+          "itemId": "BATXL-MAT-INTELLO-PLUS",
+          "quantity": 1.1,
+          "unit": "square_meter",
+          "derived": true,
+          "designAssumption": true,
+          "derivation": "surface ×1,10 pour recouvrements et relevés"
+        },
+        {
+          "designation": "Ruban adhésif système étanchéité à l'air",
+          "quantityFormula": "joints_linear_m",
+          "requiresQuote": true
+        },
+        {
+          "designation": "Mastic/colle de raccord étanche à l'air",
+          "quantityFormula": "perimeter_and_connections",
+          "requiresQuote": true
+        }
+      ],
+      "guardrails": [
+        "Ne pas combiner automatiquement cette composition avec un sarking complet: vérifier le complexe hygrothermique.",
+        "Le frein-vapeur, ses raccords et traversées doivent rester continus; les bandes et mastics sont métrés selon la géométrie réelle."
+      ]
+    }
+  ],
+  "quoteLineRules": {
+    "forbiddenGenericLines": [
+      "matériaux toiture",
+      "matériel maçonnerie",
+      "fournitures diverses",
+      "étanchéité complète"
+    ],
+    "rule": "Lorsqu'un assemblage connu existe, la simulation doit générer des lignes de composants détaillées ou une ligne de système qui conserve son BOM interne traçable.",
+    "examples": [
+      "Une toiture ardoise doit relier ardoises, crochets, liteaux, contre-lattes, sous-toiture et, si prévue, isolation; les rives/faîtages/gouttières sont métrés séparément.",
+      "Un mur creux doit relier bloc intérieur, isolant, attaches/crochets de mur, fixations d'isolant, parement, mortier et DPC; Murfor/linteaux uniquement si techniquement requis.",
+      "Une toiture EPDM doit séparer support, isolation, pare-vapeur éventuel, membrane, colle, primer, bandes de détails et évacuations."
+    ]
+  }
+}

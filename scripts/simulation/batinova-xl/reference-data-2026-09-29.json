@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "datasetCode": "BATXL-REFERENCE-DATA-2026-09-29",
+  "frozenAt": "2026-09-29",
+  "simulationPeriod": {
+    "from": "2026-08-18",
+    "to": "2026-09-28",
+    "workingDays": 30
+  },
+  "rules": {
+    "runtimeNetworkAccess": false,
+    "realPersonalData": false,
+    "syntheticEntities": true,
+    "sourceBackedCalibration": true,
+    "note": "Les personnes, clients, fournisseurs et adresses précises restent fictifs. Les valeurs ci-dessous sont des repères publics gelés pour rendre BATXL déterministe; toute valeur dérivée doit rester marquée derived=true."
+  },
+  "labour": {
+    "source": {
+      "authority": "SPF Emploi — base Salaires minimums, CP 1240000 Construction",
+      "effectiveDate": "2026-07-01",
+      "url": "https://www.salairesminimums.be/document.html?jcId=c206d961982d4ec6b997c7a485e0bf32"
+    },
+    "indexationPercent": 1.0966796,
+    "grossHourlyMinimumEur": {
+      "categoryI": 18.592,
+      "categoryIA": 19.517,
+      "categoryII": 19.82,
+      "categoryIIA": 20.81,
+      "categoryIII": 21.078,
+      "categoryIV": 22.374
+    },
+    "derivedCrewLeadHourlyReferenceEur": {
+      "categoryIIIPlus10Pct": 23.186,
+      "categoryIVPlus10Pct": 24.597
+    },
+    "caveat": "Salaires bruts minimums sectoriels, pas coût employeur complet."
+  },
+  "vat": {
+    "source": {
+      "authority": "SPF Finances",
+      "url": "https://finances.belgium.be/fr/particuliers/habitation/construire-renover/renover/renover-taux-de-tva"
+    },
+    "renovationPrivateHomeOlderThan10YearsPercent": 6,
+    "standardPercent": 21,
+    "selfPurchasedConstructionMaterialsPercent": 21,
+    "rule": "Le 6% ne s'applique que si les conditions officielles sont réunies; sinon 21%."
+  },
+  "paymentTerms": {
+    "source": {
+      "authority": "Loi belge sur le retard de paiement dans les transactions commerciales / SPF Justice",
+      "url": "https://www.justice.belgium.be/fr/nouvelles/communiques_de_presse/lutte_contre_le_retard_de_paiement_dans_les_transactions_0"
+    },
+    "b2bDefaultCalendarDays": 30,
+    "b2bContractualMaximumCalendarDays": 60,
+    "simulationUse": "Répartir fournisseurs à 30j et 60j; créer quelques retards sans dépasser artificiellement la règle contractuelle."
+  },
+  "constructionPriceContext": {
+    "source": {
+      "authority": "Statbel",
+      "publicationDate": "2026-09-15",
+      "url": "https://statbel.fgov.be/fr/nouvelles/indice-des-prix-la-production-dans-la-construction-17"
+    },
+    "q2_2026QuarterOnQuarterPercent": 1.7,
+    "q2_2026YearOnYearPercent": 5.3,
+    "fourQuarterAverageInflationPercent": 3.6,
+    "simulationUse": "Conserver les prix sources gelés au 29/09/2026; ne pas faire de live repricing."
+  },
+  "fuel": {
+    "source": {
+      "authority": "SPF Economie — prix maximum produits pétroliers",
+      "validFrom": "2026-09-26",
+      "url": "https://petrolprices.economie.fgov.be/petrolprices/?locale=fr"
+    },
+    "dieselB7EurPerLiterTtc": 2.494,
+    "petrol95E10EurPerLiterTtc": 2.108
+  },
+  "weather": {
+    "august2026": {
+      "source": {
+        "authority": "IRM",
+        "url": "https://www.meteo.be/fr/climat/climat-de-la-belgique/bilans-climatologiques/2026/aout"
+      },
+      "uccleRainfallMm": 75,
+      "uccleRainDays": 16,
+      "severeReference": {
+        "date": "2026-08-19",
+        "location": "Sosoye (Anhée)",
+        "rainfallMm": 42.5,
+        "simulationUse": "Créer au moins une journée météo perturbée/arrêt partiel sur un chantier wallon."
+      }
+    },
+    "september2026To28": {
+      "source": {
+        "authority": "IRM",
+        "observedThrough": "2026-09-28",
+        "url": "https://www.meteo.be/fr/climat/climat-de-la-belgique/bilans-climatologiques/2026/septembre"
+      },
+      "uccleRainfallMm": 17.3,
+      "uccleRainDays": 8,
+      "simulationUse": "Septembre est plus sec; limiter les interruptions météo par rapport à la seconde moitié d'août."
+    }
+  },
+  "marketAndProjectMix": {
+    "sources": [
+      {
+        "authority": "Statbel — permis de bâtir",
+        "url": "https://statbel.fgov.be/fr/themes/construction-logement/permis-de-batir",
+        "fact": "Depuis 2019, les permis de rénovation résidentielle sont généralement plus nombreux que ceux de nouvelles constructions."
+      },
+      {
+        "authority": "Statbel — immobilier S1 2026",
+        "url": "https://statbel.fgov.be/fr/nouvelles/prix-de-limmobilier-1er-semestre-de-2026",
+        "namurMedianEur": {
+          "house2or3Facades": 223000,
+          "house4Facades": 300000,
+          "apartment": 200000
+        }
+      }
+    ],
+    "target15Projects": {
+      "renovationOrRepair": 11,
+      "plannedOrNewBuild": 2,
+      "professionalOrMultiTrade": 2,
+      "oneLargeWorksiteAtOrAboveCheckinatworkThreshold": true
+    }
+  },
+  "worksiteCompliance": {
+    "checkinatwork": {
+      "source": {
+        "authority": "Sécurité sociale belge",
+        "url": "https://www.socialsecurity.be/site_fr/employer/applics/checkinatwork/general/construction-works.htm"
+      },
+      "thresholdExVatEur": 500000,
+      "rule2026": "Présence IN obligatoire sur les lieux de travaux immobiliers visés atteignant le seuil; passage IN/OUT généralisé annoncé pour le 01/04/2027."
+    },
+    "safetyCoordination": {
+      "source": {
+        "authority": "SPF Emploi",
+        "url": "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/lieux-de-travail/chantiers-temporaires-ou-mobiles"
+      },
+      "simulationDocuments": [
+        "plan de sécurité et de santé",
+        "dossier d'intervention ultérieure",
+        "journal de coordination",
+        "avis préalable lorsque requis"
+      ]
+    }
+  },
+  "technicalReferences": {
+    "source": {
+      "authority": "Buildwise",
+      "urls": [
+        "https://www.buildwise.be/fr/metiers/toitures-inclinees/",
+        "https://www.buildwise.be/fr/publications/notes-d-information-technique/280/",
+        "https://www.buildwise.be/fr/publications/notes-d-information-technique/294/"
+      ]
+    },
+    "supportedScenarioFamilies": [
+      "toiture inclinée ardoises/tuiles",
+      "sarking",
+      "isolation toiture",
+      "toiture plate/EPDM",
+      "zinguerie",
+      "raccords et détails constructifs"
+    ]
+  },
+  "publicMaterialBenchmarks": [
+    {
+      "code": "BATXL-BENCH-EPDM-1.2",
+      "label": "Membrane EPDM 1,2 mm",
+      "unit": "m2",
+      "priceEur": 20,
+      "priceBasis": "prix public affiché, détail Belgique",
+      "sourceUrl": "https://www.gamma.be/fr/assortiment/membrane-de-toiture-epdm-pandser-7-m-x-1-2-mm-a-commander-par-10-cm/p/B379701"
+    },
+    {
+      "code": "BATXL-BENCH-OSB3-18",
+      "label": "OSB3 18 mm rainuré/languetté",
+      "unit": "m2",
+      "priceEur": 10.41,
+      "priceBasis": "prix public affiché",
+      "sourceUrl": "https://www.hubo.be/fr/p/osb-3-rainure-et-languette-244x59-cm-18mm/5768/"
+    },
+    {
+      "code": "BATXL-BENCH-PIR-120",
+      "label": "PIR 120 mm R5,45",
+      "unit": "m2",
+      "priceListEur": 52.99,
+      "pricePromoObservedEur": 36.99,
+      "derived": true,
+      "derivation": "114,46 EUR / 2,16 m2 = 52,99 EUR/m2; promo observée 79,90 EUR / 2,16 m2 = 36,99 EUR/m2",
+      "sourceUrl": "https://www.hubo.be/fr/p/iko-enertherm-multi-fit-panneau-isolant-120x60x12-cm-r5-45-2-16m/871358/"
+    },
+    {
+      "code": "BATXL-BENCH-SLATE-3222",
+      "label": "Ardoise naturelle 32x22",
+      "unit": "piece",
+      "priceTtcEur": 2.03,
+      "sourceUrl": "https://webshop.biemar.be/fr/articles/48519/ardoise-naturelle-itasi-32-22-rf35-1er-tri/"
+    },
+    {
+      "code": "BATXL-BENCH-ZINC-08",
+      "label": "Feuille zinc naturel 0,80 mm 2250x1000",
+      "unit": "sheet_2.25m2",
+      "catalogGrossEur": 73.872,
+      "derived": true,
+      "derivation": "5,70 EUR/kg x 12,96 kg",
+      "sourceUrl": "https://www.toitmat.be/fr/zinc-feuille-toitmat-0-80-mm-2250-x-1000mm-12-960kg-2-25m2-eur-kg/m041325",
+      "caveat": "Prix brut catalogue; remise pro et traitement TVA non supposés."
+    },
+    {
+      "code": "BATXL-BENCH-GUTTER-ZINC-360",
+      "label": "Gouttière zinc demi-ronde 360 mm 0,80",
+      "unit": "linear_meter",
+      "catalogGrossEur": 15.24,
+      "sourceUrl": "https://www.toitmat.be/fr/zinc-cuivre-plomb-et-alu/zinc/gouttieres-et-accessoires/gouttieres",
+      "caveat": "Prix brut catalogue; remise pro et traitement TVA non supposés."
+    },
+    {
+      "code": "BATXL-BENCH-SAW",
+      "label": "Scie circulaire professionnelle 1200W",
+      "unit": "piece",
+      "publicPriceEur": 210,
+      "sourceUrl": "https://www.hubo.be/fr/p/makita-hs7601j-scie-circulaire-1200w-190mm/787632/"
+    }
+  ],
+  "missingSimulationTargets": {
+    "clients": 20,
+    "projects": 15,
+    "people": 25,
+    "teams": 4,
+    "planningAssignmentsMax": 120,
+    "stockReferences": 100,
+    "stockLocations": 3,
+    "vehicles": 10,
+    "toolsAndEquipment": 55,
+    "suppliers": 12,
+    "subcontractors": 5,
+    "quotesMin": 25,
+    "quotesMax": 30,
+    "documentsAndPhotos": "enough to exceed 250 registry rows when combined, to exercise pagination",
+    "requiredMissingPacks": [
+      "core-clients-projects-commercial-pack.mjs",
+      "assets-fleet-pack.mjs",
+      "documents-pack.mjs",
+      "BATINOVA_SCRIPT_3 orchestrator"
+    ]
+  },
+  "tradeMaterialCalibration": {
+    "path": "scripts/simulation/batinova-xl/trade-materials-2026-09-29.json",
+    "catalogCode": "BATXL-TRADE-MATERIALS-BE-2026-09-29",
+    "required": true,
+    "rules": [
+      "Utiliser des nomenclatures métier détaillées lorsqu'un assemblage est connu; éviter les lignes génériques.",
+      "Distinguer métrés surfaciques, linéaires et unitaires.",
+      "Calculer rives, faîtages, noues, gouttières, descentes, solins, baies et évacuations depuis la géométrie du chantier.",
+      "Ne pas inventer de remise professionnelle ni de prix absent.",
+      "Conserver la provenance, la base TVA et le statut derived/designAssumption de chaque prix ou quantité."
+    ],
+    "requiredBy": [
+      "core-clients-projects-commercial-pack.mjs",
+      "finance-stock-pack.mjs",
+      "assets-fleet-pack.mjs",
+      "BATINOVA_SCRIPT_3"
+    ]
+  }
+}

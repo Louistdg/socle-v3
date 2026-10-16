@@ -1,0 +1,325 @@
+{
+  "sourceUrl": "https://socle-v3-preview.up.railway.app",
+  "railwayDeploymentId": "f3c40166-16dc-4fc4-bc65-57352c44c359",
+  "retrievedAt": "2026-10-11T23:44:11.248Z",
+  "files": [
+    {
+      "path": "/admin.js",
+      "bytes": 54931,
+      "sha256": "0ee9f144cd656d889651ff6193a9df6c85e20818a3965d49aecacc5709595974",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/app.js",
+      "bytes": 19395,
+      "sha256": "b9efda02526e39d63f52b06c4ec40281f866c4a658607dc950f90854d517cbff",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/archives.js",
+      "bytes": 45315,
+      "sha256": "dccbea6334a78e632891bce21d648a8a38f8042da4a2c3c545187a443238ea39",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/blank-workspace.js",
+      "bytes": 81678,
+      "sha256": "fc15cc8e87d1fcfee84bb745c826ad03112fad74c25bd83415e722dd7d4bf588",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/business.js",
+      "bytes": 25693,
+      "sha256": "25fdfef833a9328fc7ef1a2279d7fc84cdaf0d272779f271d1cc05c085e00b38",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/cockpit.js",
+      "bytes": 31804,
+      "sha256": "c1ced66231e71ea7fa07df7ab8eafec6def76fd692d46995f412f92c8226cb59",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/contacts.js",
+      "bytes": 16465,
+      "sha256": "5a1f5df11e2680a02b0ba4a1020a390a6b8faef7b15f476a01e9ff08fef86247",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/delivery-scans.js",
+      "bytes": 5731,
+      "sha256": "e7159bf5716f475dc2ff62ff6b7dccf7c2e08545f58d38b2ad96b66f5f539200",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/documents-server.js",
+      "bytes": 23101,
+      "sha256": "8d6f7bde9f4f6b53002f4634d0a38d4ebccb1e9744453bc9266f308891be6158",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/field-portal.js",
+      "bytes": 31133,
+      "sha256": "00d089c71bd77a9728085d1a75b0f0aa0ec4ece3cce66cae0667dabe0bff2b35",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/field-server.js",
+      "bytes": 21250,
+      "sha256": "b598561dda03693cc45c3f086685910d89102634447921d70beb153fc9aa4210",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/field-workflows.js",
+      "bytes": 57630,
+      "sha256": "b6b428a1912c29dcbe8deae624b473a730ae9cc5f13c62022aa1ac9a489e2495",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/free-entry.js",
+      "bytes": 3435,
+      "sha256": "ffbfc273596c8c345d3a1d2dca9e2c9d44559a2111b37b41768a7b9d6b599e3a",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/ia-a-ui.css",
+      "bytes": 123961,
+      "sha256": "a78cecef969e7ffd3990d063bb8721be570ae844f2fb51170fb3fcee2cc978f0",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/ia-a-ui.js",
+      "bytes": 82017,
+      "sha256": "a876b371bce09403b1f2f36d62679f9c5219d431448eaaa5ee750e979e8657bd",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/index.html",
+      "bytes": 4411,
+      "sha256": "f0b3e44413c799e4359a873cf0930d9b4395543ab8f18ce0f0318f812d94d53c",
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "path": "/local-test-auth.js",
+      "bytes": 13356,
+      "sha256": "143c19416492cf4bad5fc22034177b7f528ac1f7d033f87e55c49e0efa9e72d3",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/mobile-nav.css",
+      "bytes": 24162,
+      "sha256": "35c7ea51645493b701d00e553ddd723cb7dd8d93131bccb04fb32d92b4de2605",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/mobile-nav.js",
+      "bytes": 11376,
+      "sha256": "4ce501595f68b0f6866163ca0aa181753b06af281ed1faabb29d3f10ba1489b6",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/navigation-registry.js",
+      "bytes": 6337,
+      "sha256": "4fecd58112fe0eae7f2f86e70f0043100fdffb094a88eed68018107a25fec2d5",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/onboarding.js",
+      "bytes": 53855,
+      "sha256": "b34526601c11b534cc1db1b23a02f06bb3a0b383146de0a2e7739c966af7aa69",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/organization.css",
+      "bytes": 49630,
+      "sha256": "57d660b2930e42697691a2a764e5ff08cc07a6f9473f6e4903a8c71f783ee8a1",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/organization.js",
+      "bytes": 10272,
+      "sha256": "c7139a9f218e20a5f960a2a8cf367efa30ccd1f4386ff443e791ee4161c8c383",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/partners.js",
+      "bytes": 18251,
+      "sha256": "0312cd0e43883096bb2be6830a9c94cc34113d769b7702f0d790ca2a414577dd",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/permissions.js",
+      "bytes": 35262,
+      "sha256": "0ff6c001c9819621db88093b3a4f8b68b56be374d864f6fa6fe6f4067a9ef1ae",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/planning.css",
+      "bytes": 10165,
+      "sha256": "5d40bc423f3ae0f0dbf41903da460335b4a87c938ed2dc57974fd6802584d8b1",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/planning.js",
+      "bytes": 54469,
+      "sha256": "cdf3097cc6d1c8357aa1a13af745c8135d12de18e34b1513fa529c947fad01d9",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/procurement.js",
+      "bytes": 19445,
+      "sha256": "9d6e6be97cffe7b5435aa9975a455e3bbf90c431f948f546f216e32e91ee8331",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/production-runtime.js",
+      "bytes": 706,
+      "sha256": "b92e4782776f2b5f7f5da525f2634c73eb21be32a56003d31398efd1f8414f66",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/profile-avatar.css",
+      "bytes": 3126,
+      "sha256": "c6b82f1d95b0d08342c89594df0c81cce8d40a988d6248e73122a35c04a995da",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/profile-avatar.js",
+      "bytes": 16801,
+      "sha256": "58605b8f07058841b21b3101dda3d1c0822ca73f594d7b9bdc45378caa8d0616",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/project-hub.js",
+      "bytes": 7337,
+      "sha256": "e1c80fd7d0a48de949c222f9605fbb571f68cb0922742fe03e714a4c8183a195",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/quick-intervention.js",
+      "bytes": 5923,
+      "sha256": "65b9894abbca528993d9b5d21248a5ad0f58b2a0011733a056ddc7f842ce6580",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/quote-preproject.js",
+      "bytes": 14164,
+      "sha256": "d9b8608f9dc384fd47f1729e17c81a02a7d224e135246b0771d525669c688c79",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/quote-visit-capture.js",
+      "bytes": 37903,
+      "sha256": "130e8050648710ce2aa909852a8271363026580102f90c1c5710e2fb03ddae65",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/realistic-demo.js",
+      "bytes": 27209,
+      "sha256": "d55a33d6a82b702562b45978566bdbb0fef6376581f0f571da04a8a9d6244a16",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/refinement.js",
+      "bytes": 43778,
+      "sha256": "e6f39fbb9c29ca4b1fe13db2957ce9fedf4e956faaf8832c1dd8d89b787fa8c9",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/server-modules.js",
+      "bytes": 95171,
+      "sha256": "5b4fe209ef14247ee8a4dcbfb221a6e52f2040060147564da55511851887c4f7",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/stock-barcode.css",
+      "bytes": 2373,
+      "sha256": "ba903c383524581290bf102600833143f3400fd3dfcfd0b2e67653e5c8cbd0ca",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/stock-barcode.js",
+      "bytes": 16745,
+      "sha256": "6593d4f533a956b52709e96d73a5b30685b87ac35c63aec4ce0eaa59f610e60d",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/stock-catalog-v2.css",
+      "bytes": 5619,
+      "sha256": "1b9692883278e846317aa7fb73b06b8197529ee3eb6cef382afc87085581e105",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/stock-catalog-v2.js",
+      "bytes": 30737,
+      "sha256": "17d8c1fbfa778a1c61a9049d04059ca906ec327387ae3f2a8bbe8c248b130e9a",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/style.css",
+      "bytes": 67768,
+      "sha256": "d71c729d13e13bc217751f53dbaebed4f89a4672c16451865537f3236c659fc9",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/supplier-allocations.js",
+      "bytes": 26082,
+      "sha256": "63a2770250913262f91b3a382a16c0db9bec28525d1b16007a4232468bbaf7b8",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/ui-foundation.css",
+      "bytes": 13744,
+      "sha256": "1e798a0ece12c73d3e28f83e109b0a2c4dc923fc2bc048baabc482fa69234660",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/ui-foundation.js",
+      "bytes": 17913,
+      "sha256": "1523d8e83aa669743ddc5edb9f3658493f4bd1f29d5cb3727a59f59b46356d4c",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/v3-money.js",
+      "bytes": 537,
+      "sha256": "8d1f38db6ae1ba7c7a83ac7c8bdee9bd0d7bde26622ed88471eed086f1ca1ae5",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/v3-themes.css",
+      "bytes": 14458,
+      "sha256": "4c55b4a35a1e28849a6b2a69772d2f5a13b8ecbafa8e26faec2923139f450ef6",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/v3-themes.js",
+      "bytes": 4765,
+      "sha256": "7a6b9d6675c13ec5100d6af9f8347bf3b2057fe7d71bf76f6b8723b11df0ec84",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/v3.css",
+      "bytes": 21907,
+      "sha256": "df30bbb47397290ceaf5b99b7dd09416937ea529675c2168f5e1de4d96ff2b54",
+      "contentType": "text/css;charset=utf-8"
+    },
+    {
+      "path": "/v3.js",
+      "bytes": 27053,
+      "sha256": "921b7741840f77ba3543c8ea80ac115d73198859c7752f3c4cd1a1bf84bfea8f",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/workflow-improvements.js",
+      "bytes": 153889,
+      "sha256": "03770c7c9908abb5521b9633ac4781b4709147ec28fdddcb3352e41dd8270abd",
+      "contentType": "application/javascript;charset=utf-8"
+    },
+    {
+      "path": "/workspace-config.js",
+      "bytes": 31,
+      "sha256": "50ace3ef53596f14c403c0b01da4e1629e2937481faf67a4aa4a27066d1ca12b",
+      "contentType": "application/javascript;charset=utf-8"
+    }
+  ]
+}

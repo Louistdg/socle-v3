@@ -1,0 +1,1375 @@
+{
+  "schemaVersion": 1,
+  "code": "BATXL-BOM-TEMPLATES-BE-2026-09-29",
+  "observedAt": "2026-09-29",
+  "currency": "EUR",
+  "materialCatalog": "materials-catalog-2026-09-29.json",
+  "referenceData": "reference-data-2026-09-29.json",
+  "principles": {
+    "deterministic": true,
+    "noRuntimeNetwork": true,
+    "exactPricePolicy": "Use current source-backed catalog price when available. Otherwise mark supplierQuoteRequired; never invent an exact current market price.",
+    "quantityPolicy": "Separate sourced technical consumption from simulation waste/overlap assumptions.",
+    "professionalDiscountPolicy": "Any synthetic professional discount is a separate commercial parameter and never alters the observed source benchmark.",
+    "units": [
+      "piece",
+      "linear_metre",
+      "square_metre",
+      "cubic_metre",
+      "litre",
+      "kg",
+      "bag",
+      "box",
+      "roll",
+      "can"
+    ]
+  },
+  "commonAssumptions": {
+    "purchaseWastePct": {
+      "roofCovering": 5,
+      "battensTimber": 7,
+      "sheetBoards": 8,
+      "insulation": 5,
+      "membranes": 8,
+      "masonryBlocks": 5,
+      "facingBricks": 7,
+      "mortar": 7,
+      "zincProfiles": 7,
+      "pvcDrainage": 5
+    },
+    "note": "These waste percentages are simulation assumptions for purchasing realism, not manufacturer guarantees."
+  },
+  "templates": [
+    {
+      "id": "BATXL-BOM-ROOF-SLATE-NATURAL",
+      "label": "Rénovation toiture inclinée — ardoise naturelle 32x22 au crochet",
+      "workType": "roof_natural_slate",
+      "parameters": {
+        "roofAreaM2": "required",
+        "eavesLengthM": "required",
+        "ridgeLengthM": "required",
+        "vergeLengthM": "required",
+        "rafterSpacingM": "required",
+        "overlapMm": {
+          "default": 90,
+          "allowed": [
+            90,
+            100
+          ]
+        },
+        "insulationThicknessMm": "project_specific",
+        "roofWindows": "optional",
+        "chimneys": "optional"
+      },
+      "sourcedConsumption": {
+        "slatePiecesPerM2": {
+          "overlap90": 39,
+          "overlap100": 40.8,
+          "source": "Defrancq/CUPA technical slate tables"
+        },
+        "slateHookLengthMm": {
+          "overlap90": 100,
+          "source": "Defrancq technical slate table"
+        },
+        "battenLmPerM2": {
+          "overlap90": 8.7,
+          "overlap100": 9.09,
+          "source": "Defrancq technical slate table"
+        },
+        "generalSlateRangePerM2": {
+          "min": 35,
+          "max": 40,
+          "source": "CUPA Pizarras"
+        }
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "couverture",
+          "catalogCode": "ROOF-SLATE-NAT-3222",
+          "label": "Ardoises naturelles 32x22",
+          "required": true,
+          "quantityFormula": "roofAreaM2 * slatePiecesPerM2(overlapMm) * 1.05",
+          "unit": "piece",
+          "reason": "Couverture principale, 5% perte simulation."
+        },
+        {
+          "seq": 20,
+          "group": "fixations",
+          "catalogCode": "ROOF-HOOK-INOX-92",
+          "label": "Crochets inox pour ardoises",
+          "required": true,
+          "quantityFormula": "same purchased piece count as field slates; select hook length from overlap/exposure detail",
+          "unit": "piece",
+          "reason": "Une fixation par ardoise dans le scénario au crochet; longueur à adapter au recouvrement."
+        },
+        {
+          "seq": 30,
+          "group": "lattage",
+          "catalogCode": "WOOD-BATTEN-32X38",
+          "label": "Liteaux traités 32x38",
+          "required": true,
+          "quantityFormula": "roofAreaM2 * battenLmPerM2(overlapMm) * 1.07",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 40,
+          "group": "lattage",
+          "catalogCode": "WOOD-COUNTERBATTEN-15X22",
+          "label": "Contre-lattes traitées",
+          "required": true,
+          "quantityFormula": "roofAreaM2 / rafterSpacingM * 1.07",
+          "unit": "linear_metre",
+          "reason": "Formule géométrique; l'entraxe chevrons doit venir du chantier."
+        },
+        {
+          "seq": 50,
+          "group": "sous_toiture",
+          "catalogCode": null,
+          "label": "Écran de sous-toiture HPV",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "roofAreaM2 * 1.08",
+          "unit": "square_metre",
+          "reason": "8% simulation pour recouvrements, relevés et chutes."
+        },
+        {
+          "seq": 60,
+          "group": "isolation",
+          "catalogCode": "INS-GLASS-220",
+          "label": "Isolation entre/sous chevrons",
+          "required": "when scope includes insulation",
+          "quantityFormula": "insulatedAreaM2 * 1.05",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 70,
+          "group": "etancheite_air",
+          "catalogCode": "MEM-VAPOUR-VARIO",
+          "label": "Pare-vapeur / frein-vapeur",
+          "required": "when insulation installed",
+          "quantityFormula": "insulatedAreaM2 * 1.08",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 80,
+          "group": "etancheite_air",
+          "catalogCode": null,
+          "label": "Adhésif système pare-vapeur",
+          "required": "when vapor control layer installed",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "derived from perimeter + membrane laps + penetrations",
+          "unit": "roll"
+        },
+        {
+          "seq": 90,
+          "group": "zinguerie",
+          "catalogCode": "ZINC-FOLD-200",
+          "label": "Bandes/solins zinc de raccord",
+          "required": true,
+          "quantityFormula": "flashingLengthM * 1.07",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 100,
+          "group": "evacuation",
+          "catalogCode": "ZINC-GUTTER-ANTH-360",
+          "label": "Gouttières zinc",
+          "required": "when gutters in project scope",
+          "quantityFormula": "eavesLengthM * 1.07",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 110,
+          "group": "evacuation",
+          "catalogCode": "ZINC-GUTTER-HOOK-333",
+          "label": "Crochets de gouttière",
+          "required": "when gutters in project scope",
+          "quantityFormula": "ceil(eavesLengthM / gutterHookSpacingM) + endAllowance",
+          "unit": "piece",
+          "reason": "Espacement doit venir du système/chantier; ne pas figer une valeur universelle."
+        },
+        {
+          "seq": 120,
+          "group": "evacuation",
+          "catalogCode": "ZINC-DOWNPIPE-80",
+          "label": "Descentes zinc",
+          "required": "when gutters in project scope",
+          "quantityFormula": "sum(downpipeHeightsM) * 1.05",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 130,
+          "group": "evacuation",
+          "catalogCode": "ZINC-ELBOW-80X80",
+          "label": "Coudes / dévoiements de descente",
+          "required": "per geometry",
+          "quantityFormula": "count from downpipe geometry",
+          "unit": "piece"
+        },
+        {
+          "seq": 140,
+          "group": "details",
+          "catalogCode": null,
+          "label": "Faîtage / arêtiers compatibles ardoise",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "ridgeLengthM + hipLengthM",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 150,
+          "group": "details",
+          "catalogCode": null,
+          "label": "Accessoires fenêtres de toit / raccords",
+          "required": "if roofWindows > 0",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "roofWindows",
+          "unit": "kit"
+        },
+        {
+          "seq": 160,
+          "group": "details",
+          "catalogCode": null,
+          "label": "Solins cheminée / noquets / contre-solins",
+          "required": "if chimneys > 0",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "chimneyPerimeterM + sideLaps",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 170,
+          "group": "consommables",
+          "catalogCode": "FIX-WOOD-6X100",
+          "label": "Vis structure/lattage selon détail",
+          "required": true,
+          "quantityFormula": "project_takeoff",
+          "unit": "box_100"
+        },
+        {
+          "seq": 180,
+          "group": "consommables",
+          "catalogCode": "CONS-PU-750",
+          "label": "Mousse PU de finition locale",
+          "required": "only where specified",
+          "quantityFormula": "project_takeoff",
+          "unit": "can_750ml"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-ROOF-TILE-ACTUA10",
+      "label": "Rénovation toiture inclinée — tuile terre cuite Actua 10",
+      "workType": "roof_clay_tile",
+      "parameters": {
+        "roofAreaM2": "required",
+        "ridgeLengthM": "required",
+        "vergeLengthM": "required",
+        "rafterSpacingM": "required",
+        "selectedBattenSpacingMm": {
+          "default": 345,
+          "min": 310,
+          "max": 380
+        }
+      },
+      "sourcedConsumption": {
+        "tilesPerM2": {
+          "min": 10,
+          "max": 12.4,
+          "defaultSimulation": 11.2,
+          "source": "Wienerberger Actua 10"
+        },
+        "battenSpacingMm": {
+          "min": 310,
+          "max": 380,
+          "source": "Wienerberger Actua 10"
+        },
+        "ridgeTilesPerLm": {
+          "value": 3,
+          "source": "Wienerberger/Biemar product data"
+        }
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "couverture",
+          "catalogCode": "ROOF-TILE-ACTUA-RED",
+          "label": "Tuiles Actua 10",
+          "required": true,
+          "quantityFormula": "roofAreaM2 * 11.2 * 1.05",
+          "unit": "piece"
+        },
+        {
+          "seq": 20,
+          "group": "faitage",
+          "catalogCode": "ROOF-TILE-ACTUA-RIDGE",
+          "label": "Faîtières Actua",
+          "required": true,
+          "quantityFormula": "ridgeLengthM * 3 * 1.05",
+          "unit": "piece"
+        },
+        {
+          "seq": 30,
+          "group": "rives",
+          "catalogCode": "ROOF-TILE-ACTUA-EDGE",
+          "label": "Demi-rives Actua",
+          "required": "if dry verge tiles specified",
+          "quantityFormula": "vergeLengthM * 1.4 * 1.05",
+          "unit": "piece"
+        },
+        {
+          "seq": 40,
+          "group": "ventilation",
+          "catalogCode": "ROOF-TILE-ACTUA-VENT",
+          "label": "Chatières Actua",
+          "required": "if ventilation design calls for vent tiles",
+          "quantityFormula": "project_design_count",
+          "unit": "piece"
+        },
+        {
+          "seq": 50,
+          "group": "lattage",
+          "catalogCode": "WOOD-BATTEN-32X38",
+          "label": "Liteaux traités",
+          "required": true,
+          "quantityFormula": "roofAreaM2 / (selectedBattenSpacingMm/1000) * 1.07",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 60,
+          "group": "lattage",
+          "catalogCode": "WOOD-COUNTERBATTEN-15X22",
+          "label": "Contre-lattes",
+          "required": true,
+          "quantityFormula": "roofAreaM2 / rafterSpacingM * 1.07",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 70,
+          "group": "sous_toiture",
+          "catalogCode": null,
+          "label": "Écran sous-toiture HPV",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "roofAreaM2 * 1.08",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 80,
+          "group": "fixations",
+          "catalogCode": null,
+          "label": "Clips/vis de fixation tuiles",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "manufacturer anchoring calculation",
+          "unit": "piece",
+          "reason": "Ne pas simuler une fixation systématique de chaque tuile sans calcul d'ancrage."
+        },
+        {
+          "seq": 90,
+          "group": "isolation",
+          "catalogCode": "INS-GLASS-180",
+          "label": "Isolation toiture",
+          "required": "if insulation scope",
+          "quantityFormula": "insulatedAreaM2 * 1.05",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 100,
+          "group": "etancheite_air",
+          "catalogCode": "MEM-VAPOUR-VARIO",
+          "label": "Pare-vapeur",
+          "required": "if insulation scope",
+          "quantityFormula": "insulatedAreaM2 * 1.08",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 110,
+          "group": "zinguerie",
+          "catalogCode": "ZINC-FOLD-200",
+          "label": "Solins/raccords zinc",
+          "required": true,
+          "quantityFormula": "flashingLengthM * 1.07",
+          "unit": "linear_metre"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-FLAT-EPDM",
+      "label": "Toiture plate EPDM sur support bois",
+      "workType": "flat_roof_epdm",
+      "parameters": {
+        "roofAreaM2": "required",
+        "perimeterM": "required",
+        "upstandAreaM2": "required",
+        "outlets": "required",
+        "insulationThicknessMm": "project_specific"
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "support",
+          "catalogCode": "WOOD-OSB3-18",
+          "label": "OSB3 18 mm",
+          "required": "if timber deck scope",
+          "quantityFormula": "roofAreaM2 * 1.08",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 20,
+          "group": "pare_vapeur",
+          "catalogCode": "MEM-VAPOUR-DELTA",
+          "label": "Pare-vapeur",
+          "required": "for warm roof build-up as designed",
+          "quantityFormula": "roofAreaM2 * 1.08",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 30,
+          "group": "isolation",
+          "catalogCode": "INS-PIR",
+          "label": "PIR toiture plate",
+          "required": "if insulated warm roof",
+          "quantityFormula": "roofAreaM2 * 1.05",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 40,
+          "group": "membrane",
+          "catalogCode": "FLAT-EPDM-12",
+          "label": "Membrane EPDM 1,2 mm",
+          "required": true,
+          "quantityFormula": "(roofAreaM2 + upstandAreaM2) * 1.08",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 50,
+          "group": "colle",
+          "catalogCode": "FLAT-EPDM-PU-5L",
+          "label": "Colle PU EPDM pour zones prévues par système",
+          "required": true,
+          "quantityFormula": "wholeCanTakeoffFromManufacturerCoverage",
+          "unit": "can_5l",
+          "reason": "Ne pas inventer une consommation L/m² non vérifiée."
+        },
+        {
+          "seq": 60,
+          "group": "colle",
+          "catalogCode": "FLAT-EPDM-CONTACT-5L",
+          "label": "Colle contact pour relevés/rives",
+          "required": true,
+          "quantityFormula": "wholeCanTakeoffFromManufacturerCoverage",
+          "unit": "can_5l"
+        },
+        {
+          "seq": 70,
+          "group": "primaire",
+          "catalogCode": "FLAT-EPDM-PRIMER-1L",
+          "label": "Primaire EPDM",
+          "required": "where system detail requires primer",
+          "quantityFormula": "wholeCanTakeoffFromManufacturerCoverage",
+          "unit": "litre"
+        },
+        {
+          "seq": 80,
+          "group": "evacuation",
+          "catalogCode": null,
+          "label": "Avaloir/naissance EPDM",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "outlets",
+          "unit": "piece"
+        },
+        {
+          "seq": 90,
+          "group": "rives",
+          "catalogCode": null,
+          "label": "Profilés de rive compatibles EPDM",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "perimeterM * 1.05",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 100,
+          "group": "details",
+          "catalogCode": null,
+          "label": "Pièces d'angles / bandes de détail / flashing tape",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "count from corners + penetrations",
+          "unit": "piece_or_roll"
+        },
+        {
+          "seq": 110,
+          "group": "etancheite",
+          "catalogCode": null,
+          "label": "Mastic système EPDM",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "manufacturerDetailTakeoff",
+          "unit": "cartridge"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-SARKING-SLATE",
+      "label": "Sarking + couverture ardoise",
+      "workType": "sarking_slate",
+      "parameters": {
+        "roofAreaM2": "required",
+        "rafterSpacingM": "required",
+        "ridgeLengthM": "required",
+        "eavesLengthM": "required"
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "support",
+          "catalogCode": "WOOD-VOLIGE-25X180",
+          "label": "Voliges/support continu si prévu",
+          "required": "project_design",
+          "quantityFormula": "roofAreaM2 / boardEffectiveWidthM * 1.08",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 20,
+          "group": "pare_vapeur",
+          "catalogCode": "MEM-VAPOUR-VARIO",
+          "label": "Pare-vapeur continu",
+          "required": true,
+          "quantityFormula": "roofAreaM2 * 1.08",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 30,
+          "group": "isolation",
+          "catalogCode": "INS-PIR",
+          "label": "Panneaux PIR sarking",
+          "required": true,
+          "quantityFormula": "roofAreaM2 * 1.05",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 40,
+          "group": "fixations",
+          "catalogCode": null,
+          "label": "Vis sarking structurelles longues + rondelles",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "manufacturer/system fastening plan",
+          "unit": "piece"
+        },
+        {
+          "seq": 50,
+          "group": "sous_toiture",
+          "catalogCode": null,
+          "label": "Écran sous-toiture compatible sarking",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "roofAreaM2 * 1.08",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 60,
+          "group": "lattage",
+          "catalogCode": "WOOD-COUNTERBATTEN-15X22",
+          "label": "Contre-lattage",
+          "required": true,
+          "quantityFormula": "roofAreaM2 / rafterSpacingM * 1.07",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 70,
+          "group": "lattage",
+          "catalogCode": "WOOD-BATTEN-32X38",
+          "label": "Liteaux",
+          "required": true,
+          "quantityFormula": "roofAreaM2 * 8.70 * 1.07",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 80,
+          "group": "couverture",
+          "catalogCode": "ROOF-SLATE-NAT-3222",
+          "label": "Ardoises naturelles",
+          "required": true,
+          "quantityFormula": "roofAreaM2 * 39.0 * 1.05",
+          "unit": "piece"
+        },
+        {
+          "seq": 90,
+          "group": "fixations",
+          "catalogCode": "ROOF-HOOK-INOX-92",
+          "label": "Crochets inox",
+          "required": true,
+          "quantityFormula": "same purchased count as slates",
+          "unit": "piece"
+        },
+        {
+          "seq": 100,
+          "group": "details",
+          "catalogCode": "ZINC-FOLD-200",
+          "label": "Raccords/solins zinc",
+          "required": true,
+          "quantityFormula": "flashingLengthM * 1.07",
+          "unit": "linear_metre"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-ZINC-RAINWATER",
+      "label": "Zinguerie — gouttières et descentes zinc",
+      "workType": "zinc_rainwater",
+      "parameters": {
+        "gutterLengthM": "required",
+        "downpipeHeightsM": "required",
+        "outlets": "required",
+        "corners": "optional"
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "gouttiere",
+          "catalogCode": "ZINC-GUTTER-ANTH-360",
+          "label": "Gouttière zinc 360",
+          "required": true,
+          "quantityFormula": "gutterLengthM * 1.07",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 20,
+          "group": "gouttiere",
+          "catalogCode": "ZINC-GUTTER-HOOK-333",
+          "label": "Crochets de gouttière",
+          "required": true,
+          "quantityFormula": "ceil(gutterLengthM/gutterHookSpacingM)+endAllowance",
+          "unit": "piece"
+        },
+        {
+          "seq": 30,
+          "group": "gouttiere",
+          "catalogCode": null,
+          "label": "Talons/fonds de gouttière",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "2 per isolated gutter run adjusted for geometry",
+          "unit": "piece"
+        },
+        {
+          "seq": 40,
+          "group": "gouttiere",
+          "catalogCode": null,
+          "label": "Naissances/moignons",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "outlets",
+          "unit": "piece"
+        },
+        {
+          "seq": 50,
+          "group": "dilatation",
+          "catalogCode": "ZINC-EXPANSION-333",
+          "label": "Joints de dilatation",
+          "required": "according to run length and system rules",
+          "quantityFormula": "systemDesignCount",
+          "unit": "piece"
+        },
+        {
+          "seq": 60,
+          "group": "descente",
+          "catalogCode": "ZINC-DOWNPIPE-80",
+          "label": "Descentes rondes zinc",
+          "required": true,
+          "quantityFormula": "sum(downpipeHeightsM)*1.05",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 70,
+          "group": "descente",
+          "catalogCode": "ZINC-ELBOW-80X80",
+          "label": "Coudes de descente",
+          "required": "per geometry",
+          "quantityFormula": "geometryCount",
+          "unit": "piece"
+        },
+        {
+          "seq": 80,
+          "group": "descente",
+          "catalogCode": null,
+          "label": "Colliers de descente",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "mountingPlanCount",
+          "unit": "piece"
+        },
+        {
+          "seq": 90,
+          "group": "soudure",
+          "catalogCode": null,
+          "label": "Décapant et métal d'apport pour soudures",
+          "required": "where soldered zinc detail used",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "project_takeoff",
+          "unit": "consumable"
+        },
+        {
+          "seq": 100,
+          "group": "pliage",
+          "catalogCode": "ZINC-FOLD-200",
+          "label": "Pliages de raccord / bavettes",
+          "required": "per detail",
+          "quantityFormula": "flashingLengthM*1.07",
+          "unit": "linear_metre"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-MASONRY-CAVITY-WALL",
+      "label": "Maçonnerie mur creux — bloc porteur + isolation + brique de parement",
+      "workType": "masonry_cavity_wall",
+      "parameters": {
+        "wallNetAreaM2": "required",
+        "openings": "required",
+        "innerBlockType": {
+          "default": "argex_39x14x19"
+        },
+        "facingBrickFormat": {
+          "default": "DF"
+        },
+        "insulationThicknessMm": "project_specific",
+        "wallTieDensityPerM2": {
+          "default": 5,
+          "minGeneral": 5
+        },
+        "lintelSchedule": "required"
+      },
+      "sourcedConsumption": {
+        "argexBlocksPerM2": {
+          "value": 12.5,
+          "source": "Coeck"
+        },
+        "argexMortarLPerM2": {
+          "value": 15,
+          "source": "Coeck"
+        },
+        "mortarYieldLPer25kgBag": {
+          "value": 15,
+          "source": "Coeck 4-in-1"
+        },
+        "wallTiesPerM2": {
+          "generalMinimum": 5,
+          "ecoBrickExample": 6.5,
+          "source": "Wienerberger/Belgian guidance"
+        },
+        "facingBrickDFPerM2": {
+          "example": 58,
+          "source": "Vandersanden/Bouwdepot product examples"
+        },
+        "facingBrickWFPerM2": {
+          "example": 72,
+          "source": "Vandersanden product examples"
+        }
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "mur_interieur",
+          "catalogCode": "MASON-ARGEX-391419",
+          "label": "Blocs Argex 39x14x19",
+          "required": true,
+          "quantityFormula": "wallNetAreaM2 * 12.5 * 1.05",
+          "unit": "piece"
+        },
+        {
+          "seq": 20,
+          "group": "mortier",
+          "catalogCode": "MASON-MORTAR-M10-25",
+          "label": "Mortier de maçonnerie 25 kg",
+          "required": true,
+          "quantityFormula": "ceil(wallNetAreaM2 * 15 / 15 * 1.07)",
+          "unit": "bag_25kg",
+          "reason": "15 L/m² et 15 L/sac sourcés Coeck pour ce scénario."
+        },
+        {
+          "seq": 30,
+          "group": "isolation",
+          "catalogCode": "INS-PIR",
+          "label": "Isolation de coulisse",
+          "required": true,
+          "quantityFormula": "wallNetAreaM2 * 1.05",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 40,
+          "group": "liaison",
+          "catalogCode": "MASON-WALLTIE-210",
+          "label": "Crochets inox de mur creux avec goutte d'eau",
+          "required": true,
+          "quantityFormula": "wallNetAreaM2 * wallTieDensityPerM2 * 1.05",
+          "unit": "piece",
+          "reason": "Minimum général 5/m²; adapter aux zones de rive, vent et système."
+        },
+        {
+          "seq": 50,
+          "group": "parement",
+          "catalogCode": "MASON-FACING-BRICK-ARTIZA",
+          "label": "Briques de parement format WDF/DF selon choix",
+          "required": true,
+          "quantityFormula": "wallNetAreaM2 * selectedFacingBrickPiecesPerM2 * 1.07",
+          "unit": "piece"
+        },
+        {
+          "seq": 60,
+          "group": "parement",
+          "catalogCode": "MASON-MORTAR-25",
+          "label": "Mortier de pose/jointoiement parement",
+          "required": true,
+          "quantityFormula": "mortarTakeoffFromBrickFormatAndJoint",
+          "unit": "bag_25kg",
+          "reason": "Ne pas réutiliser aveuglément 15 L/m² du bloc intérieur pour le parement."
+        },
+        {
+          "seq": 70,
+          "group": "humidite",
+          "catalogCode": null,
+          "label": "DPC / membrane anticapillaire",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "baseLengthM + openingsSillAndCavityTrayLengthsM",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 80,
+          "group": "humidite",
+          "catalogCode": null,
+          "label": "Barbacanes/boîtes de ventilation de coulisse",
+          "required": "where cavity drainage detail requires",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "detailCount",
+          "unit": "piece"
+        },
+        {
+          "seq": 90,
+          "group": "linteaux",
+          "catalogCode": "MASON-LINTEL-160-9",
+          "label": "Linteaux précontraints intérieurs",
+          "required": true,
+          "quantityFormula": "from lintelSchedule",
+          "unit": "piece"
+        },
+        {
+          "seq": 100,
+          "group": "linteaux",
+          "catalogCode": null,
+          "label": "Cornière/linteau de parement",
+          "required": "over facing-brick openings",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "from opening widths and structural detail",
+          "unit": "piece_or_linear_metre"
+        },
+        {
+          "seq": 110,
+          "group": "renfort",
+          "catalogCode": null,
+          "label": "Armature horizontale de maçonnerie",
+          "required": "only if structural/design detail requires",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "structuralDetail",
+          "unit": "linear_metre",
+          "reason": "Ne pas inventer un entraxe universel."
+        },
+        {
+          "seq": 120,
+          "group": "consommables",
+          "catalogCode": null,
+          "label": "Ficelles, cales, profilés temporaires, protections",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "project_allowance",
+          "unit": "lot"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-MASONRY-BLOCK-WALL",
+      "label": "Petite maçonnerie — mur en blocs béton/Argex",
+      "workType": "masonry_block_wall",
+      "parameters": {
+        "wallNetAreaM2": "required",
+        "blockType": {
+          "default": "argex_39x14x19"
+        },
+        "openings": "optional"
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "blocs",
+          "catalogCode": "MASON-ARGEX-391419",
+          "label": "Blocs Argex creux 39x14x19",
+          "required": true,
+          "quantityFormula": "wallNetAreaM2*12.5*1.05",
+          "unit": "piece"
+        },
+        {
+          "seq": 20,
+          "group": "mortier",
+          "catalogCode": "MASON-MORTAR-M10-25",
+          "label": "Mortier M10 25 kg",
+          "required": true,
+          "quantityFormula": "ceil(wallNetAreaM2*15/15*1.07)",
+          "unit": "bag_25kg"
+        },
+        {
+          "seq": 30,
+          "group": "linteaux",
+          "catalogCode": "MASON-LINTEL-160-9",
+          "label": "Linteaux béton précontraints",
+          "required": "if openings",
+          "quantityFormula": "lintelSchedule",
+          "unit": "piece"
+        },
+        {
+          "seq": 40,
+          "group": "liaisons",
+          "catalogCode": null,
+          "label": "Ancrages de liaison au bâti existant",
+          "required": "when wall connects to existing structure",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "structuralDetail",
+          "unit": "piece"
+        },
+        {
+          "seq": 50,
+          "group": "humidite",
+          "catalogCode": null,
+          "label": "DPC sous première assise",
+          "required": "where wall bears on moisture-risk support",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "wallLengthM*1.05",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 60,
+          "group": "renfort",
+          "catalogCode": null,
+          "label": "Armature de joint",
+          "required": "if required by design",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "structuralDetail",
+          "unit": "linear_metre"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-AAC-PARTITION",
+      "label": "Maçonnerie béton cellulaire",
+      "workType": "aac_wall",
+      "parameters": {
+        "wallNetAreaM2": "required",
+        "blockThicknessMm": {
+          "default": 100
+        }
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "blocs",
+          "catalogCode": "MASON-AAC-602010",
+          "label": "Blocs béton cellulaire 60x20x10",
+          "required": true,
+          "quantityFormula": "wallNetAreaM2 / 0.12 * 1.05",
+          "unit": "piece",
+          "reason": "Face nominale 0,60 x 0,20 = 0,12 m²."
+        },
+        {
+          "seq": 20,
+          "group": "colle",
+          "catalogCode": "MASON-AAC-ADHESIVE-5",
+          "label": "Colle pour blocs cellulaires",
+          "required": true,
+          "quantityFormula": "manufacturerCoverageTakeoff",
+          "unit": "bag_5kg"
+        },
+        {
+          "seq": 30,
+          "group": "liaison",
+          "catalogCode": null,
+          "label": "Attaches/ancrages aux murs existants",
+          "required": "per junction",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "junctionDetailCount",
+          "unit": "piece"
+        },
+        {
+          "seq": 40,
+          "group": "linteaux",
+          "catalogCode": null,
+          "label": "Linteaux compatibles béton cellulaire",
+          "required": "if openings",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "lintelSchedule",
+          "unit": "piece"
+        },
+        {
+          "seq": 50,
+          "group": "finition",
+          "catalogCode": null,
+          "label": "Enduit/armature de finition",
+          "required": "if included in scope",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "finishedSurfaceM2",
+          "unit": "square_metre"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-CLADDING-CEDRAL",
+      "label": "Bardage fibres-ciment Cedral Click",
+      "workType": "fiber_cement_cladding",
+      "parameters": {
+        "facadeNetAreaM2": "required",
+        "perimeterM": "required",
+        "externalCornersM": "required",
+        "openingsPerimeterM": "required"
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "bardage",
+          "catalogCode": "CLAD-CEDRAL-CLICK-C18",
+          "label": "Lames Cedral Click",
+          "required": true,
+          "quantityFormula": "facadeNetAreaM2 / (0.186*3.6) * 1.08",
+          "unit": "piece"
+        },
+        {
+          "seq": 20,
+          "group": "ossature",
+          "catalogCode": null,
+          "label": "Tasseaux/ossature ventilée traitée ou profils système",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "facadeAreaFromBatSpacingAndOpenings",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 30,
+          "group": "membrane",
+          "catalogCode": null,
+          "label": "Pare-pluie façade",
+          "required": "according to wall build-up",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "facadeNetAreaM2*1.08",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 40,
+          "group": "isolation",
+          "catalogCode": "INS-PIR",
+          "label": "Isolation façade",
+          "required": "if insulated cladding",
+          "quantityFormula": "facadeNetAreaM2*1.05",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 50,
+          "group": "profils",
+          "catalogCode": "CLAD-CEDRAL-START",
+          "label": "Profil de départ",
+          "required": true,
+          "quantityFormula": "baseLengthM/3.05*1.05",
+          "unit": "piece"
+        },
+        {
+          "seq": 60,
+          "group": "profils",
+          "catalogCode": "CLAD-CEDRAL-CORNER",
+          "label": "Profils d'angle extérieur",
+          "required": "if external corners",
+          "quantityFormula": "externalCornersM/3*1.05",
+          "unit": "piece"
+        },
+        {
+          "seq": 70,
+          "group": "profils",
+          "catalogCode": null,
+          "label": "Profils de finition autour baies",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "openingsPerimeterM*1.05",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 80,
+          "group": "fixations",
+          "catalogCode": null,
+          "label": "Clips/vis de bardage système",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "manufacturerSystemTakeoff",
+          "unit": "piece"
+        },
+        {
+          "seq": 90,
+          "group": "ventilation",
+          "catalogCode": null,
+          "label": "Grilles anti-insectes entrée/sortie lame d'air",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "ventilationOpeningLengthM",
+          "unit": "linear_metre"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-ROOF-REPAIR",
+      "label": "Réparation ponctuelle toiture inclinée",
+      "workType": "roof_repair",
+      "parameters": {
+        "coveringType": "required",
+        "repairAreaM2": "required",
+        "cause": "required"
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "couverture",
+          "catalogCode": "dynamic_by_covering",
+          "label": "Ardoises/tuiles de remplacement compatibles",
+          "required": true,
+          "quantityFormula": "repairUnits + matchingReserve",
+          "unit": "piece"
+        },
+        {
+          "seq": 20,
+          "group": "fixations",
+          "catalogCode": "dynamic_by_covering",
+          "label": "Crochets/clips/pointes compatibles",
+          "required": true,
+          "quantityFormula": "repairUnitFixings",
+          "unit": "piece"
+        },
+        {
+          "seq": 30,
+          "group": "lattage",
+          "catalogCode": "WOOD-BATTEN-32X38",
+          "label": "Liteaux de réparation",
+          "required": "if damaged",
+          "quantityFormula": "measuredDamagedLengthM*1.10",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 40,
+          "group": "sous_toiture",
+          "catalogCode": null,
+          "label": "Patch sous-toiture + adhésif compatible",
+          "required": "if membrane damaged",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "repairPatchAreaM2",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 50,
+          "group": "zinguerie",
+          "catalogCode": "ZINC-FOLD-200",
+          "label": "Zinc/solin de réparation",
+          "required": "if flashing cause",
+          "quantityFormula": "measuredFlashingLengthM*1.10",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 60,
+          "group": "securite",
+          "catalogCode": null,
+          "label": "Protection collective / accès temporaire",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "siteSpecific",
+          "unit": "lot"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-ATTIC-INSULATION",
+      "label": "Isolation de toiture inclinée par l'intérieur",
+      "workType": "roof_internal_insulation",
+      "parameters": {
+        "insulatedAreaM2": "required",
+        "insulationThicknessMm": "required",
+        "airTightnessPerimeterM": "required",
+        "penetrations": "required"
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "isolation",
+          "catalogCode": "INS-GLASS-220",
+          "label": "Laine minérale 220 mm",
+          "required": true,
+          "quantityFormula": "insulatedAreaM2*1.05",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 20,
+          "group": "etancheite_air",
+          "catalogCode": "MEM-VAPOUR-VARIO",
+          "label": "Frein/pare-vapeur hygrovariable",
+          "required": true,
+          "quantityFormula": "insulatedAreaM2*1.08",
+          "unit": "square_metre"
+        },
+        {
+          "seq": 30,
+          "group": "etancheite_air",
+          "catalogCode": null,
+          "label": "Ruban adhésif système pour recouvrements",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "membraneLapLengthM + repairAllowanceM",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 40,
+          "group": "etancheite_air",
+          "catalogCode": null,
+          "label": "Mastic-colle d'étanchéité périphérique",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "airTightnessPerimeterM / cartridgeCoverageM",
+          "unit": "cartridge"
+        },
+        {
+          "seq": 50,
+          "group": "details",
+          "catalogCode": null,
+          "label": "Manchettes étanches pour câbles/conduits",
+          "required": "if penetrations > 0",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "penetrations",
+          "unit": "piece"
+        },
+        {
+          "seq": 60,
+          "group": "ossature",
+          "catalogCode": null,
+          "label": "Tasseaux/contre-ossature intérieure",
+          "required": "if service cavity/finish included",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "areaFromSpacing",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 70,
+          "group": "finition",
+          "catalogCode": null,
+          "label": "Plaques de finition",
+          "required": "if interior finish included",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "finishedAreaM2*1.10",
+          "unit": "square_metre"
+        }
+      ]
+    },
+    {
+      "id": "BATXL-BOM-CHIMNEY-REBUILD",
+      "label": "Réfection souche de cheminée et raccord toiture",
+      "workType": "chimney_rebuild",
+      "parameters": {
+        "masonryAreaM2": "required",
+        "chimneyPerimeterM": "required",
+        "flashingLengthM": "required",
+        "capRequired": {
+          "default": true
+        }
+      },
+      "lines": [
+        {
+          "seq": 10,
+          "group": "demolition",
+          "catalogCode": null,
+          "label": "Big-bags/évacuation gravats",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "demolitionVolumeAllowance",
+          "unit": "lot"
+        },
+        {
+          "seq": 20,
+          "group": "maconnerie",
+          "catalogCode": "MASON-FACING-BRICK-M65-3G",
+          "label": "Briques de parement de souche",
+          "required": true,
+          "quantityFormula": "masonryAreaM2*selectedFacingBrickPiecesPerM2*1.10",
+          "unit": "piece"
+        },
+        {
+          "seq": 30,
+          "group": "mortier",
+          "catalogCode": "MASON-MORTAR-25",
+          "label": "Mortier de maçonnerie",
+          "required": true,
+          "quantityFormula": "mortarTakeoffFromBrickFormatAndJoint",
+          "unit": "bag_25kg"
+        },
+        {
+          "seq": 40,
+          "group": "zinguerie",
+          "catalogCode": "ZINC-FOLD-200",
+          "label": "Noquets/solins/bavettes zinc",
+          "required": true,
+          "quantityFormula": "flashingLengthM*1.10",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 50,
+          "group": "etancheite",
+          "catalogCode": null,
+          "label": "Contre-solin / joint de finition compatible support",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "chimneyPerimeterM*1.10",
+          "unit": "linear_metre"
+        },
+        {
+          "seq": 60,
+          "group": "couronnement",
+          "catalogCode": null,
+          "label": "Couvre-mur/chapeau de cheminée",
+          "required": "if capRequired",
+          "supplierQuoteRequired": true,
+          "quantityFormula": "1",
+          "unit": "piece"
+        },
+        {
+          "seq": 70,
+          "group": "couverture",
+          "catalogCode": "dynamic_by_covering",
+          "label": "Ardoises/tuiles de raccord",
+          "required": true,
+          "quantityFormula": "repairUnits+matchingReserve",
+          "unit": "piece"
+        },
+        {
+          "seq": 80,
+          "group": "securite",
+          "catalogCode": null,
+          "label": "Accès/échafaudage/protection collective",
+          "required": true,
+          "supplierQuoteRequired": true,
+          "quantityFormula": "siteSpecific",
+          "unit": "lot"
+        }
+      ]
+    }
+  ],
+  "costingRules": {
+    "lineSourcePrice": "Resolve catalogCode against materials-catalog-2026-09-29.json.",
+    "exVatNormalization": "If vatIncluded=true and standard VAT applies, exVat = displayedPrice / 1.21. Do not apply this blindly when the source uses another tax basis.",
+    "quotePrice": "sourceBenchmarkExVat * (1 - syntheticProfessionalDiscountPct/100), with discount recorded explicitly.",
+    "projectMaterialCost": "sum(purchased quantity * negotiated unit cost) adjusted by actual returns/stock movements.",
+    "invoiceMaterialRevenue": "Never derive selling price solely from purchase price. Use quote lines with explicit markup/labour/overheads as commercial data.",
+    "stockTraceability": "Every project issue and return must reference stock item, quantity, source location, destination/project and BATXL operation key."
+  }
+}

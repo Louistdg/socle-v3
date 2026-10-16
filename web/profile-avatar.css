@@ -1,0 +1,26 @@
+.avatar.has-photo,.person-avatar.has-photo{padding:0;overflow:hidden;background:transparent}
+.socle-profile-avatar-image{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.socle-avatar-character{display:block;width:100%;height:100%;border-radius:inherit}
+.header-right .avatar[role="button"],.personal-head .person-avatar[role="button"]{cursor:pointer}
+.profile-avatar-edit{align-self:center;white-space:nowrap}
+.profile-avatar-modal{text-align:center}
+.profile-avatar-preview{width:112px;height:112px;margin:0 auto 14px;border-radius:50%;overflow:hidden;background:var(--ia-paper-soft,#eef1e8);display:grid;place-items:center;font-weight:800;font-size:1.4rem}
+.profile-avatar-preview .socle-profile-avatar-image{width:100%;height:100%}
+.profile-avatar-fallback{font-size:1.5rem}
+.socle-avatar-gallery{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;max-height:min(52vh,430px);overflow:auto;padding:4px 3px 10px;overscroll-behavior:contain}
+.socle-avatar-choice{min-width:0;display:grid;justify-items:center;gap:5px;padding:7px 4px;border:1px solid var(--line,#394657);border-radius:12px;background:var(--surface,#202b3b);color:var(--text,#e9edf5);cursor:pointer;transition:transform .15s ease,border-color .15s ease,background .15s ease}
+.socle-avatar-choice:hover{transform:translateY(-2px);border-color:var(--accent,#76d5bd)}
+.socle-avatar-choice.selected{border:2px solid var(--accent,#76d5bd);background:color-mix(in srgb,var(--accent,#76d5bd) 16%,var(--surface,#202b3b))}
+.socle-avatar-choice .socle-avatar-character{width:68px;height:68px;border-radius:50%}
+.socle-avatar-choice span{font-size:.7rem;line-height:1.15;min-height:2.2em;display:grid;place-items:center;text-align:center}
+.socle-avatar-picker>p,.profile-avatar-modal>p{margin:0 0 12px;color:var(--muted,#aeb9c9)}
+.profile-avatar-modal h3{margin:4px 0 6px;text-align:left}
+.profile-avatar-photo{border-top:1px solid var(--line,#394657);margin-top:10px;padding-top:8px}
+.profile-avatar-photo>p{margin:0 0 8px;text-align:left;color:var(--muted,#aeb9c9)}
+.person-avatar-management{display:flex;align-items:center;gap:12px;padding:12px;margin:0 0 14px;border:1px solid var(--line,#394657);border-radius:14px;background:var(--surface,#202b3b)}
+.person-avatar-management>div{width:60px;height:60px;flex:0 0 60px;overflow:hidden;border-radius:50%}
+.person-avatar-management>span{display:grid;gap:3px;flex:1;min-width:0}
+.person-avatar-management small{color:var(--muted,#aeb9c9)}
+.person-avatar-management .btn{flex:0 0 auto}
+@media(max-width:760px){.socle-avatar-gallery{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;max-height:56vh}.socle-avatar-choice .socle-avatar-character{width:62px;height:62px}}
+@media(max-width:460px){.socle-avatar-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.socle-avatar-choice{padding:6px 3px}.socle-avatar-choice .socle-avatar-character{width:60px;height:60px}.profile-avatar-edit{width:100%;text-align:left}.personal-head>div{flex-wrap:wrap}.profile-avatar-preview{width:96px;height:96px}.person-avatar-management>div{width:48px;height:48px;flex-basis:48px}}

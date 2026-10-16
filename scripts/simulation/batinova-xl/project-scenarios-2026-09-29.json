@@ -1,0 +1,649 @@
+{
+  "schemaVersion": 1,
+  "code": "BATXL-SCENARIOS-BE-2026-09-29",
+  "period": {
+    "from": "2026-08-18",
+    "to": "2026-09-28",
+    "workingDays": 30
+  },
+  "note": "All clients and project identities are synthetic. Municipalities are used only for Belgian/Walloon operational realism. Quantities are simulation take-offs; source-backed unit prices live in materials-catalog-2026-09-29.json.",
+  "clients": [
+    {
+      "id": "BATXL-CLI-001",
+      "name": "Famille Delcourt",
+      "type": "individual",
+      "city": "Namur",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-002",
+      "name": "Famille Renard",
+      "type": "individual",
+      "city": "Dinant",
+      "returning": true
+    },
+    {
+      "id": "BATXL-CLI-003",
+      "name": "Famille Laurent",
+      "type": "individual",
+      "city": "Ciney",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-004",
+      "name": "Famille Dubois",
+      "type": "individual",
+      "city": "Philippeville",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-005",
+      "name": "Famille Maréchal",
+      "type": "individual",
+      "city": "Couvin",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-006",
+      "name": "Famille Simon",
+      "type": "individual",
+      "city": "Rochefort",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-007",
+      "name": "Famille Legrand",
+      "type": "individual",
+      "city": "Andenne",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-008",
+      "name": "Famille Henry",
+      "type": "individual",
+      "city": "Gembloux",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-009",
+      "name": "Famille Gérard",
+      "type": "individual",
+      "city": "Charleroi",
+      "returning": true
+    },
+    {
+      "id": "BATXL-CLI-010",
+      "name": "Famille Martin",
+      "type": "individual",
+      "city": "Marche-en-Famenne",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-011",
+      "name": "Famille Evrard",
+      "type": "individual",
+      "city": "Mettet",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-012",
+      "name": "Famille Collard",
+      "type": "individual",
+      "city": "Florennes",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-013",
+      "name": "Habitat Meuse SRL",
+      "type": "business",
+      "city": "Namur",
+      "returning": true
+    },
+    {
+      "id": "BATXL-CLI-014",
+      "name": "Résidences Condroz SRL",
+      "type": "business",
+      "city": "Ciney",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-015",
+      "name": "Ateliers Sambre SA",
+      "type": "business",
+      "city": "Charleroi",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-016",
+      "name": "Immo Vallées SRL",
+      "type": "business",
+      "city": "Dinant",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-017",
+      "name": "Menuiseries du Centre SRL",
+      "type": "business",
+      "city": "Gembloux",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-018",
+      "name": "Gestion Patrimoine Ardenne SRL",
+      "type": "business",
+      "city": "Rochefort",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-019",
+      "name": "Bureau Horizon SRL",
+      "type": "business",
+      "city": "Namur",
+      "returning": false
+    },
+    {
+      "id": "BATXL-CLI-020",
+      "name": "Logis Mosan SRL",
+      "type": "business",
+      "city": "Andenne",
+      "returning": false
+    }
+  ],
+  "projects": [
+    {
+      "id": "BATXL-PRJ-001",
+      "clientId": "BATXL-CLI-001",
+      "name": "Rénovation complète toiture ardoise — Delcourt",
+      "city": "Namur",
+      "status": "active",
+      "vatProfile": "private_renovation_6_if_eligible",
+      "projectFamily": "roof_natural_slate",
+      "financialStory": "healthy_margin",
+      "weatherExposure": "high",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-ROOF-SLATE-NATURAL",
+          "parameters": {
+            "roofAreaM2": 168,
+            "eavesLengthM": 28,
+            "ridgeLengthM": 11,
+            "vergeLengthM": 20,
+            "rafterSpacingM": 0.45,
+            "overlapMm": 90,
+            "insulatedAreaM2": 152,
+            "flashingLengthM": 18,
+            "downpipeHeightsM": [
+              5.8,
+              5.8
+            ],
+            "gutterHookSpacingM": 0.5,
+            "roofWindows": 2,
+            "chimneys": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-002",
+      "clientId": "BATXL-CLI-003",
+      "name": "Réfection toiture tuile Actua 10 — Laurent",
+      "city": "Ciney",
+      "status": "active",
+      "vatProfile": "private_renovation_6_if_eligible",
+      "projectFamily": "roof_clay_tile",
+      "financialStory": "tight_margin_due_to_labor",
+      "weatherExposure": "high",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-ROOF-TILE-ACTUA10",
+          "parameters": {
+            "roofAreaM2": 214,
+            "ridgeLengthM": 14.5,
+            "vergeLengthM": 24,
+            "rafterSpacingM": 0.45,
+            "selectedBattenSpacingMm": 345,
+            "insulatedAreaM2": 196,
+            "flashingLengthM": 21
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-003",
+      "clientId": "BATXL-CLI-002",
+      "name": "Sarking + ardoises — Renard",
+      "city": "Dinant",
+      "status": "active",
+      "vatProfile": "private_renovation_6_if_eligible",
+      "projectFamily": "sarking_slate",
+      "financialStory": "approved_positive_amendment",
+      "weatherExposure": "high",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-SARKING-SLATE",
+          "parameters": {
+            "roofAreaM2": 152,
+            "rafterSpacingM": 0.4,
+            "ridgeLengthM": 10.2,
+            "eavesLengthM": 25,
+            "flashingLengthM": 16,
+            "boardEffectiveWidthM": 0.18
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-004",
+      "clientId": "BATXL-CLI-004",
+      "name": "Plateforme EPDM habitation — Dubois",
+      "city": "Philippeville",
+      "status": "active",
+      "vatProfile": "private_renovation_6_if_eligible",
+      "projectFamily": "flat_roof_epdm",
+      "financialStory": "supplier_delay",
+      "weatherExposure": "medium",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-FLAT-EPDM",
+          "parameters": {
+            "roofAreaM2": 92,
+            "perimeterM": 42,
+            "upstandAreaM2": 12,
+            "outlets": 2,
+            "insulationThicknessMm": 120
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-005",
+      "clientId": "BATXL-CLI-005",
+      "name": "Extension — toiture plate EPDM",
+      "city": "Couvin",
+      "status": "planned",
+      "vatProfile": "standard_21",
+      "projectFamily": "flat_roof_epdm",
+      "financialStory": "deposit_received",
+      "weatherExposure": "medium",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-FLAT-EPDM",
+          "parameters": {
+            "roofAreaM2": 48,
+            "perimeterM": 29,
+            "upstandAreaM2": 8,
+            "outlets": 1,
+            "insulationThicknessMm": 140
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-006",
+      "clientId": "BATXL-CLI-006",
+      "name": "Remplacement gouttières et descentes zinc",
+      "city": "Rochefort",
+      "status": "active",
+      "vatProfile": "private_renovation_6_if_eligible",
+      "projectFamily": "zinc_rainwater",
+      "financialStory": "normal_small_job",
+      "weatherExposure": "medium",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-ZINC-RAINWATER",
+          "parameters": {
+            "gutterLengthM": 44,
+            "downpipeHeightsM": [
+              6.2,
+              5.8,
+              6
+            ],
+            "outlets": 3,
+            "corners": 4,
+            "gutterHookSpacingM": 0.5,
+            "flashingLengthM": 8
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-007",
+      "clientId": "BATXL-CLI-013",
+      "name": "Bardage Cedral immeuble Meuse",
+      "city": "Namur",
+      "status": "active",
+      "vatProfile": "standard_21",
+      "projectFamily": "fiber_cement_cladding",
+      "financialStory": "material_cost_pressure",
+      "weatherExposure": "medium",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-CLADDING-CEDRAL",
+          "parameters": {
+            "facadeNetAreaM2": 126,
+            "perimeterM": 51,
+            "baseLengthM": 28,
+            "externalCornersM": 9,
+            "openingsPerimeterM": 32,
+            "ventilationOpeningLengthM": 41
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-008",
+      "clientId": "BATXL-CLI-007",
+      "name": "Extension maçonnée mur creux — Legrand",
+      "city": "Andenne",
+      "status": "active",
+      "vatProfile": "standard_21",
+      "projectFamily": "masonry_cavity_wall",
+      "financialStory": "good_margin_with_stock_return",
+      "weatherExposure": "low",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-MASONRY-CAVITY-WALL",
+          "parameters": {
+            "wallNetAreaM2": 86,
+            "openings": 5,
+            "innerBlockType": "argex_39x14x19",
+            "facingBrickFormat": "DF",
+            "selectedFacingBrickPiecesPerM2": 58,
+            "insulationThicknessMm": 120,
+            "wallTieDensityPerM2": 5,
+            "baseLengthM": 26,
+            "openingsSillAndCavityTrayLengthsM": 18,
+            "lintelSchedule": [
+              {
+                "lengthM": 1.6,
+                "count": 3
+              },
+              {
+                "lengthM": 2.2,
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-009",
+      "clientId": "BATXL-CLI-008",
+      "name": "Garage en blocs Argex — Henry",
+      "city": "Gembloux",
+      "status": "waiting",
+      "vatProfile": "standard_21",
+      "projectFamily": "masonry_block_wall",
+      "financialStory": "waiting_on_client_decision",
+      "weatherExposure": "low",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-MASONRY-BLOCK-WALL",
+          "parameters": {
+            "wallNetAreaM2": 72,
+            "wallLengthM": 31,
+            "openings": 3,
+            "lintelSchedule": [
+              {
+                "lengthM": 1.6,
+                "count": 2
+              },
+              {
+                "lengthM": 2.2,
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-010",
+      "clientId": "BATXL-CLI-014",
+      "name": "Cloisons techniques béton cellulaire — Condroz",
+      "city": "Ciney",
+      "status": "active",
+      "vatProfile": "standard_21",
+      "projectFamily": "aac_wall",
+      "financialStory": "hours_overrun",
+      "weatherExposure": "none",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-AAC-PARTITION",
+          "parameters": {
+            "wallNetAreaM2": 58,
+            "blockThicknessMm": 100,
+            "junctionCount": 8,
+            "finishedSurfaceM2": 116
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-011",
+      "clientId": "BATXL-CLI-009",
+      "name": "Réparation toiture ardoise après infiltration — Gérard",
+      "city": "Charleroi",
+      "status": "completed",
+      "vatProfile": "private_renovation_6_if_eligible",
+      "projectFamily": "roof_repair",
+      "financialStory": "completed_paid",
+      "weatherExposure": "high",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-ROOF-REPAIR",
+          "parameters": {
+            "coveringType": "natural_slate_32x22",
+            "repairAreaM2": 18,
+            "cause": "slates_and_flashing",
+            "repairUnits": 86,
+            "measuredDamagedLengthM": 8,
+            "repairPatchAreaM2": 7,
+            "measuredFlashingLengthM": 5.5
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-012",
+      "clientId": "BATXL-CLI-010",
+      "name": "Réfection souche de cheminée — Martin",
+      "city": "Marche-en-Famenne",
+      "status": "blocked",
+      "vatProfile": "private_renovation_6_if_eligible",
+      "projectFamily": "chimney_rebuild",
+      "financialStory": "blocked_by_weather_and_access",
+      "weatherExposure": "high",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-CHIMNEY-REBUILD",
+          "parameters": {
+            "masonryAreaM2": 14,
+            "chimneyPerimeterM": 5.2,
+            "flashingLengthM": 6.5,
+            "selectedFacingBrickPiecesPerM2": 58,
+            "capRequired": true,
+            "repairUnits": 28
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-013",
+      "clientId": "BATXL-CLI-011",
+      "name": "Isolation toiture par l'intérieur — Evrard",
+      "city": "Mettet",
+      "status": "active",
+      "vatProfile": "private_renovation_6_if_eligible",
+      "projectFamily": "roof_internal_insulation",
+      "financialStory": "planned_margin_recovery",
+      "weatherExposure": "none",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-ATTIC-INSULATION",
+          "parameters": {
+            "insulatedAreaM2": 138,
+            "insulationThicknessMm": 220,
+            "airTightnessPerimeterM": 61,
+            "penetrations": 9,
+            "finishedAreaM2": 132
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-014",
+      "clientId": "BATXL-CLI-015",
+      "name": "Rénovation multi-corps site industriel — Ateliers Sambre",
+      "city": "Charleroi",
+      "status": "active",
+      "vatProfile": "standard_21",
+      "projectFamily": "professional_multi_trade",
+      "financialStory": "large_contract_with_partial_invoicing_and_supplier_risk",
+      "weatherExposure": "mixed",
+      "compliance": {
+        "minimumContractExVatEur": 500000,
+        "exerciseCheckinatworkPath": true,
+        "simulationOnlyNoExternalDeclaration": true
+      },
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-ROOF-SLATE-NATURAL",
+          "parameters": {
+            "roofAreaM2": 480,
+            "eavesLengthM": 72,
+            "ridgeLengthM": 31,
+            "vergeLengthM": 44,
+            "rafterSpacingM": 0.5,
+            "overlapMm": 90,
+            "insulatedAreaM2": 420,
+            "flashingLengthM": 58,
+            "downpipeHeightsM": [
+              8,
+              8,
+              8,
+              8
+            ],
+            "gutterHookSpacingM": 0.5,
+            "roofWindows": 0,
+            "chimneys": 2
+          }
+        },
+        {
+          "templateId": "BATXL-BOM-FLAT-EPDM",
+          "parameters": {
+            "roofAreaM2": 260,
+            "perimeterM": 88,
+            "upstandAreaM2": 31,
+            "outlets": 6,
+            "insulationThicknessMm": 140
+          }
+        },
+        {
+          "templateId": "BATXL-BOM-CLADDING-CEDRAL",
+          "parameters": {
+            "facadeNetAreaM2": 410,
+            "perimeterM": 115,
+            "baseLengthM": 76,
+            "externalCornersM": 24,
+            "openingsPerimeterM": 96,
+            "ventilationOpeningLengthM": 128
+          }
+        },
+        {
+          "templateId": "BATXL-BOM-MASONRY-CAVITY-WALL",
+          "parameters": {
+            "wallNetAreaM2": 520,
+            "openings": 18,
+            "innerBlockType": "argex_39x14x19",
+            "facingBrickFormat": "DF",
+            "selectedFacingBrickPiecesPerM2": 58,
+            "insulationThicknessMm": 140,
+            "wallTieDensityPerM2": 5,
+            "baseLengthM": 112,
+            "openingsSillAndCavityTrayLengthsM": 84,
+            "lintelSchedule": [
+              {
+                "lengthM": 1.6,
+                "count": 8
+              },
+              {
+                "lengthM": 2.2,
+                "count": 5
+              }
+            ]
+          }
+        },
+        {
+          "templateId": "BATXL-BOM-ZINC-RAINWATER",
+          "parameters": {
+            "gutterLengthM": 154,
+            "downpipeHeightsM": [
+              8,
+              8,
+              8,
+              8,
+              7.5,
+              7.5
+            ],
+            "outlets": 6,
+            "corners": 8,
+            "gutterHookSpacingM": 0.5,
+            "flashingLengthM": 64
+          }
+        }
+      ]
+    },
+    {
+      "id": "BATXL-PRJ-015",
+      "clientId": "BATXL-CLI-002",
+      "name": "Ancienne rénovation ardoise — Renard phase 1",
+      "city": "Dinant",
+      "status": "completed",
+      "vatProfile": "private_renovation_6_if_eligible",
+      "projectFamily": "roof_natural_slate",
+      "financialStory": "historical_returning_client_profitable",
+      "weatherExposure": "high",
+      "bomInstances": [
+        {
+          "templateId": "BATXL-BOM-ROOF-SLATE-NATURAL",
+          "parameters": {
+            "roofAreaM2": 118,
+            "eavesLengthM": 21,
+            "ridgeLengthM": 8.6,
+            "vergeLengthM": 16,
+            "rafterSpacingM": 0.45,
+            "overlapMm": 90,
+            "insulatedAreaM2": 0,
+            "flashingLengthM": 11,
+            "downpipeHeightsM": [
+              5.5,
+              5.5
+            ],
+            "gutterHookSpacingM": 0.5,
+            "roofWindows": 1,
+            "chimneys": 0
+          }
+        }
+      ]
+    }
+  ],
+  "prospectOnlyClients": [
+    "BATXL-CLI-012",
+    "BATXL-CLI-016",
+    "BATXL-CLI-017",
+    "BATXL-CLI-018",
+    "BATXL-CLI-019",
+    "BATXL-CLI-020"
+  ],
+  "validationRules": [
+    "Exactly 20 synthetic clients.",
+    "Exactly 15 projects.",
+    "At least one returning client with multiple projects.",
+    "At least one completed, planned, waiting and blocked project.",
+    "At least one professional multi-trade project >= 500,000 EUR ex VAT for simulation-only compliance paths.",
+    "Every project has at least one BOM template instance.",
+    "No exact selling price is hard-coded here; commercial pack derives quote lines from material/labour assumptions and records markups explicitly."
+  ]
+}

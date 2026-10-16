@@ -1,0 +1,723 @@
+{
+  "schemaVersion": 1,
+  "catalogCode": "BATXL-MATERIALS-BE-2026-09-29",
+  "observedAt": "2026-09-29",
+  "country": "BE",
+  "currency": "EUR",
+  "purpose": "Current public/list-price anchors for deterministic BatiNova XL simulation. Not customer-specific negotiated professional prices.",
+  "pricingRules": {
+    "normalizeToExVat": true,
+    "belgianStandardVatPercent": 21,
+    "publicRetailPricesUsuallyVatIncluded": true,
+    "toitmatGrossPricesVatIncluded": false,
+    "supplierDiscounts": "Synthetic negotiated discounts must be stored separately from source prices and never overwrite the observed source benchmark.",
+    "rounding": "Store source price as displayed; calculate normalized ex-VAT in simulation at cent precision.",
+    "missingPrice": "Use supplier-quote-required rather than inventing an exact current price."
+  },
+  "sources": {
+    "BIEMAR": "https://webshop.biemar.be/",
+    "TOITMAT": "https://www.toitmat.be/",
+    "HUBO": "https://www.hubo.be/",
+    "GAMMA": "https://www.gamma.be/",
+    "COECK": "https://www.coeck.be/",
+    "WIENERBERGER": "https://www.wienerberger.be/",
+    "BOUWDEPOT": "https://www.bouwdepot.be/",
+    "CUPA": "https://www.cupapizarras.com/be-fr/"
+  },
+  "benchmarks": [
+    {
+      "code": "ROOF-SLATE-NAT-3222",
+      "family": "ardoises",
+      "label": "Ardoise naturelle Itasi 32x22 RF35 1er tri ATG 689",
+      "unit": "piece",
+      "price": 2.03,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/48519/ardoise-naturelle-itasi-32-22-rf35-1er-tri/",
+      "notes": "Public retail TTC."
+    },
+    {
+      "code": "ROOF-SLATE-FC-6032",
+      "family": "ardoises",
+      "label": "Ardoise fibrociment Alterna 60x32 gris foncé type 5",
+      "unit": "piece",
+      "price": 2.73,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/48735/eternit-alterna-60-32-gris-fonce-type-5-sans-coins-coupes/",
+      "notes": "Observed clearance/public TTC; use only as benchmark."
+    },
+    {
+      "code": "ROOF-SLATE-FC-404010",
+      "family": "ardoises",
+      "label": "Ardoise fibrociment Eternit 40/40/10 gris foncé toiture",
+      "unit": "piece",
+      "price": 2.89,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/48561/eternit-ardoise-40-40-10-gris-fonce-pour-toiture/",
+      "notes": "Observed clearance/public TTC."
+    },
+    {
+      "code": "ROOF-HOOK-INOX-92",
+      "family": "fixations",
+      "label": "Crochets inox 17% 92 mm bosselés à piquer",
+      "unit": "box_700",
+      "price": 64.74,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/48878/crochets-inox-17-92mm-bp-bossele-a-piquer-700pcs/"
+    },
+    {
+      "code": "ROOF-HOOK-INOX-70",
+      "family": "fixations",
+      "label": "Crochets inox 17% 70 mm droit à piquer",
+      "unit": "box_700",
+      "price": 55.33,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/48887/crochets-inox-17-70mm-dp-droit-piquer-700pcs/"
+    },
+    {
+      "code": "ROOF-HOOK-INOX-112",
+      "family": "fixations",
+      "label": "Crochets inox 112/3,00 AISI430 bosselés à piquer",
+      "unit": "box_500",
+      "price": 48.73,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/inox-crochet-112-3-00-a-piquer-clair-f17-bossele-500pcs-bt-eur-bt-qualite-inox-aisi430/xinpina11217p"
+    },
+    {
+      "code": "ROOF-TILE-ACTUA-RED",
+      "family": "tuiles",
+      "label": "Tuile terre cuite Actua 10 rouge naturel n°600",
+      "unit": "piece",
+      "price": 2.87,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/48714/tuile-actua-rouge-n-600/"
+    },
+    {
+      "code": "ROOF-TILE-ACTUA-RIDGE",
+      "family": "tuiles",
+      "label": "Faîtière angulaire Actua ardoisé LT",
+      "unit": "piece",
+      "price": 13.35,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/48697/faitiere-angulaire-actua-ardoise-3pc-m-lt/",
+      "coverage": "3 pieces per linear metre"
+    },
+    {
+      "code": "ROOF-TILE-ACTUA-EDGE",
+      "family": "tuiles",
+      "label": "Demi-rive Actua rouge",
+      "unit": "piece",
+      "price": 14.05,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/48719/demi-rive-gauche-actua-rouge-1-4pc-m/",
+      "coverage": "1.4 pieces per linear metre"
+    },
+    {
+      "code": "ROOF-TILE-ACTUA-VENT",
+      "family": "tuiles",
+      "label": "Chatière Actua ardoisé avec grille",
+      "unit": "piece",
+      "price": 62.75,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/48693/chatiere-actua-ardoise/"
+    },
+    {
+      "code": "WOOD-BATTEN-32X38",
+      "family": "bois",
+      "label": "Latte toiture SRN traitée 32x38 mm",
+      "unit": "linear_metre",
+      "price": 1.02,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/bois/lattes"
+    },
+    {
+      "code": "WOOD-BATTEN-24X36",
+      "family": "bois",
+      "label": "Latte toiture SRN traitée 24x36 mm",
+      "unit": "linear_metre",
+      "price": 0.623,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/bois/lattes"
+    },
+    {
+      "code": "WOOD-COUNTERBATTEN-15X22",
+      "family": "bois",
+      "label": "Contre-latte traitée 15x22 mm",
+      "unit": "linear_metre",
+      "price": 0.34,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/contre-latte-15mm-tr-1.35lm-eur-mc-22mm/plg1522135"
+    },
+    {
+      "code": "WOOD-VOLIGE-25X180",
+      "family": "bois",
+      "label": "Volige SRN traitée 4/4 x 18",
+      "unit": "linear_metre",
+      "price": 2.81,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/bois/voliges"
+    },
+    {
+      "code": "WOOD-STRUCT-63X175",
+      "family": "charpente",
+      "label": "Epicéa brut de charpente 63x175 mm",
+      "unit": "linear_metre",
+      "price": 14.29,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/epicea-brut-63x175-mm-360cm/81176/"
+    },
+    {
+      "code": "WOOD-OSB3-18",
+      "family": "panneaux",
+      "label": "OSB3 rainuré-languetté 18 mm 244x59",
+      "unit": "square_metre",
+      "price": 10.41,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/osb-3-rainure-et-languette-244x59-cm-18mm/5768/"
+    },
+    {
+      "code": "INS-GLASS-150",
+      "family": "isolation",
+      "label": "Isover Rollisol+ 150 mm R≈3.75",
+      "unit": "square_metre",
+      "price": 9.96,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/isolation/laine-minerale/toit-incline/isover"
+    },
+    {
+      "code": "INS-GLASS-180",
+      "family": "isolation",
+      "label": "Isover Rollisol+ 180 mm R≈4.50",
+      "unit": "square_metre",
+      "price": 11.99,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/isolation/laine-minerale/toit-incline/isover"
+    },
+    {
+      "code": "INS-GLASS-220",
+      "family": "isolation",
+      "label": "Isover Isoconfort 32 220 mm R≈6.85",
+      "unit": "square_metre",
+      "price": 29.2,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/isover-isoconfort-32-1-20x22cm-2-76m2-rouleau-eur-m2-r-6-85/qiso3222"
+    },
+    {
+      "code": "INS-PIR",
+      "family": "isolation",
+      "label": "Panneaux PIR toiture, gamme publique",
+      "unit": "square_metre",
+      "priceRange": [
+        29.15,
+        52.76
+      ],
+      "vatIncluded": true,
+      "source": "GAMMA",
+      "url": "https://www.gamma.be/fr/conseils-bricolage/a/prix-isolation-des-toits",
+      "notes": "Range depends on thickness/product."
+    },
+    {
+      "code": "MEM-VAPOUR-DELTA",
+      "family": "membranes",
+      "label": "Delta PVG Plus pare-vapeur",
+      "unit": "square_metre",
+      "price": 3.58,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/accessoires/accessoires-toit-et-bardage/pare-vapeur"
+    },
+    {
+      "code": "MEM-VAPOUR-VARIO",
+      "family": "membranes",
+      "label": "Isover Vario KM Duplex pare-vapeur",
+      "unit": "square_metre",
+      "price": 4.61,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/accessoires/accessoires-toit-et-bardage/pare-vapeur"
+    },
+    {
+      "code": "FLAT-EPDM-12",
+      "family": "epdm",
+      "label": "Membrane EPDM Pandser 1,2 mm",
+      "unit": "square_metre",
+      "price": 20,
+      "vatIncluded": true,
+      "source": "GAMMA",
+      "url": "https://www.gamma.be/fr/assortiment/membrane-de-toiture-epdm-pandser-7-m-x-1-2-mm-a-commander-par-10-cm/p/B379701"
+    },
+    {
+      "code": "FLAT-EPDM-CONTACT-5L",
+      "family": "epdm",
+      "label": "Colle de contact EPDM Pandser Bonding Adhesive 5 L",
+      "unit": "can_5l",
+      "price": 59.99,
+      "vatIncluded": true,
+      "source": "GAMMA",
+      "url": "https://www.gamma.be/fr/assortiment/colle-de-contact-epdm-pandser-bonding-adhesive-5-l/p/B370097"
+    },
+    {
+      "code": "FLAT-EPDM-PU-5L",
+      "family": "epdm",
+      "label": "Colle PU EPDM Pandser Bond 5 L",
+      "unit": "can_5l",
+      "price": 77.99,
+      "vatIncluded": true,
+      "source": "GAMMA",
+      "url": "https://www.gamma.be/fr/assortiment/colle-pu-epdm-pandser-bond-5-l/p/B369193"
+    },
+    {
+      "code": "FLAT-EPDM-PRIMER-1L",
+      "family": "epdm",
+      "label": "Primaire EPDM Pandser Water Based 1 L",
+      "unit": "litre",
+      "price": 21.99,
+      "vatIncluded": true,
+      "source": "GAMMA",
+      "url": "https://www.gamma.be/fr/assortiment/primaire-epdm-pandser-water-based-1-l/p/B368775",
+      "notes": "List price; promotion may differ."
+    },
+    {
+      "code": "ZINC-SHEET-08",
+      "family": "zinc",
+      "label": "Feuille VMZINC naturel 0,80 mm 2250x1000, 12,96 kg",
+      "unit": "kg",
+      "price": 6.013,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/zinc-feuille-vm-0-80-mm-2250-x-1000mm-12-960kg-2-25m2-eur-kg-220010156/m026412"
+    },
+    {
+      "code": "ZINC-SHEET-08-BUDGET",
+      "family": "zinc",
+      "label": "Feuille zinc Toitmat 0,80 mm 2250x1000, 12,96 kg",
+      "unit": "kg",
+      "price": 5.7,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/zinc-feuille-toitmat-0-80-mm-2250-x-1000mm-12-960kg-2-25m2-eur-kg/m041325"
+    },
+    {
+      "code": "ZINC-FOLD-200",
+      "family": "zinc",
+      "label": "Pliage zinc naturel+ développement 200 mm ép. 0,80",
+      "unit": "linear_metre",
+      "price": 12.88,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/zinc-pliage-ntrl-200-0-80mm/zvm200z-08"
+    },
+    {
+      "code": "ZINC-GUTTER-ANTH-360",
+      "family": "zinc",
+      "label": "Gouttière zinc anthracite 9/12/8 360 mm 0,80",
+      "unit": "linear_metre",
+      "price": 19.35,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/zinc-cuivre-plomb-et-alu/zinc/gouttieres-et-accessoires"
+    },
+    {
+      "code": "ZINC-GUTTER-HOOK-333",
+      "family": "zinc",
+      "label": "Crochet gouttière zinc demi-rond 333/420",
+      "unit": "piece",
+      "price": 1.98,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/zinc-cuivre-plomb-et-alu/zinc/crochets-de-gouttieres"
+    },
+    {
+      "code": "ZINC-DOWNPIPE-80",
+      "family": "zinc",
+      "label": "Descente zinc naturel ronde 80 mm 0,70",
+      "unit": "linear_metre",
+      "price": 8.91,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/zinc-cuivre-plomb-et-alu/zinc/tuyaux-de-descente-et-accessoires/tuyaux-de-descente"
+    },
+    {
+      "code": "ZINC-DOWNPIPE-80X80",
+      "family": "zinc",
+      "label": "Descente zinc naturel 80x80 mm 0,70",
+      "unit": "linear_metre",
+      "price": 10.78,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/zinc-vm-descente-80-80mm-2m-0-70-mm-220004661/zvmbv8072"
+    },
+    {
+      "code": "ZINC-ELBOW-80X80",
+      "family": "zinc",
+      "label": "Coude zinc 72° 80x80 mm",
+      "unit": "piece",
+      "price": 7.29,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/zinc-vm-descente-80-80mm-2m-0-70-mm-220004661/zvmbv8072"
+    },
+    {
+      "code": "ZINC-EXPANSION-333",
+      "family": "zinc",
+      "label": "Joint de dilatation zinc demi-rond 333/420",
+      "unit": "piece",
+      "price": 16.2,
+      "vatIncluded": false,
+      "source": "TOITMAT",
+      "url": "https://www.toitmat.be/fr/zinc-cuivre-plomb-et-alu/zinc/gouttieres-et-accessoires/accessoires/joint-dilatation"
+    },
+    {
+      "code": "MASON-BLOCK-391419",
+      "family": "maconnerie",
+      "label": "Bloc béton creux 39x14x19 cm",
+      "unit": "piece",
+      "price": 1.99,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/bloc-de-beton-39x14x19-cm/85629/"
+    },
+    {
+      "code": "MASON-ARGEX-391419",
+      "family": "maconnerie",
+      "label": "Bloc Argex creux 39x14x19 cm BENOR",
+      "unit": "piece",
+      "price": 2.59,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/benor-bloc-argex-creux-39x14x19-cm/122429/"
+    },
+    {
+      "code": "MASON-AAC-602010",
+      "family": "maconnerie",
+      "label": "Bloc béton cellulaire H+H 60x20x10 cm",
+      "unit": "piece",
+      "price": 3.79,
+      "vatIncluded": true,
+      "source": "GAMMA",
+      "url": "https://www.gamma.be/fr/assortiment/bloc-de-beton-cellulaire-h-h-60x20x10-cm/p/B335102"
+    },
+    {
+      "code": "MASON-AAC-602015",
+      "family": "maconnerie",
+      "label": "Bloc béton cellulaire H+H 60x20x15 cm",
+      "unit": "piece",
+      "price": 5.39,
+      "vatIncluded": true,
+      "source": "GAMMA",
+      "url": "https://www.gamma.be/fr/assortiment/bloc-de-beton-cellulaire-h-h-60x20x15-cm/p/B540343"
+    },
+    {
+      "code": "MASON-MORTAR-25",
+      "family": "maconnerie",
+      "label": "Mortier préparé 25 kg",
+      "unit": "bag_25kg",
+      "price": 5.39,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/92762/"
+    },
+    {
+      "code": "MASON-MORTAR-M10-25",
+      "family": "maconnerie",
+      "label": "Mortier universel 4 en 1 M10 25 kg",
+      "unit": "bag_25kg",
+      "price": 8.99,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/mortier-4-en-1-25kg/1050727/"
+    },
+    {
+      "code": "MASON-CEMENT-25",
+      "family": "maconnerie",
+      "label": "Ciment Portland CEM II/B-M 32,5 R 25 kg",
+      "unit": "bag_25kg",
+      "price": 9.49,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/ciment-portland-25kg-gris/368275/"
+    },
+    {
+      "code": "MASON-SAND-25",
+      "family": "maconnerie",
+      "label": "Sable jaune 0-2 mm 25 kg",
+      "unit": "bag_25kg",
+      "price": 2.79,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/sable-jaune-0-2-mm-25kg/16979/"
+    },
+    {
+      "code": "MASON-WALLTIE-210",
+      "family": "maconnerie",
+      "label": "Crochet mur creux 210x3,5 mm avec goutte d'eau",
+      "unit": "box_100",
+      "price": 24.89,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/mack-crochet-pour-mur-210x3-5-mm-100-pieces/791981/"
+    },
+    {
+      "code": "MASON-WALLTIE-230",
+      "family": "maconnerie",
+      "label": "Crochet mur creux 230x3,5 mm avec goutte d'eau",
+      "unit": "box_100",
+      "price": 26.39,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/mack-crochet-pour-mur-230x3-5-mm-100-pieces/791982.html"
+    },
+    {
+      "code": "MASON-LINTEL-160-9",
+      "family": "maconnerie",
+      "label": "Linteau béton précontraint 160x9x6 cm",
+      "unit": "piece",
+      "price": 16.59,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/linteau-precontrait-160x9x6-cm/57345/"
+    },
+    {
+      "code": "MASON-LINTEL-220-14",
+      "family": "maconnerie",
+      "label": "Linteau béton précontraint 220x14x6 cm",
+      "unit": "piece",
+      "price": 29.39,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/linteau-precontraint-220x14x6-cm-br/8746/"
+    },
+    {
+      "code": "MASON-AAC-ADHESIVE-5",
+      "family": "maconnerie",
+      "label": "Colle Weber pour blocs cellulaires 5 kg",
+      "unit": "bag_5kg",
+      "price": 11.29,
+      "vatIncluded": true,
+      "source": "GAMMA",
+      "url": "https://www.gamma.be/fr/assortiment/colle-pour-blocs-cellulaires-weber-5-kg/p/B247466"
+    },
+    {
+      "code": "MASON-FACING-BRICK-M65-3G",
+      "family": "briques",
+      "label": "Brique de parement rouge M65 188x88x63 3 trous",
+      "unit": "piece",
+      "price": 0.53,
+      "vatIncluded": true,
+      "source": "BOUWDEPOT",
+      "url": "https://www.bouwdepot.be/42-gevelstenen-online-kopen"
+    },
+    {
+      "code": "MASON-FACING-BRICK-ARTIZA",
+      "family": "briques",
+      "label": "Brique de parement Artiza WDF",
+      "unit": "piece",
+      "price": 0.94,
+      "vatIncluded": true,
+      "source": "BOUWDEPOT",
+      "url": "https://www.bouwdepot.be/941-snelbouw-amp-gevelstenen",
+      "coverage": "58 pieces/m² at 12 mm joint"
+    },
+    {
+      "code": "MASON-THERMOBRICK-29914",
+      "family": "briques",
+      "label": "Snelbouw/Thermobrick 29x9x14 cm",
+      "unit": "piece",
+      "price": 0.7,
+      "vatIncluded": true,
+      "source": "BOUWDEPOT",
+      "url": "https://www.bouwdepot.be/686-snelbouwstenen-metsen-online-kopen"
+    },
+    {
+      "code": "FIX-WOOD-6X100",
+      "family": "fixations",
+      "label": "Vis construction bois 6x100 mm",
+      "unit": "box_100",
+      "price": 23.99,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/vis-construction-100x6-mm-zingue-100-pieces/911093/"
+    },
+    {
+      "code": "FIX-WOOD-6X60",
+      "family": "fixations",
+      "label": "Vis construction bois 6x60 mm",
+      "unit": "box_100",
+      "price": 16.89,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/vis-construction-60x6-mm-zingue-100-pieces/911090/"
+    },
+    {
+      "code": "FIX-SLATE-COPPER-27X30",
+      "family": "fixations",
+      "label": "Pointes ardoise cuivre 2,7x30 mm",
+      "unit": "pack_180g",
+      "price": 19.99,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/sam-pointes-d-ardoise-2-7x30-mm-180g/209385/"
+    },
+    {
+      "code": "CONS-PU-750",
+      "family": "consommables",
+      "label": "Mousse PU 750 ml",
+      "unit": "can_750ml",
+      "price": 8.59,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/hubo-mousse-pu-750ml/534110/"
+    },
+    {
+      "code": "CLAD-CEDRAL-CLICK-C18",
+      "family": "bardage",
+      "label": "Cedral Click Wood C18 gris ardoise 12x186x3600",
+      "unit": "piece",
+      "price": 64.14,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/10401/sidings-cedral-click-wood-c18-gris-ardoise-3600-186-ral7024/"
+    },
+    {
+      "code": "CLAD-CEDRAL-START",
+      "family": "bardage",
+      "label": "Profil départ Cedral Click alu 3,05 m",
+      "unit": "piece",
+      "price": 56.99,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/10318/profil-depart-sidings-click-3m05-alu/"
+    },
+    {
+      "code": "CLAD-CEDRAL-CORNER",
+      "family": "bardage",
+      "label": "Angle extérieur Cedral Click 3 m gris schiste",
+      "unit": "piece",
+      "price": 68.64,
+      "vatIncluded": true,
+      "source": "BIEMAR",
+      "url": "https://webshop.biemar.be/fr/articles/10403/angle-exterieur-sidings-click-3m-018-gris-schiste/"
+    },
+    {
+      "code": "RAIN-PVC-G125",
+      "family": "evacuation",
+      "label": "Gouttière PVC Scala G125 gris clair",
+      "unit": "linear_metre",
+      "price": 7.5,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/scala-g125-gouttiere-3m-gris-clair/120327/"
+    },
+    {
+      "code": "RAIN-PVC-G125-HOOK",
+      "family": "evacuation",
+      "label": "Crochet gouttière PVC Scala G125",
+      "unit": "piece",
+      "price": 2.39,
+      "vatIncluded": true,
+      "source": "HUBO",
+      "url": "https://www.hubo.be/fr/p/scala-crochet-gouttiere-g125-pvc-gris-fonce/327084/"
+    }
+  ],
+  "technicalConsumptionAnchors": {
+    "naturalSlate3222": {
+      "source": "CUPA",
+      "url": "https://www.cupapizarras.com/be-fr/centre-ressources/faqs/pureau-ardoises-au-m2/",
+      "piecesPerSquareMetreRange": [
+        35,
+        40
+      ],
+      "examplePureauMm": 115,
+      "examplePiecesPerSquareMetre": 39.6,
+      "note": "Hook count roughly tracks slate count in hook-fixed layouts; final design must follow exposure/pitch/overlap."
+    },
+    "actua10": {
+      "source": "WIENERBERGER",
+      "url": "https://www.wienerberger.be/fr/toiture/moteur-de-recherche/actua-10-rouge-naturel.html",
+      "piecesPerSquareMetreRange": [
+        10,
+        12.4
+      ],
+      "battenSpacingMmRange": [
+        310,
+        380
+      ],
+      "ridgePiecesPerLinearMetre": 3
+    },
+    "argex391419": {
+      "source": "COECK",
+      "url": "https://www.coeck.be/fr-be/products/bloc-argex-39-x-14-x-19-cm-creux-benor-4-1-2",
+      "piecesPerSquareMetre": 12.5,
+      "mortarLitresPerSquareMetre": 15
+    },
+    "universalMortar25kg": {
+      "source": "COECK",
+      "url": "https://www.coeck.be/fr-be/products/mortier-universel-4-en-1-501",
+      "mortarLitresPerBag": 15
+    }
+  },
+  "targetReferenceAllocation": {
+    "total": 100,
+    "families": [
+      {
+        "family": "ardoises_tuiles_accessoires",
+        "count": 14
+      },
+      {
+        "family": "bois_charpente_panneaux",
+        "count": 12
+      },
+      {
+        "family": "isolation_membranes",
+        "count": 10
+      },
+      {
+        "family": "zinc_evacuation",
+        "count": 14
+      },
+      {
+        "family": "toiture_plate_epdm",
+        "count": 8
+      },
+      {
+        "family": "maconnerie_briques_mortiers",
+        "count": 14
+      },
+      {
+        "family": "bardage_facade",
+        "count": 8
+      },
+      {
+        "family": "fixations_colles_consommables",
+        "count": 10
+      },
+      {
+        "family": "epi",
+        "count": 5
+      },
+      {
+        "family": "drainage_pvc",
+        "count": 5
+      }
+    ],
+    "rule": "The final 100 stock references may expand these benchmark families with dimension/colour/thickness variants. Derived prices must retain derivedFrom and formula; exact current prices may not be invented."
+  }
+}

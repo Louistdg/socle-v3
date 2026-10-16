@@ -1,0 +1,30 @@
+.stock-barcode-shell{display:grid;gap:12px}
+.stock-barcode-camera{position:relative;overflow:hidden;min-height:260px;border:1px solid var(--ia-paper-line);border-radius:12px;background:var(--ia-paper-soft)}
+.stock-barcode-camera video{display:block;width:100%;min-height:260px;max-height:440px;object-fit:cover;background:var(--ia-paper-soft)}
+.stock-barcode-guide{position:absolute;left:10%;right:10%;top:44%;height:12%;border:2px solid var(--ia-paper-text);border-radius:10px;pointer-events:none}
+.stock-barcode-manual{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}
+.stock-barcode-manual label{display:grid;gap:5px}
+.stock-barcode-manual input,.stock-barcode-manual .btn{min-height:44px}
+.stock-barcode-result{display:grid;gap:12px;padding:14px;border:1px solid var(--ia-paper-line);border-radius:12px;background:var(--ia-paper-soft);color:var(--ia-paper-text)}
+.stock-barcode-result h3,.stock-barcode-result p{margin:2px 0}
+.stock-barcode-result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.stock-barcode-result-grid span{display:grid;gap:3px;padding:10px;border:1px solid var(--ia-paper-line);border-radius:9px;background:var(--ia-paper)}
+.stock-barcode-result-grid small{color:var(--ia-paper-muted)}
+.stock-barcode-manager{display:grid;gap:12px}
+.stock-barcode-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--ia-paper-line)}
+.stock-barcode-row:first-child{border-top:0}
+.stock-barcode-row strong,.stock-barcode-row small{display:block}
+.stock-barcode-row small{margin-top:3px;color:var(--ia-paper-muted)}
+.stock-barcode-row-actions{display:flex;flex-wrap:wrap;gap:8px}
+.stock-barcode-primary{display:flex;align-items:center;gap:8px;min-height:44px}
+.stock-barcode-primary input{width:auto}
+[data-stock-barcode-status][data-kind="success"]{color:var(--ia-success)}
+[data-stock-barcode-status][data-kind="error"]{color:var(--ia-danger)}
+@media(max-width:700px){
+  .stock-barcode-camera,.stock-barcode-camera video{min-height:220px}
+  .stock-barcode-manual{grid-template-columns:minmax(0,1fr)}
+  .stock-barcode-result-grid{grid-template-columns:minmax(0,1fr)}
+  .stock-barcode-row{grid-template-columns:minmax(0,1fr) auto}
+  .stock-barcode-row-actions{grid-column:1/-1}
+  .stock-barcode-row-actions .link{min-height:44px}
+}

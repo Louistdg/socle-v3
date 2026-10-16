@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOCLE V3 — Votre entreprise en mouvement</title>
+  <meta name="description" content="Votre entreprise, ses dossiers et ses échéances dans un même espace.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23163240'/%3E%3Cpath d='M8 10h16v5H13v3h11v5H8v-5h11v-3H8z' fill='%236fe0cb'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="organization.css">
+  <link rel="stylesheet" href="planning.css">
+  <link rel="stylesheet" href="ia-a-ui.css">
+  <link rel="stylesheet" href="ui-foundation.css">
+  <link rel="stylesheet" href="stock-catalog-v2.css">
+  <link rel="stylesheet" href="stock-barcode.css">
+  <link rel="stylesheet" href="profile-avatar.css">
+  <link rel="stylesheet" href="mobile-nav.css">
+  <link rel="stylesheet" href="v3.css">
+  <link rel="stylesheet" href="v3-themes.css">
+  <link rel="stylesheet" href="quote-roofing-metre.css">
+  <link rel="stylesheet" href="document-triage.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="#" onclick="navigate('home');return false"><span class="brandmark">s</span>socle<span class="branddot">.</span></a><span class="workspace"><select id="organizationSwitcher" aria-label="Entreprise active" onchange="selectSocleOrganization(this.value)" hidden></select><span id="organizationLabel">Chargement…</span><small id="organizationSwitcherStatus" role="status" aria-live="polite" hidden></small><small>ESPACE ENTREPRISE</small></span><div class="global-search"><label class="sr-only" for="globalSearch">Rechercher partout</label><input id="globalSearch" type="search" placeholder="Rechercher partout…" autocomplete="off" oninput="searchEverywhere(this.value)" onfocus="searchEverywhere(this.value)"></div><button class="quick-create" onclick="quickCreateMenu()" aria-label="Créer rapidement">+</button><div class="header-right"><span class="demo">Espace de travail · exemples fictifs</span><div class="socle-theme-picker"><button id="socleThemeButton" class="theme-button" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="socleThemeMenu" title="Changer les couleurs">Thème</button><div id="socleThemeMenu" class="theme-menu" role="menu" hidden></div></div><span class="avatar">LM</span></div></header>
+  <nav id="nav" class="topnav" aria-label="Espace entreprise"></nav>
+  <div id="saveStatus" role="status" aria-live="polite"></div>
+  <main id="main"></main>
+  <footer><span>Socle · Votre entreprise en mouvement</span><span>Dossiers sauvegardés · photos temporaires · règles non vérifiées</span></footer>
+  <dialog id="modal"><div id="modalbody"></div></dialog><div id="toast" role="status"></div>
+  <script src="/production-runtime.js"></script><script src="workspace-config.js"></script><script src="app.js"></script><script src="cockpit.js"></script><script src="admin.js"></script><script src="business.js"></script><script src="refinement.js"></script><script src="permissions.js"></script><script src="organization.js"></script><script src="archives.js"></script><script src="realistic-demo.js"></script><script src="workflow-improvements.js"></script><script src="server-modules.js"></script><script src="field-workflows.js"></script><script src="quick-intervention.js"></script><script src="free-entry.js"></script><script src="contacts.js"></script><script src="quote-preproject.js"></script><script src="blank-workspace.js"></script><script src="partners.js"></script><script src="onboarding.js"></script><script src="procurement.js"></script><script src="local-test-auth.js"></script><script src="field-server.js"></script><script src="planning.js"></script><script src="documents-server.js"></script><script src="quote-visit-capture.js"></script><script src="roofing-metre.js"></script><script src="quote-roofing-metre.js"></script><script src="supplier-allocations.js"></script><script src="supplier-invoice-pdf.js"></script><script src="project-hub.js"></script><script src="field-portal.js"></script><script src="ia-a-ui.js"></script><script src="ui-foundation.js"></script><script src="stock-catalog-v2.js"></script><script src="stock-zxing.js"></script><script src="stock-barcode.js"></script><script src="delivery-scans.js"></script><script src="navigation-registry.js"></script><script src="profile-avatar.js"></script><script src="mobile-nav.js"></script>
+  <script src="v3-themes.js"></script><script src="v3-money.js"></script><script src="v3.js"></script><script src="document-triage.js"></script>
+</body>
+</html>

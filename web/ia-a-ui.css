@@ -1,0 +1,2543 @@
+:root{
+  --ia-bg:#f4f2e9;
+  --ia-shell:#293429;
+  --ia-surface:#e3e4d8;
+  --ia-surface-soft:#d8dccd;
+  --ia-surface-raised:#cbd2bd;
+  --ia-text:#222820;
+  --ia-muted:#586253;
+  --ia-line:#a2ad9b;
+  --ia-control-line:#74816e;
+  --ia-accent:#a9b274;
+  --ia-accent-strong:#e0dfa4;
+  --ia-warm:#c89559;
+  --ia-success:#82ad79;
+  --ia-warning:#d1a45f;
+  --ia-danger:#d27468;
+  --ia-focus:#a9b274;
+  --ia-button-text:#171b14;
+  --ia-shell-text:#edf1e7;
+  --ia-shell-muted:#cbd1c4;
+  --ia-radius:12px;
+  --ia-shadow:0 14px 34px #0b0e0a45;
+}
+
+body[data-ia-a-role]{background:var(--ia-bg);color:var(--ia-text)}
+body[data-ia-a-role] .topbar{background:var(--ia-shell);border-bottom:1px solid var(--ia-line)}
+body[data-ia-a-role] .brand,body[data-ia-a-role] .workspace,body[data-ia-a-role] .workspace small,body[data-ia-a-role] .demo{color:var(--ia-shell-text)}
+body[data-ia-a-role] .brandmark,body[data-ia-a-role] .branddot{color:var(--ia-accent-strong);border-color:var(--ia-accent-strong)}
+body[data-ia-a-role] .global-search input,body[data-ia-a-role] input,body[data-ia-a-role] select,body[data-ia-a-role] textarea{background:var(--ia-surface);border-color:var(--ia-control-line);color:var(--ia-text)}
+body[data-ia-a-role] input::placeholder,body[data-ia-a-role] textarea::placeholder{color:var(--ia-muted)}
+body[data-ia-a-role] .avatar{background:var(--ia-accent-strong);color:var(--ia-button-text)}
+body[data-ia-a-role] .topnav{background:var(--ia-shell);border-color:var(--ia-line)}
+body[data-ia-a-role] .topnav button{min-height:44px;color:var(--ia-shell-muted);border-radius:9px;transition:background .15s ease,color .15s ease,border-color .15s ease}
+body[data-ia-a-role] .topnav button:hover{background:var(--ia-surface-soft);color:var(--ia-text)}
+body[data-ia-a-role] .topnav button.active{background:var(--ia-surface-raised);color:var(--ia-text);border-color:var(--ia-accent-strong)}
+body[data-ia-a-role] .topnav button[data-group="finance"],body[data-ia-a-role] .topnav button[data-group="support"],body[data-ia-a-role] .topnav button[data-group="settings"]{margin-top:10px;padding-top:14px}
+body[data-ia-a-role] .topnav button[data-group="finance"]{border-top-color:#59634c}
+body[data-ia-a-role] #saveStatus,body[data-ia-a-role] footer{background:var(--ia-shell);color:var(--ia-shell-text);border-color:var(--ia-line)}
+body[data-ia-a-role] main{color:var(--ia-text)}
+body[data-ia-a-role] .heading h1,body[data-ia-a-role] .simple-head h1,body[data-ia-a-role] .planning-head h1{color:var(--ia-text)}
+body[data-ia-a-role] .panel h2,body[data-ia-a-role] .panel h3{color:var(--ia-text)}
+body[data-ia-a-role] .heading p,body[data-ia-a-role] .simple-head p{color:var(--ia-muted)}
+body[data-ia-a-role] .subtle,body[data-ia-a-role] .help-line,body[data-ia-a-role] .panel small{color:var(--ia-muted)}
+body[data-ia-a-role] .panel,body[data-ia-a-role] .overview-links button,body[data-ia-a-role] .home-news,body[data-ia-a-role] .weather-dashboard,body[data-ia-a-role] .job-workspace-kpis>div{background:var(--ia-surface);border-color:var(--ia-line);box-shadow:none;color:var(--ia-text)}
+body[data-ia-a-role] .task,body[data-ia-a-role] .document-file-list>button,body[data-ia-a-role] .vehicle-list>button,body[data-ia-a-role] .conversation-list>button{background:transparent;color:var(--ia-text);border-color:var(--ia-line)}
+body[data-ia-a-role] .task:hover,body[data-ia-a-role] .document-file-list>button:hover,body[data-ia-a-role] .vehicle-list>button:hover{background:var(--ia-surface-soft)}
+body[data-ia-a-role] .data-table,body[data-ia-a-role] .data-table table{background:var(--ia-surface);color:var(--ia-text)}
+body[data-ia-a-role] .data-table th{background:var(--ia-surface-soft);color:var(--ia-muted)}
+body[data-ia-a-role] .data-table td,body[data-ia-a-role] .data-table th{border-color:var(--ia-line)}
+body[data-ia-a-role] .btn{min-height:44px;border:1px solid var(--ia-line);background:var(--ia-surface-raised);color:var(--ia-text);border-radius:9px;font-weight:700;padding:10px 14px}
+body[data-ia-a-role] .btn:hover{background:var(--ia-surface-soft);border-color:var(--ia-accent)}
+body[data-ia-a-role] .btn.primary{background:var(--ia-accent-strong);border-color:var(--ia-accent-strong);color:var(--ia-button-text)}
+body[data-ia-a-role] .btn.primary:hover{background:var(--ia-accent-strong);border-color:var(--ia-accent-strong)}
+body[data-ia-a-role] .link{color:var(--ia-accent-strong)}
+body[data-ia-a-role] .badge{background:var(--ia-surface-soft);color:var(--ia-text);border:1px solid var(--ia-line)}
+body[data-ia-a-role] .badge.green{background:color-mix(in srgb,var(--ia-success) 18%,var(--ia-surface));color:var(--ia-text);border-color:var(--ia-success)}
+body[data-ia-a-role] .badge.warn{background:color-mix(in srgb,var(--ia-warning) 18%,var(--ia-surface));color:var(--ia-text);border-color:var(--ia-warning)}
+body[data-ia-a-role] .negative,body[data-ia-a-role] .negative-money{color:var(--ia-danger)}
+body[data-ia-a-role] button:focus-visible,body[data-ia-a-role] input:focus-visible,body[data-ia-a-role] select:focus-visible,body[data-ia-a-role] textarea:focus-visible,body[data-ia-a-role] a:focus-visible{outline:3px solid var(--ia-focus);outline-offset:3px}
+body[data-ia-a-role] button[disabled],body[data-ia-a-role] .btn[disabled]{opacity:.52;cursor:not-allowed}
+
+.ia-role-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin:0 0 24px;padding:22px 24px;border:1px solid var(--ia-line);border-radius:var(--ia-radius);background:linear-gradient(135deg,var(--ia-surface),var(--ia-surface-soft))}
+.ia-role-head h1{margin:4px 0 8px;font-size:clamp(1.7rem,3vw,2.5rem);line-height:1.05}.ia-role-head p:not(.eyebrow){margin:0;color:var(--ia-muted);max-width:760px;line-height:1.55}
+.ia-role-chip{display:inline-flex;align-items:center;min-height:34px;padding:7px 11px;border:1px solid var(--ia-line);border-radius:999px;color:var(--ia-accent-strong);background:var(--ia-surface-soft);font-size:.78rem;font-weight:800;white-space:nowrap}
+.ia-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.ia-kpi{min-width:0;padding:18px;border:1px solid var(--ia-line);border-radius:var(--ia-radius);background:var(--ia-surface)}
+.ia-kpi small,.ia-kpi span{display:block;color:var(--ia-muted)}.ia-kpi strong{display:block;margin:7px 0 4px;font-size:clamp(1.45rem,2.4vw,2rem);overflow-wrap:anywhere}
+.ia-dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+.ia-summary{overflow:hidden}.ia-summary-head{padding:18px 18px 14px}.ia-summary-head h2{margin-top:3px}.ia-summary-list{border-top:1px solid var(--ia-line)}
+.ia-summary-row{width:100%;min-height:58px;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:13px 18px;border:0;border-bottom:1px solid var(--ia-line);background:transparent;color:var(--ia-text);text-align:left}
+button.ia-summary-row{cursor:pointer}.ia-summary-row:hover{background:var(--ia-surface-soft)}.ia-summary-copy{min-width:0}.ia-summary-copy strong,.ia-summary-copy small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ia-summary-copy small{margin-top:4px;color:var(--ia-muted)}
+.ia-row-arrow{color:var(--ia-accent-strong);font-size:1.1rem}.ia-show-more{width:100%;min-height:46px;border:0;border-top:1px solid var(--ia-line);background:var(--ia-surface-soft);color:var(--ia-accent-strong);font-weight:800}.ia-show-more:hover{background:var(--ia-surface-raised)}
+.ia-overview-personal-portals{grid-template-columns:minmax(180px,240px) minmax(0,1fr);align-items:center;margin:18px 0 24px}.ia-overview-personal-portals>div{min-width:0}.ia-overview-personal-portals h2{margin:4px 0 8px;color:var(--ia-text)}.ia-overview-personal-portals>div>p:not(.eyebrow){margin:0;color:var(--ia-muted);font-size:.88rem;line-height:1.5}.ia-overview-personal-portals .official-grid{grid-template-columns:repeat(3,minmax(0,1fr));min-width:0}.ia-overview-personal-portals .official-grid a{min-width:0;overflow-wrap:anywhere}.ia-overview-personal-portals .official-grid a:focus-visible{outline:3px solid var(--ia-focus);outline-offset:3px}
+@media(max-width:1050px){.ia-overview-personal-portals{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:700px){.ia-overview-personal-portals .official-grid{grid-template-columns:minmax(0,1fr)}}
+.ia-finance-overview{overflow:hidden}.ia-finance-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ia-line);border-top:1px solid var(--ia-line)}.ia-finance-kpis>div{background:var(--ia-surface);padding:18px}.ia-finance-kpis small,.ia-finance-kpis strong{display:block}.ia-finance-kpis small{color:var(--ia-muted)}.ia-finance-kpis strong{margin-top:7px;font-size:1.2rem}
+.ia-quick-actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 0;padding:16px;border:1px solid var(--ia-line);border-radius:var(--ia-radius);background:var(--ia-surface)}
+.ia-today-card{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:20px;margin-bottom:18px;padding:20px}.ia-today-card h2{margin:4px 0 7px}.ia-today-card p{margin:0;color:var(--ia-muted)}.ia-today-card>div:nth-child(2){display:grid;gap:7px;text-align:right}
+.ia-action-panel{padding-bottom:16px}.ia-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:0 18px}
+.ia-worker-job{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start;padding:22px;border:1px solid var(--ia-line);border-radius:16px;background:linear-gradient(135deg,var(--ia-surface-soft),var(--ia-surface));margin-bottom:16px;color:var(--ia-text)}.ia-worker-job h1{margin:4px 0 8px;font-size:clamp(1.65rem,6vw,2.45rem)}.ia-worker-job .eyebrow{color:var(--ia-accent-strong)}.ia-worker-job p{margin:0 0 8px;color:var(--ia-muted)}.ia-worker-primary{grid-column:1/-1;min-height:54px;font-size:1rem}
+.ia-worker-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}.ia-worker-actions button{min-height:88px;padding:15px;border:1px solid var(--ia-line);border-radius:12px;background:var(--ia-surface);color:var(--ia-text);text-align:left}.ia-worker-actions button:hover{background:var(--ia-surface-soft)}.ia-worker-actions strong,.ia-worker-actions span{display:block}.ia-worker-actions span{margin-top:5px;color:var(--ia-muted);font-size:.82rem}
+.ia-state{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:18px;border:1px dashed var(--ia-line);border-radius:10px;background:var(--ia-surface);color:var(--ia-text)}.ia-state-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--ia-surface-raised);color:var(--ia-text);font-weight:900}.ia-state strong,.ia-state p{display:block;margin:0}.ia-state p{margin-top:3px;color:var(--ia-muted)}.ia-state-error{border-color:var(--ia-danger)}.ia-state-error .ia-state-icon{background:color-mix(in srgb,var(--ia-danger) 18%,var(--ia-surface));color:var(--ia-danger)}.ia-state-success{border-color:var(--ia-success)}.ia-state-success .ia-state-icon{background:color-mix(in srgb,var(--ia-success) 18%,var(--ia-surface));color:var(--ia-success)}
+.ia-list-shell{display:grid;gap:14px}.ia-list-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px}.ia-list-head h1{margin:4px 0}.ia-list-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px;border:1px solid var(--ia-line);border-radius:10px;background:var(--ia-surface)}.ia-search{flex:1 1 260px}.ia-search input{width:100%}.ia-list-body{min-width:0}
+@media(max-width:1100px){.ia-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ia-worker-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){
+  body[data-ia-a-role] .topnav{position:sticky;top:0;z-index:18;gap:3px;padding:0 10px;border-bottom:1px solid var(--ia-line);scroll-snap-type:x proximity}
+  body[data-ia-a-role] .topnav button{min-height:52px;padding:14px 13px;scroll-snap-align:start}
+  body[data-ia-a-role] .topnav button[data-group="finance"],body[data-ia-a-role] .topnav button[data-group="support"],body[data-ia-a-role] .topnav button[data-group="settings"]{margin-top:0;padding-top:14px}
+  .ia-role-head{flex-direction:column;padding:18px}.ia-role-chip{align-self:flex-start}
+  .ia-dashboard-grid{grid-template-columns:1fr}.ia-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ia-today-card{grid-template-columns:1fr}.ia-today-card>div:nth-child(2){text-align:left}.ia-today-card .btn{width:100%}
+  .ia-worker-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.ia-worker-actions button{min-height:96px}
+  .ia-summary-row{grid-template-columns:minmax(0,1fr) auto}.ia-summary-row .ia-row-arrow{display:none}.ia-summary-row .badge{grid-column:2}
+  .ia-finance-kpis{grid-template-columns:1fr}.ia-action-grid{grid-template-columns:1fr}.ia-quick-actions{display:grid;grid-template-columns:1fr}.ia-quick-actions .btn{width:100%}
+  .ia-list-head{flex-direction:column}.ia-list-head .btn{width:100%}.ia-list-toolbar{align-items:stretch}.ia-list-toolbar>*{flex:1 1 100%}
+}
+@media(max-width:430px){.ia-kpi-grid{grid-template-columns:1fr}.ia-worker-actions{grid-template-columns:1fr 1fr}.ia-role-head{margin-left:-2px;margin-right:-2px}.ia-summary-head{align-items:flex-start;flex-direction:column}.ia-summary-head .btn{width:100%}}
+@media(max-width:390px){.ia-worker-actions{grid-template-columns:1fr}.ia-worker-actions button{min-height:72px}.ia-role-head h1{font-size:1.7rem}}
+@media(max-width:375px){body[data-ia-a-role] main{padding-left:12px;padding-right:12px}.ia-summary-row{padding-left:14px;padding-right:14px}.ia-role-head{padding:16px}}
+
+/* UI-FRAME-AUDIT-01: keep legacy filter and finance surfaces on the shared frame palette. */
+body[data-ia-a-role] .balanced-toolbar{
+  background:var(--ia-surface);
+  border-color:var(--ia-line);
+  color:var(--ia-text);
+}
+body[data-ia-a-role] .finance-grid>.finance-box{
+  min-width:0;
+  padding:14px 16px;
+  border:1px solid var(--ia-line);
+  border-radius:var(--ia-radius);
+  background:var(--ia-surface);
+  color:var(--ia-text);
+}
+body[data-ia-a-role] .compact-finance-table thead,
+body[data-ia-a-role] .compact-finance-table thead th{
+  background:var(--ia-surface-soft);
+  color:var(--ia-text);
+  border-color:var(--ia-line);
+}
+@media(prefers-reduced-motion:reduce){body[data-ia-a-role] *,body[data-ia-a-role] *::before,body[data-ia-a-role] *::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Compact field-home widgets: useful on a phone without pushing today's work below the fold. */
+.ia-home-weather,.ia-home-portals{margin:10px 0 14px;padding:12px;border:1px solid var(--ia-line);border-radius:12px;background:var(--ia-shell)}
+.ia-home-weather-head,.ia-home-portals-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px}
+.ia-home-weather-head .eyebrow,.ia-home-portals-head .eyebrow{margin:0;color:var(--ia-accent-strong);font-size:.66rem;letter-spacing:.12em}
+.ia-home-weather-head h2,.ia-home-portals-head h2{margin:2px 0 0;font-size:1rem;line-height:1.2}
+.ia-home-weather-head>small{color:var(--ia-muted)}
+.ia-home-weather-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.ia-home-weather-card{display:flex;min-width:0;min-height:52px;align-items:center;gap:9px;padding:8px 10px;border:1px solid var(--ia-line);border-radius:9px;background:var(--ia-surface);color:var(--ia-text);text-align:left}
+.ia-home-weather-card:hover{background:var(--ia-surface-raised)}
+.ia-home-weather-card:focus-visible,.ia-home-portal-links a:focus-visible{outline:3px solid var(--ia-focus);outline-offset:2px}
+.ia-home-weather-card>span:last-child{display:grid;min-width:0;gap:2px}
+.ia-home-weather-card strong,.ia-home-weather-card small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ia-home-weather-card small{color:var(--ia-muted);font-size:.76rem}
+.ia-home-weather-icon{font-size:1.25rem}
+.ia-home-portal-links{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.ia-home-portal-links a{display:flex;min-width:0;min-height:44px;align-items:center;justify-content:space-between;gap:6px;padding:7px 9px;border:1px solid var(--ia-line);border-radius:9px;background:var(--ia-surface);color:var(--ia-text);font-size:.83rem;font-weight:750;text-decoration:none}
+.ia-home-portal-links a:hover{background:var(--ia-surface-raised);border-color:var(--ia-accent)}
+@media(max-width:760px){
+  .ia-worker-job{gap:10px;padding:14px}.ia-worker-job h1{font-size:clamp(1.25rem,5vw,1.65rem);line-height:1.18}.ia-worker-job p{font-size:.88rem}.ia-worker-primary{min-height:48px}
+  .ia-worker-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-bottom:12px}.ia-worker-actions button{min-height:60px;padding:10px}.ia-worker-actions span{display:none}.ia-worker-actions strong{font-size:.88rem;line-height:1.25}
+  .ia-home-weather,.ia-home-portals{margin:9px 0 12px;padding:10px}.ia-home-weather-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.ia-home-weather-card{min-height:48px;padding:7px}.ia-home-portal-links{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.ia-home-portal-links a{min-height:44px;padding:6px 8px;font-size:.78rem}
+}
+@media(max-width:390px){.ia-worker-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.ia-worker-actions button{min-height:56px}.ia-home-weather-cards{grid-template-columns:minmax(0,1fr)}.ia-home-portal-links{grid-template-columns:repeat(2,minmax(0,1fr))}.ia-home-weather-head,.ia-home-portals-head{margin-bottom:7px}}
+
+/* QA correction: local simulation identity picker stays available without covering the workspace. */
+body[data-ia-a-role] .local-login-banner{
+  position:static;left:auto;right:auto;bottom:auto;z-index:40;width:176px;margin:10px 12px;padding:10px;
+  display:grid;grid-template-columns:1fr;gap:7px;border:1px solid var(--ia-line);border-radius:10px;
+  background:var(--ia-surface-soft);color:var(--ia-text);box-shadow:0 10px 28px #0005;
+}
+body[data-ia-a-role] .local-login-banner>span{display:block;min-width:0}
+body[data-ia-a-role] .local-login-banner strong{display:block;font-size:12px;line-height:1.2}
+body[data-ia-a-role] .local-login-banner small{display:none}
+body[data-ia-a-role] .local-login-banner select{width:100%;min-width:0;padding:7px 8px;font-size:12px}
+body[data-ia-a-role] .local-login-banner .btn{width:100%;min-height:36px;padding:6px 8px;font-size:12px}
+@media(max-width:760px){
+  body[data-ia-a-role] .local-login-banner{
+    position:static;left:auto;right:auto;bottom:auto;width:auto;margin:10px 8px 14px;padding:8px;
+    grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;
+  }
+  body[data-ia-a-role] .local-login-banner>span{display:none}
+  body[data-ia-a-role] .local-login-banner select{font-size:16px}
+  body[data-ia-a-role] .local-login-banner .btn{width:auto;min-height:44px;white-space:nowrap}
+}
+
+
+/* Live contrast correction 2026-10-02.
+   Keep the olive/dark identity, but remove pure-white flashes and pale-on-white text. */
+body[data-ia-a-role]{
+  --ia-paper:var(--ia-surface);
+  --ia-paper-soft:var(--ia-surface-soft);
+  --ia-paper-text:var(--ia-text);
+  --ia-paper-muted:var(--ia-muted);
+  --ia-paper-line:var(--ia-control-line);
+}
+body[data-ia-a-role] main{background:transparent}
+
+/* Legacy light surfaces that were clashing with the dark IA-A text palette. */
+body[data-ia-a-role] .server-finance,
+body[data-ia-a-role] .server-finance-grid article,
+body[data-ia-a-role] .management-tabs,
+body[data-ia-a-role] .management-tabs button.selected,
+body[data-ia-a-role] .access-owner-note,
+body[data-ia-a-role] .access-member-list>button.selected,
+body[data-ia-a-role] .access-locked-message,
+body[data-ia-a-role] .access-reset,
+body[data-ia-a-role] .permission-head,
+body[data-ia-a-role] .access-preview-modules>div,
+body[data-ia-a-role] .socle-masthead{
+  background:var(--ia-paper);
+  border-color:var(--ia-paper-line);
+  color:var(--ia-paper-text);
+}
+body[data-ia-a-role] .server-finance-grid{
+  background:var(--ia-paper-line);
+  border-color:var(--ia-paper-line);
+}
+body[data-ia-a-role] .server-finance-grid article{background:var(--ia-paper-soft)}
+body[data-ia-a-role] .server-finance h1,
+body[data-ia-a-role] .server-finance h2,
+body[data-ia-a-role] .server-finance h3,
+body[data-ia-a-role] .server-finance strong,
+body[data-ia-a-role] .access-owner-note strong,
+body[data-ia-a-role] .access-member-list>button.selected strong,
+body[data-ia-a-role] .access-preview-modules>div strong{
+  color:var(--ia-paper-text);
+}
+body[data-ia-a-role] .server-finance small,
+body[data-ia-a-role] .server-finance span,
+body[data-ia-a-role] .access-owner-note span,
+body[data-ia-a-role] .access-member-list>button.selected small,
+body[data-ia-a-role] .access-member-list>button.selected em,
+body[data-ia-a-role] .access-locked-message,
+body[data-ia-a-role] .access-reset,
+body[data-ia-a-role] .access-preview-modules>div span,
+body[data-ia-a-role] .socle-masthead span{
+  color:var(--ia-paper-muted);
+}
+body[data-ia-a-role] .server-finance>.notice{
+  background:var(--ia-surface-soft);
+  color:var(--ia-muted);
+}
+body[data-ia-a-role] .management-tabs button{color:var(--ia-muted)}
+body[data-ia-a-role] .management-tabs button.selected{box-shadow:none}
+
+/* Common legacy cards: use olive charcoal instead of pure white so text remains legible. */
+body[data-ia-a-role] .clock-card,
+body[data-ia-a-role] .home-news-grid article,
+body[data-ia-a-role] .personal-kpis>div,
+body[data-ia-a-role] .personal-alert,
+body[data-ia-a-role] .company-calendar,
+body[data-ia-a-role] .correction-picker button,
+body[data-ia-a-role] .pay-slip-grid>button,
+body[data-ia-a-role] .profit-kpis>div,
+body[data-ia-a-role] .profit-table>button,
+body[data-ia-a-role] .personal-official,
+body[data-ia-a-role] .personal-news-list article,
+body[data-ia-a-role] .document-kpis>div,
+body[data-ia-a-role] .quote-summary>div,
+body[data-ia-a-role] .quote-list-row,
+body[data-ia-a-role] .catalogue-card,
+body[data-ia-a-role] .album-card,
+body[data-ia-a-role] .photo-picker button,
+body[data-ia-a-role] .week-board,
+body[data-ia-a-role] .week-row>strong,
+body[data-ia-a-role] .week-slot,
+body[data-ia-a-role] .catalogue-row,
+body[data-ia-a-role] .messenger,
+body[data-ia-a-role] .message-thread article>div>div,
+body[data-ia-a-role] .field-card{
+  background:var(--ia-surface);
+  border-color:var(--ia-line);
+  color:var(--ia-text);
+}
+body[data-ia-a-role] .clock-card p,
+body[data-ia-a-role] .clock-card small,
+body[data-ia-a-role] .home-news-grid article p,
+body[data-ia-a-role] .personal-alert small,
+body[data-ia-a-role] .personal-official small,
+body[data-ia-a-role] .personal-news-list small,
+body[data-ia-a-role] .personal-news-list time,
+body[data-ia-a-role] .profit-kpis small,
+body[data-ia-a-role] .profit-table small,
+body[data-ia-a-role] .catalogue-card small,
+body[data-ia-a-role] .catalogue-card span,
+body[data-ia-a-role] .album-card small,
+body[data-ia-a-role] .week-slot,
+body[data-ia-a-role] .week-slot small{
+  color:var(--ia-muted);
+}
+
+/* Inputs stay dark, but with a stronger readable boundary. */
+body[data-ia-a-role] input,
+body[data-ia-a-role] select,
+body[data-ia-a-role] textarea{
+  border-color:var(--ia-line);
+}
+body[data-ia-a-role] input::placeholder,
+body[data-ia-a-role] textarea::placeholder{
+  color:var(--ia-muted);
+}
+
+/* Make primary content less visually harsh than the previous near-black canvas. */
+body[data-ia-a-role] .ia-role-head,
+body[data-ia-a-role] .ia-worker-job{
+  box-shadow:none;
+}
+
+
+/* Each existing theme owns its canvas, surfaces, borders and readable text colors. */
+body[data-ia-a-role][data-socle-theme="olive"]{
+  color-scheme:dark;
+  --ia-bg:#202c26;--ia-shell:#171e1a;--ia-surface:#2c3831;--ia-surface-soft:#39463e;--ia-surface-raised:#47554c;
+  --ia-text:#edf2ed;--ia-muted:#c0cbc1;--ia-line:#9eaf9f;--ia-control-line:#9eaf9f;--ia-accent:#a2b784;--ia-accent-strong:#c2d8a5;--ia-focus:#e1efbf;
+  --ia-button-text:#182015;--ia-shell-text:#edf2ed;--ia-shell-muted:#c0cbc1;
+}
+body[data-ia-a-role][data-socle-theme="forest"]{
+  color-scheme:light;
+  --ia-bg:#e9f0e9;--ia-shell:#17382c;--ia-surface:#f3f7f2;--ia-surface-soft:#e2ebe3;--ia-surface-raised:#d3e0d5;
+  --ia-text:#17241c;--ia-muted:#445c4b;--ia-line:#768778;--ia-control-line:#768778;--ia-accent:#557d5d;--ia-accent-strong:#355b3e;--ia-focus:#385e40;
+  --ia-button-text:#fff;--ia-shell-text:#f2f6f2;--ia-shell-muted:#d0dfd4;
+}
+body[data-ia-a-role][data-socle-theme="slate"]{
+  color-scheme:dark;
+  --ia-bg:#172832;--ia-shell:#111e25;--ia-surface:#26363e;--ia-surface-soft:#33444c;--ia-surface-raised:#43545c;
+  --ia-text:#f1f4f6;--ia-muted:#c4ced2;--ia-line:#92a6af;--ia-control-line:#92a6af;--ia-accent:#8da8b5;--ia-accent-strong:#bad0d9;--ia-focus:#edf8fc;
+  --ia-button-text:#172126;--ia-shell-text:#f1f4f6;--ia-shell-muted:#c4ced2;
+}
+body[data-ia-a-role][data-socle-theme="night"]{
+  color-scheme:dark;
+  --ia-bg:#151e2c;--ia-shell:#0f1623;--ia-surface:#202b3e;--ia-surface-soft:#2b3850;--ia-surface-raised:#394964;
+  --ia-text:#f2f4fb;--ia-muted:#c4cee0;--ia-line:#8c9cb5;--ia-control-line:#8c9cb5;--ia-accent:#819bd1;--ia-accent-strong:#b2c4f2;--ia-focus:#e0eaff;
+  --ia-button-text:#171e2b;--ia-shell-text:#f2f4fb;--ia-shell-muted:#c4cee0;
+}
+body[data-ia-a-role][data-socle-theme="graphite"]{
+  color-scheme:dark;
+  --ia-bg:#1c1e20;--ia-shell:#121416;--ia-surface:#282b2d;--ia-surface-soft:#34383a;--ia-surface-raised:#44494b;
+  --ia-text:#f1f2f1;--ia-muted:#c6cac9;--ia-line:#969e9f;--ia-control-line:#969e9f;--ia-accent:#acb6b6;--ia-accent-strong:#d1d7d5;--ia-focus:#f0f4f3;
+  --ia-button-text:#17191a;--ia-shell-text:#f1f2f1;--ia-shell-muted:#c6cac9;
+}
+body[data-ia-a-role][data-socle-theme="earth"]{
+  color-scheme:light;
+  --ia-bg:#efe8de;--ia-shell:#352a23;--ia-surface:#f6f1e8;--ia-surface-soft:#ebe0d2;--ia-surface-raised:#ddd0be;
+  --ia-text:#33271f;--ia-muted:#675443;--ia-line:#8f7a68;--ia-control-line:#8f7a68;--ia-accent:#a16f4e;--ia-accent-strong:#784a30;--ia-focus:#6f422b;
+  --ia-button-text:#fff;--ia-shell-text:#fbf7f2;--ia-shell-muted:#ddcfc1;
+}
+body[data-ia-a-role][data-socle-theme="moss"]{
+  color-scheme:dark;
+  --ia-bg:#2a311d;--ia-shell:#1f2617;--ia-surface:#363f26;--ia-surface-soft:#444f30;--ia-surface-raised:#535f3e;
+  --ia-text:#f5f4ea;--ia-muted:#d2d8c6;--ia-line:#a1ad83;--ia-control-line:#a1ad83;--ia-accent:#9bab68;--ia-accent-strong:#bfce86;--ia-focus:#d9e9a3;
+  --ia-button-text:#19200f;--ia-shell-text:#f5f4ea;--ia-shell-muted:#d2d8c6;
+}
+body[data-ia-a-role][data-socle-theme="aubergine"]{
+  color-scheme:dark;
+  --ia-bg:#281b2b;--ia-shell:#1c151f;--ia-surface:#352a39;--ia-surface-soft:#433548;--ia-surface-raised:#55445a;
+  --ia-text:#f4eef5;--ia-muted:#d2c7d5;--ia-line:#a28da5;--ia-control-line:#a28da5;--ia-accent:#b99aba;--ia-accent-strong:#d5bbd6;--ia-focus:#ecd4ed;
+  --ia-button-text:#211622;--ia-shell-text:#f4eef5;--ia-shell-muted:#d2c7d5;
+}
+body[data-ia-a-role][data-socle-theme="high-contrast"]{
+  color-scheme:light;
+  --ia-bg:#f8f4eb;--ia-shell:#080a08;--ia-surface:#f0eee6;--ia-surface-soft:#e3e4dc;--ia-surface-raised:#d2d8cc;
+  --ia-text:#0a0d0b;--ia-muted:#333b36;--ia-line:#555e58;--ia-control-line:#555e58;--ia-accent:#344f18;--ia-accent-strong:#263d10;--ia-focus:#111;
+  --ia-button-text:#fff;--ia-shell-text:#fff;--ia-shell-muted:#e8ece9;
+}
+body[data-ia-a-role][data-socle-theme="chalk"]{
+  color-scheme:light;
+  --ia-bg:#e1e8e5;--ia-shell:#263331;--ia-surface:#f5f8f7;--ia-surface-soft:#e6edeb;--ia-surface-raised:#d5e0dc;
+  --ia-text:#182522;--ia-muted:#445752;--ia-line:#778c84;--ia-control-line:#778c84;--ia-accent:#587c72;--ia-accent-strong:#3b6157;--ia-focus:#31584e;
+  --ia-button-text:#fff;--ia-shell-text:#f4f8f6;--ia-shell-muted:#cdd9d5;
+}
+body[data-ia-a-role][data-socle-theme="slate"] .ia-worker-job,
+body[data-ia-a-role][data-socle-theme="moss"] .ia-worker-job{
+  border-color:var(--ia-line);background:linear-gradient(135deg,var(--ia-surface-soft),var(--ia-surface));color:var(--ia-text)
+}
+body[data-ia-a-role][data-socle-theme="slate"] .ia-worker-job p,
+body[data-ia-a-role][data-socle-theme="moss"] .ia-worker-job p{color:var(--ia-muted)}
+body[data-ia-a-role][data-socle-theme="slate"] .ia-back-to-top,
+body[data-ia-a-role][data-socle-theme="moss"] .ia-back-to-top{border-color:var(--ia-line);background:var(--ia-surface-raised);color:var(--ia-text)}
+body[data-ia-a-role][data-socle-theme="slate"] .ia-back-to-top:hover,
+body[data-ia-a-role][data-socle-theme="moss"] .ia-back-to-top:hover{background:var(--ia-accent-strong);color:var(--ia-button-text)}
+body[data-ia-a-role][data-socle-theme="slate"],
+body[data-ia-a-role][data-socle-theme="moss"]{
+  --ia-paper:var(--ia-surface);
+  --ia-paper-soft:var(--ia-surface-soft);
+  --ia-paper-text:var(--ia-text);
+  --ia-paper-muted:var(--ia-muted);
+  --ia-paper-line:var(--ia-control-line);
+}
+body[data-ia-a-role][data-socle-theme="slate"] .badge,
+body[data-ia-a-role][data-socle-theme="moss"] .badge{background:var(--ia-surface-soft);color:var(--ia-text);border-color:var(--ia-line)}
+body[data-ia-a-role][data-socle-theme="slate"] .badge.green,
+body[data-ia-a-role][data-socle-theme="moss"] .badge.green{background:color-mix(in srgb,var(--ia-success) 24%,var(--ia-surface));color:var(--ia-text);border-color:var(--ia-success)}
+body[data-ia-a-role][data-socle-theme="slate"] .badge.warn,
+body[data-ia-a-role][data-socle-theme="moss"] .badge.warn{background:color-mix(in srgb,var(--ia-warning) 22%,var(--ia-surface));color:var(--ia-text);border-color:var(--ia-warning)}
+body[data-ia-a-role][data-socle-theme="slate"] .ia-quick-actions,
+body[data-ia-a-role][data-socle-theme="moss"] .ia-quick-actions{background:var(--ia-surface)}
+body[data-ia-a-role][data-socle-theme="olive"],
+body[data-ia-a-role][data-socle-theme="slate"],
+body[data-ia-a-role][data-socle-theme="night"],
+body[data-ia-a-role][data-socle-theme="graphite"],
+body[data-ia-a-role][data-socle-theme="moss"],
+body[data-ia-a-role][data-socle-theme="aubergine"]{--ia-warning:#e6bc70;--ia-danger:#f09a8e;--ia-success:#9dcc91}
+body[data-ia-a-role][data-socle-theme="forest"],
+body[data-ia-a-role][data-socle-theme="earth"],
+body[data-ia-a-role][data-socle-theme="chalk"],
+body[data-ia-a-role][data-socle-theme="high-contrast"]{--ia-warning:#805b22;--ia-danger:#a03b30;--ia-success:#315d3b}
+body[data-ia-a-role]{
+  --page-bg:var(--ia-bg);--surface:var(--ia-surface);--surface-soft:var(--ia-surface-soft);--surface-raised:var(--ia-surface-raised);
+  --border:var(--ia-control-line);--line:var(--ia-control-line);--text:var(--ia-text);--text-muted:var(--ia-muted);--muted:var(--ia-muted);--accent:var(--ia-accent);--accent-contrast:var(--ia-button-text);--panel:var(--ia-surface);
+  --ia-desktop-canvas:var(--ia-bg);
+}
+
+/* Theme chooser in the top bar. */
+.socle-theme-picker{position:relative;display:flex;align-items:center}
+.theme-button{min-height:36px;padding:7px 11px;border:1px solid var(--ia-line,#56624e);border-radius:8px;background:var(--ia-surface,#31382d);color:var(--ia-text,#f4f2e8);font-weight:750}
+.theme-button:hover{background:var(--ia-surface-soft,#394234)}
+.theme-menu{position:absolute;right:0;top:calc(100% + 9px);z-index:90;width:210px;max-height:min(420px,70vh);overflow:auto;padding:7px;border:1px solid var(--ia-line,#56624e);border-radius:10px;background:var(--ia-surface-raised,#293025);box-shadow:0 18px 45px #0008}
+.theme-menu[hidden]{display:none}
+.theme-choice{display:grid;grid-template-columns:66px 1fr;align-items:center;gap:9px;width:100%;min-height:39px;padding:7px 8px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--ia-text,#f4f2e8);text-align:left;font-size:13px}
+.theme-choice:hover,.theme-choice.selected{background:var(--ia-surface-soft,#394234);border-color:var(--ia-line,#56624e)}
+.theme-swatches{display:flex;gap:4px}.theme-swatches i{width:17px;height:17px;border-radius:50%;border:1px solid #ffffff66;box-shadow:0 0 0 1px #0002}
+@media(max-width:760px){.socle-theme-picker{display:none}}
+
+/* Dialogs: warm paper surfaces with dark readable typography. */
+body[data-ia-a-role] dialog{
+  background:var(--ia-paper);
+  color:var(--ia-paper-text);
+  border-color:var(--ia-paper-line);
+}
+body[data-ia-a-role] dialog .modal-inner,
+body[data-ia-a-role] dialog form,
+body[data-ia-a-role] dialog label,
+body[data-ia-a-role] dialog h1,
+body[data-ia-a-role] dialog h2,
+body[data-ia-a-role] dialog h3,
+body[data-ia-a-role] dialog strong,
+body[data-ia-a-role] dialog .eyebrow,
+body[data-ia-a-role] dialog .subtle{
+  color:var(--ia-paper-text);
+}
+body[data-ia-a-role] dialog .subtle,
+body[data-ia-a-role] dialog small{color:var(--ia-paper-muted)}
+body[data-ia-a-role] dialog input,
+body[data-ia-a-role] dialog select,
+body[data-ia-a-role] dialog textarea{
+  background:var(--ia-paper-soft);
+  color:var(--ia-paper-text);
+  border-color:var(--ia-paper-line);
+}
+body[data-ia-a-role] dialog input::placeholder,
+body[data-ia-a-role] dialog textarea::placeholder{color:var(--ia-paper-muted)}
+body[data-ia-a-role] dialog .close{background:var(--ia-paper-soft);color:var(--ia-paper-text)}
+body[data-ia-a-role] dialog .btn{background:var(--ia-surface-raised);color:var(--ia-text);border-color:var(--ia-line)}
+body[data-ia-a-role] dialog .btn:hover{background:var(--ia-surface-soft)}
+body[data-ia-a-role] dialog .btn.primary{background:var(--ia-accent-strong);color:var(--ia-button-text);border-color:var(--ia-accent-strong)}
+body[data-ia-a-role] dialog .btn.primary:hover{background:var(--ia-accent-strong);border-color:var(--ia-accent-strong)}
+body[data-ia-a-role] dialog input[type="checkbox"]{accent-color:#52643f}
+
+/* Prévisions chantier détaillées, lisibles et faciles à parcourir au doigt. */
+.weather-forecast-intro{margin:0 0 12px;color:#5e6c5d;font-size:13px}
+.weather-detail{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;max-height:min(62vh,620px);overflow-y:auto;padding:2px}
+.weather-detail .weather-day{display:grid;gap:11px;text-align:left;background:#f4f7f0;border:1px solid #dbe4d6;border-radius:10px;padding:13px}
+.weather-day-heading{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:9px}
+.weather-day-icon{font-size:29px;line-height:1}
+.weather-day-heading h3{font-size:15px;text-transform:capitalize}
+.weather-day-heading strong{display:block;margin-top:3px;font-size:12px}
+.weather-day-relative{padding:4px 6px;border-radius:5px;background:#e4eadc;color:#43523d;font-size:10px;white-space:nowrap}
+.weather-day-temperature{display:flex;gap:12px;justify-content:space-between;padding:8px 0;border-top:1px solid #dbe4d6;border-bottom:1px solid #dbe4d6;font-size:12px}
+.weather-day-temperature strong{margin-left:4px;font-size:14px}
+.weather-day-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.weather-day-metrics>div{min-width:0;padding:8px;border-radius:7px;background:#fff}
+.weather-day-metrics small,.weather-day-metrics strong{display:block}
+.weather-day-metrics small{font-size:10px;color:#687568;line-height:1.35}
+.weather-day-metrics strong{margin-top:4px;font-size:13px}
+.weather-day-sun{margin:0;font-size:11px;color:#586756}
+.weather-day-sun span{padding:0 3px}
+.weather-source{margin:12px 0 0;font-size:11px;color:#687568}
+.weather-source a{color:#2f6557;text-decoration:underline}
+body[data-ia-a-role] dialog:has(.weather-detail){width:min(780px,calc(100vw - 24px));max-width:780px;max-height:calc(100dvh - 24px);overflow-y:auto}
+body[data-ia-a-role] .weather-detail .weather-day{background:var(--ia-paper-soft);border-color:var(--ia-paper-line);color:var(--ia-paper-text)}
+body[data-ia-a-role] .weather-day-metrics>div{background:var(--ia-paper);border:1px solid var(--ia-paper-line)}
+body[data-ia-a-role] .weather-day-metrics small,body[data-ia-a-role] .weather-day-sun,body[data-ia-a-role] .weather-forecast-intro,body[data-ia-a-role] .weather-source{color:var(--ia-paper-muted)}
+body[data-ia-a-role] .weather-day-relative{background:var(--ia-paper);color:var(--ia-paper-text)}
+body[data-ia-a-role] .weather-source a{color:var(--ia-paper-text)}
+@media(max-width:700px){.weather-detail{grid-template-columns:minmax(0,1fr);max-height:56dvh}.weather-detail .weather-day{padding:11px}.weather-day-metrics{gap:6px}.weather-day-metrics>div{padding:7px}}
+
+
+/* Full legacy light-surface pass 2026-10-02.
+   Every light card uses theme paper colors and explicitly dark typography. */
+body[data-ia-a-role] .ia-b-slot,
+body[data-ia-a-role] .ia-b-month>button,
+body[data-ia-a-role] .schedule-grid,
+body[data-ia-a-role] .schedule-row>strong,
+body[data-ia-a-role] .schedule-slot,
+body[data-ia-a-role] .week-board,
+body[data-ia-a-role] .week-row>strong,
+body[data-ia-a-role] .week-slot,
+body[data-ia-a-role] .dispatch,
+body[data-ia-a-role] .bottom-strip,
+body[data-ia-a-role] .person-card,
+body[data-ia-a-role] .job-card,
+body[data-ia-a-role] .fleet-card,
+body[data-ia-a-role] .pack-card,
+body[data-ia-a-role] .asset-table table,
+body[data-ia-a-role] .alert-panel,
+body[data-ia-a-role] .asset-categories button,
+body[data-ia-a-role] .ledger-list>button,
+body[data-ia-a-role] .project-row,
+body[data-ia-a-role] .decision-section,
+body[data-ia-a-role] .decision-columns .panel,
+body[data-ia-a-role] .weather-dashboard,
+body[data-ia-a-role] .weather-card,
+body[data-ia-a-role] .weather-detail section,
+body[data-ia-a-role] .search-results,
+body[data-ia-a-role] .search-results button,
+body[data-ia-a-role] .quick-create-menu button,
+body[data-ia-a-role] .messenger,
+body[data-ia-a-role] .conversation-list,
+body[data-ia-a-role] .message-thread,
+body[data-ia-a-role] .message-thread article>div>div,
+body[data-ia-a-role] .owner-invitation-panel,
+body[data-ia-a-role] .owner-invitation-manual-result,
+body[data-ia-a-role] .archive-switch button,
+body[data-ia-a-role] .document-subfolders button,
+body[data-ia-a-role] .field-action-strip,
+body[data-ia-a-role] .worker-alert-shortcut,
+body[data-ia-a-role] .personal-official,
+body[data-ia-a-role] .annual-month,
+body[data-ia-a-role] .custom-values,
+body[data-ia-a-role] .departure-actions,
+body[data-ia-a-role] .access-denied {
+  background:var(--ia-paper);
+  color:var(--ia-paper-text);
+  border-color:var(--ia-paper-line);
+}
+
+/* Planning cards were the most visible remaining defect: never light-on-light. */
+body[data-ia-a-role] .ia-b-slot strong,
+body[data-ia-a-role] .ia-b-slot span,
+body[data-ia-a-role] .ia-b-slot small,
+body[data-ia-a-role] .ia-b-slot em,
+body[data-ia-a-role] .ia-b-month>button strong,
+body[data-ia-a-role] .ia-b-month>button span,
+body[data-ia-a-role] .ia-b-month>button small,
+body[data-ia-a-role] .schedule-row>strong,
+body[data-ia-a-role] .schedule-slot,
+body[data-ia-a-role] .schedule-slot small,
+body[data-ia-a-role] .week-row>strong,
+body[data-ia-a-role] .week-row>strong small,
+body[data-ia-a-role] .week-slot,
+body[data-ia-a-role] .week-slot small,
+body[data-ia-a-role] .week-slot b {
+  color:var(--ia-paper-text);
+  opacity:1;
+}
+body[data-ia-a-role] .ia-b-slot span,
+body[data-ia-a-role] .ia-b-slot small,
+body[data-ia-a-role] .ia-b-slot em,
+body[data-ia-a-role] .ia-b-month>button span,
+body[data-ia-a-role] .ia-b-month>button small,
+body[data-ia-a-role] .schedule-slot small,
+body[data-ia-a-role] .week-row>strong small,
+body[data-ia-a-role] .week-slot small {
+  color:var(--ia-paper-muted);
+}
+body[data-ia-a-role] .ia-b-slot:hover,
+body[data-ia-a-role] .ia-b-month>button:hover,
+body[data-ia-a-role] .schedule-slot:hover,
+body[data-ia-a-role] .week-slot:hover,
+body[data-ia-a-role] .project-row:hover,
+body[data-ia-a-role] .ledger-list>button:hover,
+body[data-ia-a-role] .search-results button:hover,
+body[data-ia-a-role] .quick-create-menu button:hover,
+body[data-ia-a-role] .document-subfolders button:hover,
+body[data-ia-a-role] .archive-switch button:hover {
+  background:var(--ia-paper-soft);
+}
+
+/* Explicit dark copy inside every paper surface. */
+body[data-ia-a-role] .dispatch h1,
+body[data-ia-a-role] .dispatch h2,
+body[data-ia-a-role] .dispatch h3,
+body[data-ia-a-role] .dispatch strong,
+body[data-ia-a-role] .bottom-strip h2,
+body[data-ia-a-role] .person-card h2,
+body[data-ia-a-role] .person-card strong,
+body[data-ia-a-role] .job-card h2,
+body[data-ia-a-role] .job-card strong,
+body[data-ia-a-role] .fleet-card h2,
+body[data-ia-a-role] .fleet-card strong,
+body[data-ia-a-role] .pack-card h2,
+body[data-ia-a-role] .pack-card strong,
+body[data-ia-a-role] .project-row strong,
+body[data-ia-a-role] .project-row b,
+body[data-ia-a-role] .ledger-list strong,
+body[data-ia-a-role] .ledger-list b,
+body[data-ia-a-role] .weather-card strong,
+body[data-ia-a-role] .weather-detail strong,
+body[data-ia-a-role] .search-results strong,
+body[data-ia-a-role] .quick-create-menu strong,
+body[data-ia-a-role] .message-thread strong,
+body[data-ia-a-role] .owner-invitation-panel strong,
+body[data-ia-a-role] .asset-categories button strong,
+body[data-ia-a-role] .annual-month strong,
+body[data-ia-a-role] .custom-values summary {
+  color:var(--ia-paper-text);
+}
+body[data-ia-a-role] .dispatch p,
+body[data-ia-a-role] .dispatch small,
+body[data-ia-a-role] .bottom-strip small,
+body[data-ia-a-role] .person-card p,
+body[data-ia-a-role] .person-card small,
+body[data-ia-a-role] .job-card p,
+body[data-ia-a-role] .job-card small,
+body[data-ia-a-role] .fleet-card p,
+body[data-ia-a-role] .fleet-card small,
+body[data-ia-a-role] .pack-card p,
+body[data-ia-a-role] .pack-card small,
+body[data-ia-a-role] .project-row small,
+body[data-ia-a-role] .ledger-list small,
+body[data-ia-a-role] .ledger-list time,
+body[data-ia-a-role] .weather-card small,
+body[data-ia-a-role] .search-results p,
+body[data-ia-a-role] .search-results small,
+body[data-ia-a-role] .quick-create-menu small,
+body[data-ia-a-role] .conversation-list small,
+body[data-ia-a-role] .conversation-list time,
+body[data-ia-a-role] .message-thread time,
+body[data-ia-a-role] .owner-invitation-panel small,
+body[data-ia-a-role] .asset-categories button span,
+body[data-ia-a-role] .annual-month small,
+body[data-ia-a-role] .custom-values>p {
+  color:var(--ia-paper-muted);
+}
+
+/* Light table/header strips should stay readable, never inherit the dark-shell text. */
+body[data-ia-a-role] .schedule-head,
+body[data-ia-a-role] .week-head,
+body[data-ia-a-role] .catalogue-table-head,
+body[data-ia-a-role] .profit-head,
+body[data-ia-a-role] .quote-list-head,
+body[data-ia-a-role] .permission-head,
+body[data-ia-a-role] .asset-table th,
+body[data-ia-a-role] .data-table th {
+  background:var(--ia-paper-soft);
+  color:var(--ia-paper-muted);
+  border-color:var(--ia-paper-line);
+}
+
+/* Keep light controls inside paper surfaces dark-on-light instead of inheriting shell colors. */
+body[data-ia-a-role] .owner-invitation-panel input,
+body[data-ia-a-role] .owner-invitation-panel select,
+body[data-ia-a-role] .search-results input,
+body[data-ia-a-role] .quick-create-menu input {
+  background:var(--ia-paper-soft);
+  color:var(--ia-paper-text);
+  border-color:var(--ia-paper-line);
+}
+
+
+/* Compact operational lists: click-to-open instead of endless passive tables. */
+body[data-ia-a-role] .ia-compact-table{overflow:hidden}
+body[data-ia-a-role] .ia-compact-table>.ia-compact-footer{border-top:1px solid var(--ia-line)}
+body[data-ia-a-role] .ia-click-row{cursor:pointer;transition:background .12s ease}
+body[data-ia-a-role] .ia-click-row:hover,
+body[data-ia-a-role] .ia-click-row:focus-visible{background:var(--ia-paper-soft);outline:2px solid var(--ia-accent);outline-offset:-2px}
+body[data-ia-a-role] .ia-row-open{font-size:12px;font-weight:800;color:var(--ia-paper-muted);white-space:nowrap}
+body[data-ia-a-role] .ia-stock-warning{color:var(--ia-warning)!important;font-weight:800}
+body[data-ia-a-role] .ia-compact-footer{display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 16px;color:var(--ia-muted);font-size:12px}
+body[data-ia-a-role] .ia-list-more{min-height:38px;padding:7px 13px;border:1px solid var(--ia-line);border-radius:7px;background:var(--ia-surface-soft);color:var(--ia-text);font-weight:800}
+body[data-ia-a-role] .ia-list-more:hover{background:var(--ia-surface-raised)}
+body[data-ia-a-role] .ia-compact-panel{overflow:hidden}
+body[data-ia-a-role] .ia-compact-card-list{display:grid}
+body[data-ia-a-role] .ia-compact-card{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:14px;align-items:center;width:100%;padding:13px 18px;border:0;border-top:1px solid var(--ia-line);background:var(--ia-surface);color:var(--ia-text);text-align:left}
+body[data-ia-a-role] .ia-compact-card:first-child{border-top:0}
+body[data-ia-a-role] .ia-compact-card:hover,
+body[data-ia-a-role] .ia-compact-card:focus-visible{background:var(--ia-surface-soft);outline:2px solid var(--ia-accent);outline-offset:-2px}
+body[data-ia-a-role] .ia-compact-card strong,
+body[data-ia-a-role] .ia-compact-card small{display:block}
+body[data-ia-a-role] .ia-compact-card small{margin-top:3px;color:var(--ia-muted)}
+body[data-ia-a-role] .ia-compact-card .ia-row-open{color:var(--ia-muted)}
+body[data-ia-a-role] .ia-asset-list{overflow:hidden}
+body[data-ia-a-role] .ia-asset-row{display:grid;grid-template-columns:minmax(240px,1.35fr) minmax(190px,1fr) 130px 105px 80px;gap:16px;align-items:center;width:100%;min-height:68px;padding:12px 18px;border:0;border-bottom:1px solid var(--ia-line);background:var(--ia-surface);color:var(--ia-text);text-align:left}
+body[data-ia-a-role] .ia-asset-row:last-of-type{border-bottom:0}
+body[data-ia-a-role] .ia-asset-row:hover,
+body[data-ia-a-role] .ia-asset-row:focus-visible{background:var(--ia-surface-soft);outline:2px solid var(--ia-accent);outline-offset:-2px}
+body[data-ia-a-role] .ia-asset-row strong,
+body[data-ia-a-role] .ia-asset-row small,
+body[data-ia-a-role] .ia-asset-row b{display:block}
+body[data-ia-a-role] .ia-asset-row small{margin-bottom:4px;color:var(--ia-muted);font-size:11px}
+body[data-ia-a-role] .ia-asset-row b{font-size:12px;font-weight:650}
+body[data-ia-a-role] .ia-asset-copy strong{font-size:14px}
+body[data-ia-a-role] .ia-asset-copy small{margin-top:4px;margin-bottom:0}
+body[data-ia-a-role] dialog .ia-detail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:16px}
+body[data-ia-a-role] dialog .ia-detail-grid>div{padding:10px;border:1px solid var(--ia-paper-line);border-radius:7px;background:var(--ia-paper-soft)}
+body[data-ia-a-role] dialog .ia-detail-grid small,
+body[data-ia-a-role] dialog .ia-detail-grid strong{display:block}
+body[data-ia-a-role] dialog .ia-detail-grid small{color:var(--ia-paper-muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+body[data-ia-a-role] dialog .ia-detail-grid strong{margin-top:4px;color:var(--ia-paper-text);font-size:13px}
+body[data-ia-a-role] dialog .ia-detail-summary{display:flex;justify-content:space-between;gap:12px;margin:10px 0;padding:9px 11px;border-radius:7px;background:var(--ia-paper-soft);color:var(--ia-paper-text)}
+body[data-ia-a-role] dialog .ia-detail-list{display:grid;border:1px solid var(--ia-paper-line);border-radius:8px;overflow:hidden}
+body[data-ia-a-role] dialog .ia-detail-line{display:grid;grid-template-columns:minmax(180px,1.6fr) repeat(4,minmax(80px,.7fr));gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--ia-paper-line);color:var(--ia-paper-text)}
+body[data-ia-a-role] dialog .ia-detail-line:last-child{border-bottom:0}
+body[data-ia-a-role] dialog .ia-detail-line-short{grid-template-columns:minmax(180px,1.6fr) repeat(3,minmax(70px,.7fr))}
+body[data-ia-a-role] dialog .ia-detail-line strong,
+body[data-ia-a-role] dialog .ia-detail-line small,
+body[data-ia-a-role] dialog .ia-detail-line b{display:block}
+body[data-ia-a-role] dialog .ia-detail-line small{color:var(--ia-paper-muted);font-size:10px}
+body[data-ia-a-role] dialog .ia-detail-link{display:flex;justify-content:space-between;gap:12px;align-items:center;width:100%;padding:11px 12px;border:0;border-bottom:1px solid var(--ia-paper-line);background:var(--ia-paper);color:var(--ia-paper-text);text-align:left}
+body[data-ia-a-role] dialog .ia-detail-link:last-child{border-bottom:0}
+body[data-ia-a-role] dialog .ia-detail-link:hover{background:var(--ia-paper-soft)}
+body[data-ia-a-role] dialog .ia-asset-health{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:16px 0;padding:12px;border:1px solid var(--ia-paper-line);border-radius:8px;background:var(--ia-paper-soft);color:var(--ia-paper-text)}
+body[data-ia-a-role] dialog .ia-asset-health>div{display:flex;align-items:center;gap:9px}
+@media(max-width:900px){
+  body[data-ia-a-role] .ia-asset-row{grid-template-columns:minmax(200px,1.4fr) 1fr 105px 78px}
+  body[data-ia-a-role] .ia-asset-row>.ia-asset-place{display:none}
+}
+@media(max-width:700px){
+  body[data-ia-a-role] .ia-asset-row{grid-template-columns:minmax(0,1fr) auto auto;padding:12px}
+  body[data-ia-a-role] .ia-asset-row>span:nth-child(3){display:none}
+  body[data-ia-a-role] .ia-row-open{display:none}
+  body[data-ia-a-role] .ia-compact-card{grid-template-columns:minmax(0,1fr) auto;padding:12px}
+  body[data-ia-a-role] dialog .ia-detail-grid{grid-template-columns:1fr 1fr}
+  body[data-ia-a-role] dialog .ia-detail-line,
+  body[data-ia-a-role] dialog .ia-detail-line-short{grid-template-columns:1fr 1fr}
+  body[data-ia-a-role] dialog .ia-detail-line>span:first-child{grid-column:1/-1}
+  body[data-ia-a-role] dialog .ia-asset-health{align-items:stretch;flex-direction:column}
+}
+
+
+/* Interaction contrast pass 2026-10-02.
+   Rule: light interaction state => dark text; dark interaction state => light text. */
+body[data-ia-a-role] .project-row,
+body[data-ia-a-role] .project-row *:not(.badge),
+body[data-ia-a-role] .people-table tbody tr,
+body[data-ia-a-role] .people-table tbody tr td,
+body[data-ia-a-role] .people-table tbody tr strong,
+body[data-ia-a-role] .people-table tbody tr small,
+body[data-ia-a-role] .people-table tbody tr button:not(.badge),
+body[data-ia-a-role] .data-table tbody tr.ia-click-row,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row td,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row strong,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row small,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row .ia-row-open {
+  color:var(--ia-paper-text);
+}
+
+body[data-ia-a-role] .project-row small,
+body[data-ia-a-role] .people-table tbody tr small,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row small {
+  color:var(--ia-paper-muted);
+}
+
+/* Personnel rows: no washed-out white hover. */
+body[data-ia-a-role] .people-table tbody tr {
+  background:var(--ia-surface);
+  color:var(--ia-text);
+  transition:background .12s ease,color .12s ease;
+}
+body[data-ia-a-role] .people-table tbody tr td,
+body[data-ia-a-role] .people-table tbody tr strong,
+body[data-ia-a-role] .people-table tbody tr button:not(.badge) {
+  color:var(--ia-text);
+}
+body[data-ia-a-role] .people-table tbody tr small {
+  color:var(--ia-muted);
+}
+body[data-ia-a-role] .people-table tbody tr:hover,
+body[data-ia-a-role] .people-table tbody tr:focus-within {
+  background:var(--ia-paper-soft);
+}
+body[data-ia-a-role] .people-table tbody tr:hover td,
+body[data-ia-a-role] .people-table tbody tr:hover strong,
+body[data-ia-a-role] .people-table tbody tr:hover button:not(.badge),
+body[data-ia-a-role] .people-table tbody tr:focus-within td,
+body[data-ia-a-role] .people-table tbody tr:focus-within strong,
+body[data-ia-a-role] .people-table tbody tr:focus-within button:not(.badge) {
+  color:var(--ia-paper-text)!important;
+}
+body[data-ia-a-role] .people-table tbody tr:hover small,
+body[data-ia-a-role] .people-table tbody tr:focus-within small {
+  color:var(--ia-paper-muted)!important;
+}
+
+/* Chantiers: paper rows need explicitly dark copy in every state. */
+body[data-ia-a-role] .project-row {
+  background:var(--ia-paper);
+  color:var(--ia-paper-text);
+  border-color:var(--ia-paper-line);
+}
+body[data-ia-a-role] .project-row:hover,
+body[data-ia-a-role] .project-row:focus-visible {
+  background:var(--ia-paper-soft);
+  color:var(--ia-paper-text);
+  outline:3px solid var(--ia-accent);
+  outline-offset:-3px;
+}
+body[data-ia-a-role] .project-row:hover *:not(.badge),
+body[data-ia-a-role] .project-row:focus-visible *:not(.badge) {
+  color:var(--ia-paper-text)!important;
+}
+body[data-ia-a-role] .project-row:hover small,
+body[data-ia-a-role] .project-row:focus-visible small {
+  color:var(--ia-paper-muted)!important;
+}
+
+/* Stock/Achats clickable rows: keep the compact UX, fix contrast on hover/focus. */
+body[data-ia-a-role] .ia-click-row {
+  color:var(--ia-text);
+}
+body[data-ia-a-role] .ia-click-row:hover,
+body[data-ia-a-role] .ia-click-row:focus-visible {
+  background:var(--ia-paper-soft);
+  color:var(--ia-paper-text);
+}
+body[data-ia-a-role] .ia-click-row:hover td,
+body[data-ia-a-role] .ia-click-row:hover strong,
+body[data-ia-a-role] .ia-click-row:hover .ia-row-open,
+body[data-ia-a-role] .ia-click-row:focus-visible td,
+body[data-ia-a-role] .ia-click-row:focus-visible strong,
+body[data-ia-a-role] .ia-click-row:focus-visible .ia-row-open {
+  color:var(--ia-paper-text)!important;
+}
+body[data-ia-a-role] .ia-click-row:hover small,
+body[data-ia-a-role] .ia-click-row:focus-visible small {
+  color:var(--ia-paper-muted)!important;
+}
+
+/* Global interactive affordance for menus, tabs and clickable cards. */
+body[data-ia-a-role] button,
+body[data-ia-a-role] [role="button"] {
+  transition:background .12s ease,color .12s ease,border-color .12s ease,outline-color .12s ease;
+}
+body[data-ia-a-role] .module-switch button:hover,
+body[data-ia-a-role] .filter-pills button:hover,
+body[data-ia-a-role] .asset-categories button:hover,
+body[data-ia-a-role] .management-tabs button:hover {
+  border-color:var(--ia-accent);
+}
+body[data-ia-a-role] .module-switch button.selected,
+body[data-ia-a-role] .filter-pills button.selected,
+body[data-ia-a-role] .asset-categories button.selected,
+body[data-ia-a-role] .management-tabs button.selected {
+  background:var(--ia-paper-soft);
+  color:var(--ia-paper-text);
+  border-color:var(--ia-accent);
+}
+body[data-ia-a-role] .module-switch button.selected *,
+body[data-ia-a-role] .filter-pills button.selected *,
+body[data-ia-a-role] .asset-categories button.selected *,
+body[data-ia-a-role] .management-tabs button.selected * {
+  color:var(--ia-paper-text)!important;
+}
+
+
+/* Final harmony pass 2026-10-02.
+   Never switch a dark operational row to a pale surface on hover. */
+body[data-ia-a-role] .people-table tbody tr,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row,
+body[data-ia-a-role] .project-row{
+  background:var(--ia-surface)!important;
+  color:var(--ia-text)!important;
+  border-color:var(--ia-line)!important;
+}
+body[data-ia-a-role] .people-table tbody tr td,
+body[data-ia-a-role] .people-table tbody tr strong,
+body[data-ia-a-role] .people-table tbody tr button:not(.badge),
+body[data-ia-a-role] .data-table tbody tr.ia-click-row td,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row strong,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row .ia-row-open,
+body[data-ia-a-role] .project-row *:not(.badge){
+  color:var(--ia-text)!important;
+}
+body[data-ia-a-role] .people-table tbody tr small,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row small,
+body[data-ia-a-role] .project-row small{
+  color:var(--ia-muted)!important;
+}
+body[data-ia-a-role] .people-table tbody tr:hover,
+body[data-ia-a-role] .people-table tbody tr:focus,
+body[data-ia-a-role] .people-table tbody tr:focus-within,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row:hover,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row:focus-visible,
+body[data-ia-a-role] .project-row:hover,
+body[data-ia-a-role] .project-row:focus-visible{
+  background:var(--ia-surface-raised)!important;
+  color:var(--ia-text)!important;
+  outline:2px solid var(--ia-accent);
+  outline-offset:-2px;
+}
+body[data-ia-a-role] .people-table tbody tr:hover *,
+body[data-ia-a-role] .people-table tbody tr:focus *,
+body[data-ia-a-role] .people-table tbody tr:focus-within *,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row:hover *,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row:focus-visible *,
+body[data-ia-a-role] .project-row:hover *:not(.badge),
+body[data-ia-a-role] .project-row:focus-visible *:not(.badge){
+  color:var(--ia-text)!important;
+}
+body[data-ia-a-role] .people-table tbody tr:hover small,
+body[data-ia-a-role] .people-table tbody tr:focus small,
+body[data-ia-a-role] .people-table tbody tr:focus-within small,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row:hover small,
+body[data-ia-a-role] .data-table tbody tr.ia-click-row:focus-visible small,
+body[data-ia-a-role] .project-row:hover small,
+body[data-ia-a-role] .project-row:focus-visible small{
+  color:var(--ia-muted)!important;
+}
+body[data-ia-a-role] .people-table tbody tr,
+body[data-ia-a-role] .project-row,
+body[data-ia-a-role] .ia-click-row,
+body[data-ia-a-role] .ia-asset-row,
+body[data-ia-a-role] .ia-compact-card{
+  cursor:pointer;
+}
+body[data-ia-a-role] .people-table tbody tr:active,
+body[data-ia-a-role] .project-row:active,
+body[data-ia-a-role] .ia-click-row:active,
+body[data-ia-a-role] .ia-asset-row:active,
+body[data-ia-a-role] .ia-compact-card:active{
+  transform:translateY(1px);
+}
+body[data-ia-a-role] .project-open,
+body[data-ia-a-role] .people-table .link,
+body[data-ia-a-role] .ia-row-open{
+  color:var(--ia-accent-strong)!important;
+  font-weight:800;
+}
+
+/* Consistent menu/tab interaction across modules. */
+body[data-ia-a-role] .module-switch button,
+body[data-ia-a-role] .filter-pills button,
+body[data-ia-a-role] .asset-categories button,
+body[data-ia-a-role] .management-tabs button,
+body[data-ia-a-role] .tabs button,
+body[data-ia-a-role] .job-workspace-tabs button,
+body[data-ia-a-role] .quote-area-tabs button{
+  transition:background .12s ease,color .12s ease,border-color .12s ease,transform .12s ease;
+}
+body[data-ia-a-role] .module-switch button:hover,
+body[data-ia-a-role] .filter-pills button:hover,
+body[data-ia-a-role] .asset-categories button:hover,
+body[data-ia-a-role] .management-tabs button:hover,
+body[data-ia-a-role] .tabs button:hover,
+body[data-ia-a-role] .job-workspace-tabs button:hover,
+body[data-ia-a-role] .quote-area-tabs button:hover{
+  background:var(--ia-surface-raised)!important;
+  color:var(--ia-text)!important;
+  border-color:var(--ia-accent)!important;
+}
+body[data-ia-a-role] .module-switch button.selected,
+body[data-ia-a-role] .filter-pills button.selected,
+body[data-ia-a-role] .asset-categories button.selected,
+body[data-ia-a-role] .management-tabs button.selected,
+body[data-ia-a-role] .tabs button.selected,
+body[data-ia-a-role] .job-workspace-tabs button.selected,
+body[data-ia-a-role] .quote-area-tabs button.selected{
+  background:var(--ia-accent-strong)!important;
+  color:var(--ia-button-text)!important;
+  border-color:var(--ia-accent)!important;
+}
+body[data-ia-a-role] .module-switch button.selected *,
+body[data-ia-a-role] .filter-pills button.selected *,
+body[data-ia-a-role] .asset-categories button.selected *,
+body[data-ia-a-role] .management-tabs button.selected *,
+body[data-ia-a-role] .tabs button.selected *,
+body[data-ia-a-role] .job-workspace-tabs button.selected *,
+body[data-ia-a-role] .quote-area-tabs button.selected *{
+  color:var(--ia-button-text)!important;
+}
+body[data-ia-a-role] .module-switch button:active,
+body[data-ia-a-role] .filter-pills button:active,
+body[data-ia-a-role] .asset-categories button:active,
+body[data-ia-a-role] .management-tabs button:active,
+body[data-ia-a-role] .tabs button:active,
+body[data-ia-a-role] .job-workspace-tabs button:active,
+body[data-ia-a-role] .quote-area-tabs button:active{
+  transform:translateY(1px);
+}
+
+/* Compact footers for Personnel and Chantiers match Stock/Achats. */
+body[data-ia-a-role] .ia-dom-list-footer{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:12px 16px;
+  border:1px solid var(--ia-line);
+  border-top:0;
+  border-radius:0 0 10px 10px;
+  background:var(--ia-surface);
+  color:var(--ia-muted);
+  font-size:12px;
+}
+body[data-ia-a-role] .project-list + .ia-dom-list-footer{
+  margin-top:-1px;
+}
+body[data-ia-a-role] .people-table + .ia-dom-list-footer{
+  border-left:0;
+  border-right:0;
+  border-bottom:0;
+  border-radius:0;
+}
+body[data-ia-a-role] [hidden]{
+  display:none!important;
+}
+
+
+/* Interaction harmony 2026-10-03.
+   Rule: dark rows stay dark on hover/focus; light dialogs use dark copy. */
+body[data-ia-a-role] .data-table tbody tr,
+body[data-ia-a-role] .people-table tbody tr,
+body[data-ia-a-role] .server-invoices tbody tr{
+  color:var(--ia-text);
+  transition:background .12s ease,color .12s ease;
+}
+body[data-ia-a-role] .data-table tbody tr:hover,
+body[data-ia-a-role] .data-table tbody tr:focus-within,
+body[data-ia-a-role] .people-table tbody tr:hover,
+body[data-ia-a-role] .people-table tbody tr:focus-within,
+body[data-ia-a-role] .server-invoices tbody tr:hover,
+body[data-ia-a-role] .server-invoices tbody tr:focus-within,
+body[data-ia-a-role] .ia-click-row:hover,
+body[data-ia-a-role] .ia-click-row:focus-visible{
+  background:var(--ia-surface-soft)!important;
+  color:var(--ia-text)!important;
+}
+body[data-ia-a-role] .data-table tbody tr:hover td,
+body[data-ia-a-role] .data-table tbody tr:focus-within td,
+body[data-ia-a-role] .people-table tbody tr:hover td,
+body[data-ia-a-role] .people-table tbody tr:focus-within td,
+body[data-ia-a-role] .server-invoices tbody tr:hover td,
+body[data-ia-a-role] .server-invoices tbody tr:focus-within td,
+body[data-ia-a-role] .ia-click-row:hover td,
+body[data-ia-a-role] .ia-click-row:focus-visible td{
+  color:var(--ia-text)!important;
+}
+body[data-ia-a-role] .data-table tbody tr:hover strong,
+body[data-ia-a-role] .data-table tbody tr:focus-within strong,
+body[data-ia-a-role] .people-table tbody tr:hover strong,
+body[data-ia-a-role] .people-table tbody tr:focus-within strong,
+body[data-ia-a-role] .server-invoices tbody tr:hover strong,
+body[data-ia-a-role] .server-invoices tbody tr:focus-within strong{
+  color:var(--ia-text)!important;
+}
+body[data-ia-a-role] .data-table tbody tr:hover small,
+body[data-ia-a-role] .data-table tbody tr:focus-within small,
+body[data-ia-a-role] .people-table tbody tr:hover small,
+body[data-ia-a-role] .people-table tbody tr:focus-within small,
+body[data-ia-a-role] .server-invoices tbody tr:hover small,
+body[data-ia-a-role] .server-invoices tbody tr:focus-within small{
+  color:var(--ia-muted)!important;
+}
+body[data-ia-a-role] .data-table tbody tr:hover .link,
+body[data-ia-a-role] .data-table tbody tr:focus-within .link,
+body[data-ia-a-role] .people-table tbody tr:hover .link,
+body[data-ia-a-role] .people-table tbody tr:focus-within .link,
+body[data-ia-a-role] .server-invoices tbody tr:hover .link,
+body[data-ia-a-role] .server-invoices tbody tr:focus-within .link{
+  color:var(--ia-accent-strong)!important;
+}
+
+/* Chantiers: visibly clickable, never washed-out paper rows. */
+body[data-ia-a-role] .project-list{
+  border:1px solid var(--ia-line);
+  border-radius:10px;
+  overflow:hidden;
+  background:var(--ia-surface);
+}
+body[data-ia-a-role] .project-row{
+  cursor:pointer;
+  background:var(--ia-surface)!important;
+  color:var(--ia-text)!important;
+  border-color:var(--ia-line)!important;
+  transition:background .12s ease,outline-color .12s ease;
+}
+body[data-ia-a-role] .project-row:hover,
+body[data-ia-a-role] .project-row:focus-visible{
+  background:var(--ia-surface-soft)!important;
+  color:var(--ia-text)!important;
+  outline:2px solid var(--ia-accent);
+  outline-offset:-2px;
+}
+body[data-ia-a-role] .project-row strong,
+body[data-ia-a-role] .project-row b,
+body[data-ia-a-role] .project-row .project-number{
+  color:var(--ia-text)!important;
+}
+body[data-ia-a-role] .project-row small{
+  color:var(--ia-muted)!important;
+}
+body[data-ia-a-role] .project-row .project-open{
+  color:var(--ia-accent-strong)!important;
+  white-space:nowrap;
+}
+
+/* General tasks and clickable operational rows get a clear affordance. */
+body[data-ia-a-role] .task,
+body[data-ia-a-role] .general-tasks .task,
+body[data-ia-a-role] .document-file-list>button,
+body[data-ia-a-role] .vehicle-list>button{
+  transition:background .12s ease,outline-color .12s ease;
+}
+body[data-ia-a-role] .task:hover,
+body[data-ia-a-role] .task:focus-visible,
+body[data-ia-a-role] .general-tasks .task:hover,
+body[data-ia-a-role] .general-tasks .task:focus-visible{
+  background:var(--ia-surface-soft)!important;
+  color:var(--ia-text)!important;
+}
+
+/* Light modals: links and values must be dark enough to read. */
+body[data-ia-a-role] dialog .link,
+body[data-ia-a-role] dialog a{
+  color:var(--ia-accent-strong)!important;
+  font-weight:800;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+body[data-ia-a-role] dialog .detail-row,
+body[data-ia-a-role] dialog .detail-row b,
+body[data-ia-a-role] dialog .detail-row strong{
+  color:var(--ia-paper-text)!important;
+}
+body[data-ia-a-role] dialog .detail-row span,
+body[data-ia-a-role] dialog .detail-row small{
+  color:var(--ia-paper-muted)!important;
+}
+body[data-ia-a-role] dialog .btn.primary{
+  color:var(--ia-button-text)!important;
+}
+
+/* Keyboard focus is visible without bleaching the component. */
+body[data-ia-a-role] .project-row:focus-visible,
+body[data-ia-a-role] .people-table tbody tr:focus-visible,
+body[data-ia-a-role] .ia-click-row:focus-visible{
+  outline:3px solid var(--ia-focus);
+  outline-offset:-3px;
+}
+
+
+/* Readability + interaction patch 2026-10-03.
+   Chantiers and personnel modals must never render pale copy on pale surfaces. */
+body[data-ia-a-role] .compact-jobs{
+  background:var(--ia-surface)!important;
+  border-color:var(--ia-line)!important;
+}
+body[data-ia-a-role] .compact-job{
+  background:var(--ia-surface)!important;
+  color:var(--ia-text)!important;
+  border-color:var(--ia-line)!important;
+  cursor:pointer;
+}
+body[data-ia-a-role] .compact-job *:not(.badge){
+  color:var(--ia-text)!important;
+}
+body[data-ia-a-role] .compact-job small{
+  color:var(--ia-muted)!important;
+}
+body[data-ia-a-role] .compact-job .job-index,
+body[data-ia-a-role] .compact-job i{
+  color:var(--ia-accent-strong)!important;
+}
+body[data-ia-a-role] .compact-job:hover,
+body[data-ia-a-role] .compact-job:focus-visible{
+  background:var(--ia-surface-raised)!important;
+  color:var(--ia-text)!important;
+  outline:2px solid var(--ia-accent);
+  outline-offset:-2px;
+}
+body[data-ia-a-role] .compact-job:hover *:not(.badge),
+body[data-ia-a-role] .compact-job:focus-visible *:not(.badge){
+  color:var(--ia-text)!important;
+}
+body[data-ia-a-role] .compact-job:hover small,
+body[data-ia-a-role] .compact-job:focus-visible small{
+  color:var(--ia-muted)!important;
+}
+
+/* Dark operational tables keep their copy readable on hover/focus. */
+body[data-ia-a-role] main .data-table tbody tr{
+  color:var(--ia-text);
+}
+body[data-ia-a-role] main .data-table tbody tr:hover,
+body[data-ia-a-role] main .data-table tbody tr:focus-within{
+  background:var(--ia-surface-raised)!important;
+}
+body[data-ia-a-role] main .data-table tbody tr:hover td,
+body[data-ia-a-role] main .data-table tbody tr:hover strong,
+body[data-ia-a-role] main .data-table tbody tr:hover b,
+body[data-ia-a-role] main .data-table tbody tr:focus-within td,
+body[data-ia-a-role] main .data-table tbody tr:focus-within strong,
+body[data-ia-a-role] main .data-table tbody tr:focus-within b{
+  color:var(--ia-text)!important;
+}
+body[data-ia-a-role] main .data-table tbody tr:hover small,
+body[data-ia-a-role] main .data-table tbody tr:focus-within small{
+    color:var(--ia-muted)!important;
+}
+
+/* Job details stay aligned with the active theme while keeping a readable summary. */
+.job-detail-summary{margin:0 0 18px;padding:16px;border:1px solid var(--ia-paper-line,#dce4dc);border-radius:10px;background:var(--ia-paper,#f3f6f1);color:var(--ia-paper-text,#1f2a23)}
+.job-detail-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.job-detail-summary-grid>div{min-width:0;padding:10px;border-radius:7px;background:var(--ia-paper-soft,#fff);color:var(--ia-paper-text,#1f2a23)}
+.job-detail-summary-grid small,.job-detail-summary-grid strong{display:block}
+.job-detail-summary-grid small{margin-bottom:5px;color:var(--ia-paper-muted,#526054);font-size:11px;font-weight:700}
+.job-detail-summary-grid strong{color:var(--ia-paper-text,#1f2a23);font-size:13px;line-height:1.4;overflow-wrap:anywhere}
+.job-open-workspace{margin-top:14px}
+body[data-ia-a-role] dialog .job-detail-summary{border-color:var(--ia-paper-line);background:var(--ia-paper);color:var(--ia-paper-text)}
+body[data-ia-a-role] dialog .job-detail-summary-grid>div{background:var(--ia-paper-soft);color:var(--ia-paper-text)}
+body[data-ia-a-role] dialog .job-detail-summary-grid small{color:var(--ia-paper-muted)}
+body[data-ia-a-role] dialog .job-detail-summary-grid strong{color:var(--ia-paper-text)}
+@media(max-width:760px){.job-detail-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:430px){.job-detail-summary{padding:11px}.job-detail-summary-grid{gap:7px}.job-detail-summary-grid>div{padding:8px}}
+
+/* Personnel dossier: all light/yellow legacy blocks use dark ink explicitly. */
+body[data-ia-a-role] dialog .person-dossier-head,
+body[data-ia-a-role] dialog .person-section,
+body[data-ia-a-role] dialog .person-kpis>div,
+body[data-ia-a-role] dialog .professional-summary>div,
+body[data-ia-a-role] dialog .person-events>div,
+body[data-ia-a-role] dialog .permit-grid>div,
+body[data-ia-a-role] dialog .accident-card,
+body[data-ia-a-role] dialog .detail-row,
+body[data-ia-a-role] dialog .notice,
+body[data-ia-a-role] dialog .training-tags span,
+body[data-ia-a-role] dialog .job-note{
+  color:var(--ia-paper-text)!important;
+  border-color:var(--ia-paper-line)!important;
+}
+body[data-ia-a-role] dialog .person-kpis>div,
+body[data-ia-a-role] dialog .professional-summary>div,
+body[data-ia-a-role] dialog .permit-grid>div,
+body[data-ia-a-role] dialog .accident-card,
+body[data-ia-a-role] dialog .notice,
+body[data-ia-a-role] dialog .training-tags span,
+body[data-ia-a-role] dialog .job-note{
+  background:var(--ia-paper-soft)!important;
+}
+body[data-ia-a-role] dialog .person-dossier-head *,
+body[data-ia-a-role] dialog .person-section h1,
+body[data-ia-a-role] dialog .person-section h2,
+body[data-ia-a-role] dialog .person-section h3,
+body[data-ia-a-role] dialog .person-section strong,
+body[data-ia-a-role] dialog .person-section b,
+body[data-ia-a-role] dialog .person-kpis strong,
+body[data-ia-a-role] dialog .professional-summary strong,
+body[data-ia-a-role] dialog .person-events strong,
+body[data-ia-a-role] dialog .permit-grid strong,
+body[data-ia-a-role] dialog .accident-card strong,
+body[data-ia-a-role] dialog .detail-row b,
+body[data-ia-a-role] dialog .notice strong{
+  color:var(--ia-paper-text)!important;
+}
+body[data-ia-a-role] dialog .person-section p,
+body[data-ia-a-role] dialog .person-section span:not(.badge),
+body[data-ia-a-role] dialog .person-section small,
+body[data-ia-a-role] dialog .person-kpis small,
+body[data-ia-a-role] dialog .person-kpis span,
+body[data-ia-a-role] dialog .professional-summary small,
+body[data-ia-a-role] dialog .person-events small,
+body[data-ia-a-role] dialog .permit-grid span,
+body[data-ia-a-role] dialog .permit-grid small,
+body[data-ia-a-role] dialog .accident-card small,
+body[data-ia-a-role] dialog .detail-row span{
+  color:var(--ia-paper-muted)!important;
+}
+body[data-ia-a-role] dialog .link{
+  color:var(--ia-accent-strong)!important;
+  font-weight:800;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+body[data-ia-a-role] dialog .link:hover,
+body[data-ia-a-role] dialog .link:focus-visible{
+  color:var(--ia-accent-strong)!important;
+  background:var(--ia-surface-raised)!important;
+  outline:2px solid var(--ia-focus);
+  outline-offset:2px;
+}
+
+/* Planning stays readable without the large near-white panels. */
+body[data-ia-a-role] .ia-b-week-day{
+  background:var(--ia-surface);
+  border-color:var(--ia-line);
+  color:var(--ia-text);
+}
+body[data-ia-a-role] .ia-b-week-day.is-weekend{
+  background:color-mix(in srgb,var(--ia-surface) 88%,var(--ia-accent) 12%);
+}
+body[data-ia-a-role] .ia-b-week-day h3{color:var(--ia-text)}
+body[data-ia-a-role] .ia-b-week-team{color:var(--ia-muted)}
+body[data-ia-a-role] .ia-b-slot{
+  padding:10px;
+  background:var(--ia-surface-soft);
+  border-color:var(--ia-line);
+  color:var(--ia-text);
+  transition:background .15s ease,border-color .15s ease,transform .15s ease;
+}
+body[data-ia-a-role] .ia-b-slot strong{color:var(--ia-text)}
+body[data-ia-a-role] .ia-b-slot span,
+body[data-ia-a-role] .ia-b-slot small,
+body[data-ia-a-role] .ia-b-slot em{color:var(--ia-muted)}
+body[data-ia-a-role] .ia-b-slot:hover{
+  background:var(--ia-surface-raised);
+  border-color:var(--ia-accent);
+  transform:translateY(-1px);
+}
+body[data-ia-a-role] .ia-b-slot:focus-visible{outline:3px solid var(--ia-focus);outline-offset:2px}
+
+/* Shared secondary surfaces follow the active palette, including legacy filter wrappers. */
+body[data-ia-a-role] .module-switch,
+body[data-ia-a-role] .filter-pills,
+body[data-ia-a-role] .tabs,
+body[data-ia-a-role] .management-tabs,
+body[data-ia-a-role] .job-workspace-tabs,
+body[data-ia-a-role] .quote-area-tabs,
+body[data-ia-a-role] .notice{
+  background:var(--ia-surface-soft);
+  border-color:var(--ia-line);
+  color:var(--ia-muted);
+}
+body[data-ia-a-role] .count{background:var(--ia-surface-raised);color:var(--ia-text)}
+body[data-ia-a-role] .badge:not(.green):not(.warn){background:var(--ia-surface-raised);border-color:var(--ia-line);color:var(--ia-text)}
+
+/* Color-only compatibility with the compact mobile navigation in #162. */
+@media(max-width:760px){
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-nav button:not(.active){color:var(--ia-shell-muted)}
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-sheet[open]{background:var(--ia-surface)!important;border-color:var(--ia-line);color:var(--ia-text)!important}
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-sheet-head h2{color:var(--ia-text)!important}
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-sheet-head .eyebrow,
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-sheet-head span,
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-menu-group h3,
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-menu-foot{color:var(--ia-muted)!important}
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-sheet-grabber{background:var(--ia-muted)}
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-sheet-close,
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-menu-search input,
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-menu-group button{background:var(--ia-surface-soft);border-color:var(--ia-line);color:var(--ia-text)!important}
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-menu-search input::placeholder{color:var(--ia-muted)}
+  body[data-ia-a-role][data-mobile-nav="true"] .socle-mobile-menu-group button>span{color:var(--ia-accent-strong)!important}
+}
+
+/* SOCLE workspace: theme surfaces and typography share the same palette. */
+body[data-ia-a-role] .brand,body[data-ia-a-role] .workspace{color:#fffdf7}
+body[data-ia-a-role] .workspace small,body[data-ia-a-role] .demo{color:#d9decf}
+body[data-ia-a-role] .ia-state{border-color:var(--ia-line);background:var(--ia-surface-soft);color:var(--ia-text)}
+body[data-ia-a-role] .ia-state-icon{background:var(--ia-surface-raised);color:var(--ia-accent-strong)}
+body[data-ia-a-role] .ia-state-error{border-color:#c58b80;background:#fbefec}
+body[data-ia-a-role] .ia-state-error .ia-state-icon{background:#efd0ca;color:#7b3028}
+body[data-ia-a-role] .ia-state-success{border-color:#9ab08f;background:#edf4e9}
+body[data-ia-a-role] .ia-state-success .ia-state-icon{background:#d7e7d0;color:#2e5a31}
+body[data-ia-a-role] .ia-role-head{background:linear-gradient(135deg,var(--ia-surface),var(--ia-surface-soft));border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .ia-role-head .eyebrow{color:var(--ia-accent-strong)}
+body[data-ia-a-role] .ia-role-head p:not(.eyebrow){color:var(--ia-muted)}
+body[data-ia-a-role] .ia-role-chip{border-color:var(--ia-line);color:var(--ia-accent-strong);background:var(--ia-surface-soft)}
+body[data-ia-a-role] .ia-quick-actions{background:var(--ia-surface);border-color:var(--ia-line)}
+body[data-ia-a-role] .ia-state{background:var(--ia-surface-soft);border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .ia-state-icon{background:var(--ia-surface-raised);color:var(--ia-accent-strong)}
+body[data-ia-a-role] .ia-state-error{border-color:#c58b80;background:color-mix(in srgb,#b44a3d 12%,var(--ia-surface))}
+body[data-ia-a-role] .ia-state-error .ia-state-icon{background:color-mix(in srgb,#b44a3d 24%,var(--ia-surface));color:var(--ia-text)}
+body[data-ia-a-role] .ia-state-success{border-color:#9ab08f;background:color-mix(in srgb,#57814e 14%,var(--ia-surface))}
+body[data-ia-a-role] .ia-state-success .ia-state-icon{background:color-mix(in srgb,#57814e 24%,var(--ia-surface));color:var(--ia-text)}
+body[data-ia-a-role] .ia-home-weather,body[data-ia-a-role] .ia-home-portals{background:var(--ia-surface-soft);border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .ia-home-weather-head .eyebrow,body[data-ia-a-role] .ia-home-portals-head .eyebrow{color:var(--ia-accent-strong)}
+body[data-ia-a-role] .ia-row-arrow{color:var(--ia-accent-strong)}
+body[data-ia-a-role] .ia-owner-dashboard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+body[data-ia-a-role] .ia-owner-panel,body[data-ia-a-role] .ia-owner-week{min-width:0;overflow:hidden;border:1px solid var(--ia-line);border-radius:var(--ia-radius);background:var(--ia-surface);color:var(--ia-text)}
+body[data-ia-a-role] .ia-owner-panel>header,body[data-ia-a-role] .ia-owner-week>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border-bottom:1px solid var(--ia-line)}
+body[data-ia-a-role] .ia-owner-panel h2,body[data-ia-a-role] .ia-owner-week h2{margin:0;font-size:1rem;color:var(--ia-text)}
+body[data-ia-a-role] .ia-owner-panel .eyebrow,body[data-ia-a-role] .ia-owner-week .eyebrow{margin:0 0 3px;color:var(--ia-accent-strong);font-size:.63rem;letter-spacing:.12em}
+body[data-ia-a-role] .ia-owner-panel-body{padding:3px 12px}
+body[data-ia-a-role] .ia-owner-row{width:100%;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 3px;border:0;border-bottom:1px solid var(--ia-line);background:transparent;color:var(--ia-text);text-align:left;cursor:pointer}
+body[data-ia-a-role] .ia-owner-row:last-child{border-bottom:0}
+body[data-ia-a-role] .ia-owner-row:hover,body[data-ia-a-role] .ia-owner-row:focus-visible{background:var(--ia-surface-soft)}
+body[data-ia-a-role] .ia-owner-row>span:first-child{display:grid;min-width:0;gap:3px}
+body[data-ia-a-role] .ia-owner-row strong,body[data-ia-a-role] .ia-owner-row small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body[data-ia-a-role] .ia-owner-row strong{font-size:.84rem}
+body[data-ia-a-role] .ia-owner-row small,body[data-ia-a-role] .ia-owner-task-state{font-size:.72rem;color:var(--ia-muted)}
+body[data-ia-a-role] .ia-owner-week{grid-column:1/-1}
+body[data-ia-a-role] .ia-owner-week-days{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding:9px}
+body[data-ia-a-role] .ia-owner-week-day{min-width:0;padding:9px;border:1px solid var(--ia-line);border-radius:8px;background:var(--ia-surface-soft)}
+body[data-ia-a-role] .ia-owner-week-day h3{display:flex;justify-content:space-between;gap:5px;margin:0 0 7px;color:var(--ia-text);font-size:.76rem;text-transform:capitalize}
+body[data-ia-a-role] .ia-owner-week-day ul{display:grid;gap:5px;min-height:26px;margin:0;padding:0;list-style:none}
+body[data-ia-a-role] .ia-owner-week-day li{display:grid;gap:2px;min-width:0;padding-left:6px;border-left:2px solid var(--ia-accent)}
+body[data-ia-a-role] .ia-owner-week-day li small{color:var(--ia-muted);font-size:.65rem}
+body[data-ia-a-role] .ia-owner-week-day li strong{overflow:hidden;color:var(--ia-text);font-size:.72rem;line-height:1.25;text-overflow:ellipsis}
+body[data-ia-a-role] .ia-owner-week-day li.is-empty{padding:4px 0;border:0;color:var(--ia-muted);font-size:.7rem}
+body[data-ia-a-role] .ia-b-week-board{grid-template-columns:repeat(7,minmax(145px,1fr));min-width:1050px;gap:8px}
+body[data-ia-a-role] .ia-b-week-day{padding:9px;background:var(--ia-surface);border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .ia-b-week-day h3{font-size:.78rem;line-height:1.25;color:var(--ia-text)}
+body[data-ia-a-role] .ia-b-slot{padding:8px;background:var(--ia-surface-soft);border-color:var(--ia-line);color:var(--ia-text);font-size:.75rem}
+body[data-ia-a-role] .ia-b-slot strong{font-size:.78rem;color:var(--ia-text)}
+body[data-ia-a-role] .ia-b-slot span,body[data-ia-a-role] .ia-b-slot small,body[data-ia-a-role] .ia-b-slot em{font-size:.68rem;color:var(--ia-muted)}
+body[data-ia-a-role] .ia-b-worker-day{background:var(--ia-surface);border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .ia-b-worker-day-head{background:var(--ia-surface-soft);color:var(--ia-text)}
+body[data-ia-a-role] .ia-b-worker-mission{background:var(--ia-surface-soft);border-color:var(--ia-line);color:var(--ia-text)}
+.ia-back-to-top{position:fixed;right:22px;bottom:22px;z-index:75;width:48px;height:48px;display:grid;place-items:center;border:1px solid #455344;border-radius:50%;background:#344332;color:#fff;font-size:24px;font-weight:800;box-shadow:0 5px 18px #18221944;cursor:pointer;transition:transform .15s ease,background .15s ease,opacity .15s ease}
+.ia-back-to-top:hover{transform:translateY(-2px);background:#253629}
+.ia-back-to-top:focus-visible{outline:3px solid var(--ia-accent);outline-offset:3px}
+.ia-back-to-top[hidden]{display:none!important}
+body[data-ia-a-role] .official-access,body[data-ia-a-role] .personal-company-access{background:var(--ia-surface);border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .official-access .eyebrow,body[data-ia-a-role] .personal-company-access .eyebrow{color:var(--ia-accent-strong)}
+body[data-ia-a-role] .official-access h2,body[data-ia-a-role] .official-access>div>p:not(.eyebrow),body[data-ia-a-role] .personal-company-access h2,body[data-ia-a-role] .personal-company-access span{color:var(--ia-text)}
+body[data-ia-a-role] .official-grid a{background:var(--ia-surface-soft);border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .official-grid a:hover{background:var(--ia-surface-raised)}
+body[data-ia-a-role] .official-grid a span{color:var(--ia-muted)}
+body[data-ia-a-role] .official-grid a b{color:var(--ia-accent-strong)}
+@media(max-width:760px){body[data-ia-a-role] .ia-owner-dashboard{grid-template-columns:1fr}body[data-ia-a-role] .ia-owner-week{grid-column:auto}body[data-ia-a-role] .ia-owner-week-days{grid-template-columns:1fr;gap:5px;padding:8px}body[data-ia-a-role] .ia-owner-week-day{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px;align-items:start;padding:7px 9px}body[data-ia-a-role] .ia-owner-week-day h3{display:grid;gap:1px;margin:0;font-size:.72rem}body[data-ia-a-role] .ia-owner-week-day ul{min-height:0}.ia-back-to-top{right:14px;bottom:calc(88px + env(safe-area-inset-bottom,0px));width:46px;height:46px}body[data-ia-a-role] .ia-b-week-wrap{overflow:visible}body[data-ia-a-role] .ia-b-week-board{grid-template-columns:minmax(0,1fr);min-width:0;gap:6px}body[data-ia-a-role] .ia-b-week-day{display:block;padding:8px}body[data-ia-a-role] .ia-b-week-day h3{margin:0 0 6px}body[data-ia-a-role] .ia-b-week-assignment{margin:0 0 5px}body[data-ia-a-role] .ia-b-week-day .ia-b-week-empty{padding:4px 0}}
+
+
+/* Desktop surface hierarchy 2026-10-04: dark canvas + cream functional panels. */
+@media(min-width:761px){
+  body[data-ia-a-role]{
+    --ia-desktop-canvas:var(--ia-bg);
+    --ia-canvas-text:var(--ia-text);
+    --ia-canvas-muted:var(--ia-muted);
+    background:var(--ia-desktop-canvas);
+  }
+  body[data-ia-a-role] main{
+    background:transparent;
+    color:var(--ia-canvas-text);
+  }
+  body[data-ia-a-role] main>.heading h1,
+  body[data-ia-a-role] main>.simple-head h1,
+  body[data-ia-a-role] main>.planning-head h1,
+  body[data-ia-a-role] main>.overview-head h1{
+    color:var(--ia-canvas-text);
+  }
+  body[data-ia-a-role] main>.heading p,
+  body[data-ia-a-role] main>.simple-head p,
+  body[data-ia-a-role] main>.planning-head p,
+  body[data-ia-a-role] main>.overview-head p{
+    color:var(--ia-canvas-muted);
+  }
+  body[data-ia-a-role] main input,
+  body[data-ia-a-role] main select,
+  body[data-ia-a-role] main textarea{
+    background:var(--ia-surface-soft);
+    color:var(--ia-text);
+  }
+  body[data-ia-a-role] .ia-b-planning-head,
+  body[data-ia-a-role] .toolbar.ia-b-filters,
+  body[data-ia-a-role] .ia-b-filters + .section-heading,
+  body[data-ia-a-role] .personal-head{
+    background:var(--ia-surface);
+    color:var(--ia-text);
+    border:1px solid var(--ia-line);
+    border-radius:var(--ia-radius);
+    box-shadow:none;
+  }
+  body[data-ia-a-role] .ia-b-planning-head{
+    padding:12px 14px;
+  }
+  body[data-ia-a-role] .toolbar.ia-b-filters{
+    padding:12px;
+  }
+  body[data-ia-a-role] .ia-b-filters + .section-heading{
+    margin:12px 0;
+    padding:12px 14px;
+  }
+  body[data-ia-a-role] .personal-head{
+    padding:16px 18px;
+  }
+  body[data-ia-a-role] .personal-head h1,
+  body[data-ia-a-role] .personal-head strong{
+    color:var(--ia-text);
+  }
+  body[data-ia-a-role] .personal-head span,
+  body[data-ia-a-role] .personal-head label{
+    color:var(--ia-muted);
+  }
+  body[data-ia-a-role] .personal-today{
+    background:var(--ia-surface);
+    color:var(--ia-text);
+    border:1px solid var(--ia-line);
+  }
+  body[data-ia-a-role] .personal-today p{
+    color:var(--ia-muted);
+  }
+  body[data-ia-a-role] .compact-jobs{
+    background:var(--ia-surface)!important;
+    border-color:var(--ia-line)!important;
+  }
+  body[data-ia-a-role] .compact-jobs .compact-job{
+    background:var(--ia-surface-soft)!important;
+    color:var(--ia-text)!important;
+  }
+  body[data-ia-a-role] .compact-jobs .compact-job:hover,
+  body[data-ia-a-role] .compact-jobs .compact-job:focus-visible{
+    background:var(--ia-surface-raised)!important;
+  }
+  body[data-ia-a-role] .ia-b-week-day{
+    background:var(--ia-surface)!important;
+    border-color:var(--ia-line)!important;
+    color:var(--ia-text);
+  }
+  body[data-ia-a-role] .ia-b-slot{
+    background:var(--ia-surface-soft)!important;
+    border-color:var(--ia-line)!important;
+    color:var(--ia-text);
+  }
+}
+
+/* Biens & matériel integration: module spacing and desktop filter proportions. */
+body[data-ia-a-role] .asset-categories{
+  margin-bottom:var(--ds-space-md);
+}
+.assets-filter-bar{
+  margin-block:0 var(--ds-space-sm);
+}
+.assets-filter-summary{
+  justify-content:flex-end;
+  margin-block:0 var(--ds-space-md);
+}
+@media(min-width:761px){
+  .assets-filter-bar.ui-compact-filter-bar .ui-filter-control--search{
+    flex:0 1 200px;
+    min-width:180px;
+  }
+  .assets-filter-bar .ui-filter-sheet__panel>.ui-filter-control{
+    flex:0 1 128px;
+    min-width:112px;
+  }
+  .assets-filter-bar .ui-filter-reset{
+    padding-inline:8px;
+    font-size:var(--ds-font-xs);
+  }
+  .assets-filter-bar .ui-filter-actions{
+    flex:0 0 auto;
+  }
+}
+@media(max-width:760px){
+  .assets-filter-summary{
+    justify-content:flex-start;
+  }
+}
+
+
+/* MOBILE-UX-CONVERGENCE-02 — phone canvas and functional surfaces follow the active theme. */
+@media(max-width:760px){
+  body[data-ia-a-role]{
+    background:var(--ia-bg)!important;
+  }
+  body[data-ia-a-role] main{
+    background:transparent!important;
+    color:var(--ia-text);
+  }
+  body[data-ia-a-role] main>.heading h1,
+  body[data-ia-a-role] main>.simple-head h1,
+  body[data-ia-a-role] main>.planning-head h1,
+  body[data-ia-a-role] main>.overview-head h1,
+  body[data-ia-a-role] main>.section-heading h2{
+    color:var(--ia-text)!important;
+  }
+  body[data-ia-a-role] main>.heading p,
+  body[data-ia-a-role] main>.simple-head p,
+  body[data-ia-a-role] main>.planning-head p,
+  body[data-ia-a-role] main>.overview-head p{
+    color:var(--ia-muted)!important;
+  }
+
+  body[data-ia-a-role] .panel,
+  body[data-ia-a-role] .ia-role-head,
+  body[data-ia-a-role] .ia-worker-job,
+  body[data-ia-a-role] .ia-home-weather,
+  body[data-ia-a-role] .ia-home-portals,
+  body[data-ia-a-role] .ia-quick-actions,
+  body[data-ia-a-role] .weather-dashboard,
+  body[data-ia-a-role] .server-finance,
+  body[data-ia-a-role] .server-finance-grid article,
+  body[data-ia-a-role] .account-kpis>div,
+  body[data-ia-a-role] .account-side,
+  body[data-ia-a-role] .finance-box,
+  body[data-ia-a-role] .ia-b-planning-head,
+  body[data-ia-a-role] .toolbar.ia-b-filters,
+  body[data-ia-a-role] .personal-head,
+  body[data-ia-a-role] .personal-today{
+    background:var(--ia-surface)!important;
+    border-color:var(--ia-line)!important;
+    color:var(--ia-text)!important;
+  }
+  body[data-ia-a-role] .panel h1,
+  body[data-ia-a-role] .panel h2,
+  body[data-ia-a-role] .panel h3,
+  body[data-ia-a-role] .ia-role-head h1,
+  body[data-ia-a-role] .ia-worker-job h1,
+  body[data-ia-a-role] .ia-home-weather h2,
+  body[data-ia-a-role] .ia-home-portals h2{
+    color:var(--ia-text)!important;
+  }
+  body[data-ia-a-role] .ia-role-head p:not(.eyebrow),
+  body[data-ia-a-role] .ia-worker-job p,
+  body[data-ia-a-role] .ia-home-weather small,
+  body[data-ia-a-role] .ia-home-portals small{
+    color:var(--ia-muted)!important;
+  }
+  body[data-ia-a-role] .brand,
+  body[data-ia-a-role] .workspace,
+  body[data-ia-a-role] .workspace small,
+  body[data-ia-a-role] .demo{
+    color:#fffdf7!important;
+  }
+
+  body[data-ia-a-role] .ia-home-weather-card,
+  body[data-ia-a-role] .ia-home-portal-links a,
+  body[data-ia-a-role] .compact-job,
+  body[data-ia-a-role] .job-card,
+  body[data-ia-a-role] .ia-b-worker-day-head,
+  body[data-ia-a-role] .ia-b-worker-mission{
+    background:var(--ia-surface-soft)!important;
+    border-color:var(--ia-line)!important;
+    color:var(--ia-text)!important;
+  }
+  body[data-ia-a-role] .ia-home-weather-card:hover,
+  body[data-ia-a-role] .ia-home-portal-links a:hover,
+  body[data-ia-a-role] .compact-job:hover,
+  body[data-ia-a-role] .compact-job:focus-visible{
+    background:var(--ia-surface-raised)!important;
+  }
+
+  /* Chantiers: full-width readable cards, no vertical word breaking. */
+  body[data-ia-a-role] .compact-jobs{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+    min-width:0!important;
+    background:transparent!important;
+    border:0!important;
+  }
+  body[data-ia-a-role] .compact-job,
+  body[data-ia-a-role] .job-card{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+  }
+  body[data-ia-a-role] .compact-job h2,
+  body[data-ia-a-role] .compact-job h3,
+  body[data-ia-a-role] .compact-job strong,
+  body[data-ia-a-role] .job-card h2,
+  body[data-ia-a-role] .job-card h3,
+  body[data-ia-a-role] .job-card strong{
+    white-space:normal!important;
+    word-break:normal!important;
+    overflow-wrap:break-word!important;
+  }
+
+  /* Finance: convert dense tables into vertical records on phones. */
+  body[data-ia-a-role] .server-finance-grid{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+    background:transparent!important;
+    border:0!important;
+  }
+  body[data-ia-a-role] .server-finance-grid article{
+    min-width:0;
+    padding:11px!important;
+    border:1px solid var(--ia-line)!important;
+    border-radius:9px;
+  }
+  body[data-ia-a-role] .server-finance-grid article strong,
+  body[data-ia-a-role] .account-kpis strong{
+    display:block;
+    max-width:100%;
+    white-space:normal;
+    overflow-wrap:break-word;
+  }
+  body[data-ia-a-role] .account-kpis{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+  }
+  body[data-ia-a-role] .account-kpis>div{
+    min-width:0;
+    padding:11px!important;
+    border:1px solid var(--ia-line)!important;
+    border-radius:9px;
+  }
+  body[data-ia-a-role] .account-layout{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+  }
+  body[data-ia-a-role] .ia-mobile-card-table{
+    max-width:100%;
+    overflow:visible!important;
+    background:transparent!important;
+    border:0!important;
+  }
+  body[data-ia-a-role] .ia-mobile-card-table table,
+  body[data-ia-a-role] .ia-mobile-card-table tbody{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  body[data-ia-a-role] .ia-mobile-card-table thead{display:none!important}
+  body[data-ia-a-role] .ia-mobile-card-table tbody{
+    display:grid!important;
+    gap:8px;
+  }
+  body[data-ia-a-role] .ia-mobile-card-table tbody tr{
+    display:grid!important;
+    grid-template-columns:1fr;
+    gap:4px;
+    width:100%;
+    min-width:0;
+    padding:11px 12px;
+    border:1px solid var(--ia-line)!important;
+    border-radius:9px;
+    background:var(--ia-surface-soft)!important;
+  }
+  body[data-ia-a-role] .ia-mobile-card-table td{
+    display:grid!important;
+    grid-template-columns:minmax(82px,.8fr) minmax(0,1.2fr);
+    align-items:start;
+    gap:9px;
+    min-width:0;
+    padding:2px 0!important;
+    border:0!important;
+    text-align:right;
+    white-space:normal!important;
+    overflow-wrap:break-word;
+  }
+  body[data-ia-a-role] .ia-mobile-card-table td::before{
+    content:attr(data-label);
+    min-width:0;
+    color:var(--ia-muted);
+    font-size:.68rem;
+    font-weight:800;
+    letter-spacing:.035em;
+    text-align:left;
+    text-transform:uppercase;
+  }
+  body[data-ia-a-role] .ia-mobile-card-table td:empty{display:none!important}
+  body[data-ia-a-role] .ia-mobile-card-table td[colspan]{display:block!important;text-align:left}
+  body[data-ia-a-role] .ia-mobile-card-table td[colspan]::before{content:none}
+
+  /* Planning: compact Monday-Friday mobile stack. */
+  body[data-ia-a-role] .ia-b-planning-head{
+    display:grid!important;
+    grid-template-columns:1fr;
+    gap:7px;
+    margin:8px 0;
+    padding:9px!important;
+  }
+  body[data-ia-a-role] .ia-b-planning-head>.ia-b-period{order:1}
+  body[data-ia-a-role] .ia-b-planning-head>.tabs{order:2}
+  body[data-ia-a-role] .ia-b-planning-head>.ia-b-actions{order:3}
+  body[data-ia-a-role] .ia-b-period{
+    display:grid!important;
+    grid-template-columns:44px minmax(0,1fr) 44px;
+    align-items:center;
+    gap:6px;
+    width:100%;
+  }
+  body[data-ia-a-role] .ia-b-period>label{display:none!important}
+  body[data-ia-a-role] .ia-b-period>.ia-b-period-label-mobile,
+  body[data-ia-a-role] .ia-b-worker-period .ia-b-period-label-mobile{
+    display:block!important;
+    text-align:center;
+    text-transform:capitalize;
+    font-size:.83rem;
+    line-height:1.2;
+  }
+  body[data-ia-a-role] .ia-b-worker-period .ia-b-period-label-desktop{display:none!important}
+  body[data-ia-a-role] .ia-b-period>.btn{min-width:44px;width:44px;min-height:40px;padding:7px}
+  body[data-ia-a-role] .ia-b-worker-period{
+    grid-template-columns:44px minmax(0,1fr) 44px;
+    padding:8px;
+    min-height:0;
+  }
+  body[data-ia-a-role] .ia-b-worker-period>strong{min-width:0}
+  body[data-ia-a-role] .ia-b-worker-period .ia-b-worker-today{
+    grid-column:1/-1;
+    width:100%;
+    min-height:36px;
+    margin:0;
+  }
+  body[data-ia-a-role] .ia-b-planning-head>.tabs{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
+    width:100%;
+  }
+  body[data-ia-a-role] .ia-b-planning-head>.tabs button{
+    min-width:0;
+    min-height:40px;
+    padding:7px 5px;
+  }
+  body[data-ia-a-role] .ia-b-actions{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px;
+    width:100%;
+  }
+  body[data-ia-a-role] .ia-b-actions>.btn{
+    width:100%;
+    min-height:40px;
+    padding:7px 8px;
+    font-size:.78rem;
+  }
+  body[data-ia-a-role] .ia-b-actions>.btn:nth-child(n+3){display:none!important}
+  body[data-ia-a-role] .ia-b-filters{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+    padding:8px!important;
+    margin:0 0 8px;
+  }
+  body[data-ia-a-role] .ia-b-filters>*{min-width:0;min-height:40px}
+  body[data-ia-a-role] .ia-b-filters>input:first-child{grid-column:1/-1}
+  body[data-ia-a-role] .ia-b-week-wrap{overflow:visible!important}
+  body[data-ia-a-role] .ia-b-week-board{
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+    min-width:0!important;
+  }
+  body[data-ia-a-role] .ia-b-week-day{
+    min-width:0!important;
+    min-height:0!important;
+    padding:9px!important;
+    border-radius:9px;
+  }
+  body[data-ia-a-role] .ia-b-week-day h3{
+    min-height:0;
+    margin:0 0 6px;
+    font-size:.8rem;
+  }
+  body[data-ia-a-role] .ia-b-week-day.is-empty{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:8px 10px!important;
+  }
+  body[data-ia-a-role] .ia-b-week-day.is-empty h3{margin:0}
+  body[data-ia-a-role] .ia-b-week-empty{
+    margin:0;
+    padding:0;
+    font-size:.73rem;
+    white-space:nowrap;
+  }
+  body[data-ia-a-role] .ia-b-worker-week{
+    grid-template-columns:1fr!important;
+    gap:7px;
+    margin:8px 0 14px;
+  }
+  body[data-ia-a-role] .ia-b-worker-day{
+    min-height:0!important;
+    border-radius:9px;
+    background:var(--ia-surface)!important;
+    border-color:var(--ia-line)!important;
+    color:var(--ia-text)!important;
+  }
+  body[data-ia-a-role] .ia-b-worker-day.is-empty{
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:center;
+  }
+  body[data-ia-a-role] .ia-b-worker-day.is-empty .ia-b-worker-day-head{
+    border:0;
+    min-height:0;
+    padding:9px 10px;
+  }
+  body[data-ia-a-role] .ia-b-worker-day.is-empty .ia-b-worker-day-body{padding:9px 10px}
+  body[data-ia-a-role] .ia-b-worker-empty{margin:0;font-size:.75rem}
+
+  body[data-mobile-nav="true"] .ia-back-to-top{
+    bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;
+    right:12px!important;
+    z-index:75!important;
+  }
+}
+
+
+/* MOBILE-GREEN-BRAND-PORTALS-01 — theme tokens drive the shell and official portal brand colors. */
+@media(max-width:760px){
+  body[data-ia-a-role]{
+    background:var(--ia-bg)!important;
+  }
+
+  body[data-ia-a-role] .topbar,
+  body[data-ia-a-role] .socle-mobile-nav,
+  body[data-ia-a-role] .socle-mobile-sheet[open]{
+    background:var(--ia-shell,#263022)!important;
+  }
+
+  body[data-ia-a-role] .btn.primary,
+  body[data-ia-a-role] button.primary,
+  body[data-ia-a-role] .socle-mobile-nav button.active{
+    background:var(--ia-accent-strong,#526934)!important;
+    border-color:var(--ia-accent,#8ba267)!important;
+    color:var(--ia-button-text,#fffdf7)!important;
+  }
+
+  body[data-ia-a-role] .socle-mobile-nav button.active{
+    box-shadow:inset 0 0 0 1px var(--ia-accent,#8ba267)!important;
+  }
+
+  /* Mobile Planning density: keep the same information in much smaller chantier rows. */
+  body[data-ia-a-role] .ia-b-week-board{
+    gap:5px!important;
+  }
+  body[data-ia-a-role] .ia-b-week-day{
+    padding:6px!important;
+    border-radius:8px;
+  }
+  body[data-ia-a-role] .ia-b-week-day h3{
+    margin:0 0 4px!important;
+    font-size:.72rem!important;
+    line-height:1.15;
+  }
+  body[data-ia-a-role] .ia-b-week-assignment{
+    margin:0 0 3px!important;
+  }
+  body[data-ia-a-role] .ia-b-week-team{
+    display:block;
+    margin:0 0 2px;
+    font-size:.6rem!important;
+    line-height:1.1;
+  }
+  body[data-ia-a-role] .ia-b-slot{
+    display:grid!important;
+    width:100%;
+    min-height:0!important;
+    gap:1px;
+    padding:5px 7px!important;
+    border-radius:7px;
+    font-size:.66rem!important;
+    line-height:1.15;
+    text-align:left;
+  }
+  body[data-ia-a-role] .ia-b-slot strong{
+    display:-webkit-box;
+    overflow:hidden;
+    margin:0;
+    font-size:.72rem!important;
+    line-height:1.18;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+  }
+  body[data-ia-a-role] .ia-b-slot span{
+    font-size:.62rem!important;
+    line-height:1.15;
+  }
+  body[data-ia-a-role] .ia-b-slot small,
+  body[data-ia-a-role] .ia-b-slot em{
+    display:block;
+    overflow:hidden;
+    font-size:.58rem!important;
+    line-height:1.15;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  body[data-ia-a-role] .ia-b-worker-week{
+    gap:5px!important;
+  }
+  body[data-ia-a-role] .ia-b-worker-day-head{
+    min-height:0!important;
+    padding:7px 8px!important;
+  }
+  body[data-ia-a-role] .ia-b-worker-day-head h2{
+    font-size:.76rem!important;
+    line-height:1.15;
+  }
+  body[data-ia-a-role] .ia-b-worker-day-count,
+  body[data-ia-a-role] .ia-b-worker-day-number{
+    font-size:.6rem!important;
+  }
+  body[data-ia-a-role] .ia-b-worker-day-body{
+    padding:6px!important;
+  }
+  body[data-ia-a-role] .ia-b-worker-mission{
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    gap:6px;
+    min-height:0!important;
+    padding:6px 7px!important;
+    border-radius:7px;
+  }
+  body[data-ia-a-role] .ia-b-worker-mission-time span{
+    display:none;
+  }
+  body[data-ia-a-role] .ia-b-worker-mission-time strong{
+    font-size:.66rem!important;
+    white-space:nowrap;
+  }
+  body[data-ia-a-role] .ia-b-worker-mission-copy{
+    min-width:0;
+  }
+  body[data-ia-a-role] .ia-b-worker-mission-copy h3{
+    overflow:hidden;
+    margin:0;
+    font-size:.72rem!important;
+    line-height:1.15;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  body[data-ia-a-role] .ia-b-worker-mission-copy p,
+  body[data-ia-a-role] .ia-b-worker-job-ref{
+    overflow:hidden;
+    margin:1px 0 0;
+    font-size:.58rem!important;
+    line-height:1.15;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  body[data-ia-a-role] .ia-b-worker-mission-status{
+    padding:3px 5px!important;
+    font-size:.56rem!important;
+    white-space:nowrap;
+  }
+}
+
+
+/* UI-RADIUS-JOBS-2026-10-05 — rounded component rhythm + dedicated Chantiers responsive layout. */
+body[data-ia-a-role]{
+  --ia-radius:12px;
+  --ia-radius-panel:12px;
+  --ia-radius-control:10px;
+}
+body[data-ia-a-role] :where(
+  .panel,
+  .ia-role-head,
+  .ia-worker-job,
+  .ia-home-weather,
+  .ia-home-portals,
+  .ia-quick-actions,
+  .weather-dashboard,
+  .server-finance,
+  .personal-head,
+  .personal-today,
+  .job-workspace-head,
+  .job-detail-section,
+  .messenger,
+  .conversation-list,
+  .message-thread,
+  .archive-banner
+){
+  border-radius:var(--ia-radius-panel);
+}
+body[data-ia-a-role] :where(
+  .toolbar,
+  .section-heading,
+  .document-toolbar,
+  .saved-view-bar,
+  .data-table,
+  .ia-mobile-card-table,
+  .theme-menu,
+  .quick-create-menu,
+  .search-results,
+  .socle-mobile-sheet,
+  .archive-switch,
+  .module-switch
+){
+  border-radius:12px;
+}
+body[data-ia-a-role] :where(
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea,
+  .btn,
+  .tabs button,
+  .filter-pills button,
+  .archive-switch button,
+  .module-switch button,
+  .theme-choice
+){
+  border-radius:var(--ia-radius-control);
+}
+body[data-ia-a-role] :where(.data-table,.ia-mobile-card-table){
+  overflow:auto;
+}
+
+/* Chantiers desktop: dense real table with stable column widths. */
+body[data-ia-a-role] .ia-jobs-list{
+  padding:0;
+  overflow:hidden;
+  background:var(--ia-surface)!important;
+  border-color:var(--ia-line)!important;
+}
+body[data-ia-a-role] .ia-jobs-table-wrap{
+  width:100%;
+  overflow-x:auto;
+  border-radius:12px 12px 0 0;
+}
+body[data-ia-a-role] .ia-jobs-table{
+  width:100%;
+  min-width:940px;
+  border-collapse:separate;
+  border-spacing:0;
+  table-layout:fixed;
+  background:var(--ia-surface);
+  color:var(--ia-text);
+}
+body[data-ia-a-role] .ia-jobs-table .ia-job-col-name{width:30%}
+body[data-ia-a-role] .ia-jobs-table .ia-job-col-client{width:15%}
+body[data-ia-a-role] .ia-jobs-table .ia-job-col-town{width:11%}
+body[data-ia-a-role] .ia-jobs-table .ia-job-col-status{width:11%}
+body[data-ia-a-role] .ia-jobs-table .ia-job-col-team{width:15%}
+body[data-ia-a-role] .ia-jobs-table .ia-job-col-progress{width:10%}
+body[data-ia-a-role] .ia-jobs-table .ia-job-col-actions{width:8%}
+body[data-ia-a-role] .ia-jobs-table th{
+  padding:10px 12px;
+  border-bottom:1px solid var(--ia-line);
+  background:var(--ia-surface-soft);
+  color:var(--ia-muted);
+  text-align:left;
+  font-size:.68rem;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+body[data-ia-a-role] .ia-jobs-table td{
+  min-width:0;
+  padding:10px 12px;
+  border-bottom:1px solid var(--ia-line);
+  vertical-align:middle;
+  color:var(--ia-text);
+}
+body[data-ia-a-role] .ia-job-row{
+  background:var(--ia-surface-soft);
+}
+body[data-ia-a-role] .ia-job-row:last-child td{border-bottom:0}
+body[data-ia-a-role] .ia-job-row:hover td,
+body[data-ia-a-role] .ia-job-row:focus-within td{
+  background:var(--ia-surface-soft);
+}
+body[data-ia-a-role] .ia-job-title-link{
+  display:grid;
+  width:100%;
+  min-width:0;
+  gap:3px;
+  padding:2px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:var(--ia-text);
+  text-align:left;
+  cursor:pointer;
+}
+body[data-ia-a-role] .ia-job-title-link strong{
+  display:block;
+  min-width:0;
+  color:var(--ia-text);
+  font-size:.86rem;
+  line-height:1.25;
+  white-space:normal;
+  word-break:normal;
+  overflow-wrap:break-word;
+}
+body[data-ia-a-role] .ia-job-reference{
+  display:block;
+  overflow:hidden;
+  color:var(--ia-accent-strong);
+  font-size:.64rem;
+  font-weight:800;
+  line-height:1.2;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+body[data-ia-a-role] .ia-job-mobile-meta{display:none}
+body[data-ia-a-role] .ia-job-client strong,
+body[data-ia-a-role] .ia-job-team strong{
+  display:block;
+  overflow:hidden;
+  color:var(--ia-text);
+  font-size:.75rem;
+  line-height:1.25;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+body[data-ia-a-role] .ia-job-town span{
+  display:block;
+  overflow:hidden;
+  color:var(--ia-muted);
+  font-size:.72rem;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+body[data-ia-a-role] .ia-job-status .badge{
+  display:inline-flex;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+body[data-ia-a-role] .ia-job-progress-value{
+  display:grid;
+  gap:5px;
+}
+body[data-ia-a-role] .ia-job-progress-value strong{
+  color:var(--ia-text);
+  font-size:.76rem;
+}
+body[data-ia-a-role] .ia-job-progressbar{
+  display:block;
+  width:100%;
+  height:5px;
+  overflow:hidden;
+  border-radius:999px;
+  background:var(--ia-surface-raised);
+}
+body[data-ia-a-role] .ia-job-progressbar i{
+  display:block;
+  height:100%;
+  border-radius:999px;
+  background:var(--ia-accent);
+}
+body[data-ia-a-role] .ia-job-action{text-align:right}
+body[data-ia-a-role] .ia-job-open{
+  min-height:34px;
+  padding:6px 10px;
+  font-size:.7rem;
+}
+body[data-ia-a-role] .ia-jobs-list .ia-b-more{
+  padding:10px;
+  border-top:1px solid var(--ia-line);
+  background:var(--ia-surface);
+  text-align:center;
+}
+
+/* Chantiers mobile: cards, never a squeezed desktop table. */
+@media(max-width:760px){
+  body[data-ia-a-role] .ia-jobs-list{
+    overflow:visible;
+    padding:0;
+    border:0!important;
+    background:transparent!important;
+  }
+  body[data-ia-a-role] .ia-jobs-table-wrap{
+    overflow:visible;
+    border-radius:0;
+  }
+  body[data-ia-a-role] .ia-jobs-table,
+  body[data-ia-a-role] .ia-jobs-table tbody{
+    display:block;
+    width:100%;
+    min-width:0;
+    background:transparent;
+  }
+  body[data-ia-a-role] .ia-jobs-table colgroup,
+  body[data-ia-a-role] .ia-jobs-table thead{
+    display:none;
+  }
+  body[data-ia-a-role] .ia-jobs-table tbody{
+    display:grid;
+    gap:8px;
+  }
+  body[data-ia-a-role] .ia-job-row{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px 10px;
+    width:100%;
+    min-width:0;
+    padding:11px 12px;
+    border:1px solid var(--ia-line);
+    border-radius:12px;
+    background:var(--ia-surface)!important;
+    box-sizing:border-box;
+  }
+  body[data-ia-a-role] .ia-job-row:hover,
+  body[data-ia-a-role] .ia-job-row:focus-within{
+    background:var(--ia-surface)!important;
+  }
+  body[data-ia-a-role] .ia-job-row td{
+    display:block;
+    min-width:0;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+  body[data-ia-a-role] .ia-job-identity,
+  body[data-ia-a-role] .ia-job-client,
+  body[data-ia-a-role] .ia-job-action{
+    grid-column:1/-1;
+  }
+  body[data-ia-a-role] .ia-job-title-link{
+    gap:4px;
+    padding:0;
+  }
+  body[data-ia-a-role] .ia-job-title-link strong{
+    font-size:.95rem;
+    line-height:1.22;
+    white-space:normal!important;
+    word-break:normal!important;
+    overflow-wrap:break-word!important;
+  }
+  body[data-ia-a-role] .ia-job-reference{display:none}
+  body[data-ia-a-role] .ia-job-mobile-meta{
+    display:block;
+    color:var(--ia-muted);
+    font-size:.67rem;
+    font-weight:750;
+    line-height:1.25;
+    white-space:normal;
+    word-break:normal;
+    overflow-wrap:break-word;
+  }
+  body[data-ia-a-role] .ia-job-client strong{
+    color:var(--ia-muted);
+    font-size:.72rem;
+    font-weight:700;
+  }
+  body[data-ia-a-role] .ia-job-town{display:none!important}
+  body[data-ia-a-role] .ia-job-status,
+  body[data-ia-a-role] .ia-job-team,
+  body[data-ia-a-role] .ia-job-progress-cell{
+    min-width:0;
+    padding-top:2px!important;
+  }
+  body[data-ia-a-role] .ia-job-status::before,
+  body[data-ia-a-role] .ia-job-team::before,
+  body[data-ia-a-role] .ia-job-progress-cell::before{
+    content:attr(data-label);
+    display:block;
+    margin-bottom:3px;
+    color:var(--ia-muted);
+    font-size:.54rem;
+    font-weight:800;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  body[data-ia-a-role] .ia-job-status .badge{
+    max-width:100%;
+    padding:4px 6px;
+    font-size:.6rem;
+  }
+  body[data-ia-a-role] .ia-job-team strong{
+    font-size:.68rem;
+  }
+  body[data-ia-a-role] .ia-job-progress-value{
+    gap:3px;
+  }
+  body[data-ia-a-role] .ia-job-progress-value strong{
+    font-size:.68rem;
+  }
+  body[data-ia-a-role] .ia-job-progressbar{height:4px}
+  body[data-ia-a-role] .ia-job-action{
+    display:flex!important;
+    justify-content:flex-end;
+    padding-top:2px!important;
+  }
+  body[data-ia-a-role] .ia-job-open{
+    min-height:34px;
+    padding:6px 11px;
+  }
+  body[data-ia-a-role] .ia-jobs-list .ia-b-more{
+    margin-top:8px;
+    padding:8px;
+    border:1px solid var(--ia-line);
+    border-radius:12px;
+    background:var(--ia-surface);
+  }
+}
+
+
+/* PLANNING-OWNER-UI-02 — segmented planning controls; weather remains a render concern. */
+body[data-ia-a-role] .ia-b-planning-head{
+  justify-content:flex-start;
+  gap:10px;
+}
+body[data-ia-a-role] .ia-b-view-switch{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(72px,auto));
+  align-items:center;
+  gap:2px!important;
+  flex:none;
+  margin:0;
+  padding:3px;
+  border:1px solid var(--ia-line);
+  border-radius:11px;
+  background:var(--ia-surface-soft);
+  box-shadow:none;
+}
+body[data-ia-a-role] .ia-b-view-switch>button{
+  min-width:72px;
+  min-height:36px;
+  margin:0;
+  padding:7px 10px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:var(--ia-muted);
+  font-size:.8rem;
+  font-weight:800;
+  line-height:1;
+  box-shadow:none;
+}
+body[data-ia-a-role] .ia-b-view-switch>button:hover,
+body[data-ia-a-role] .ia-b-view-switch>button:focus-visible{
+  background:var(--ia-surface-raised);
+  color:var(--ia-text);
+}
+body[data-ia-a-role] .ia-b-view-switch>button.selected,
+body[data-ia-a-role] .ia-b-view-switch>button[aria-pressed="true"]{
+  background:var(--ia-accent-strong);
+  color:var(--ia-button-text,#fffdf7);
+}
+body[data-ia-a-role] .ia-b-planning-head>.ia-b-period{
+  flex:none;
+}
+body[data-ia-a-role] .ia-b-planning-head>.ia-b-actions{
+  margin-left:auto;
+}
+@media(max-width:1180px){
+  body[data-ia-a-role] .ia-b-planning-head>.ia-b-actions{
+    width:100%;
+    margin-left:0;
+  }
+}
+
+/* Shared legacy surfaces now follow the active theme instead of their original fixed palette. */
+body[data-ia-a-role] .home-clock{background:var(--ia-shell);color:var(--ia-shell-text);border:1px solid var(--ia-line)}
+body[data-ia-a-role] .home-clock-head span{color:var(--ia-shell-muted)}
+body[data-ia-a-role] .home-clock-head .link{color:var(--ia-shell-text)}
+body[data-ia-a-role] .clock-card,
+body[data-ia-a-role] .personal-kpis>div,
+body[data-ia-a-role] .personal-alert,
+body[data-ia-a-role] .personal-credentials>div,
+body[data-ia-a-role] .company-calendar,
+body[data-ia-a-role] .annual-month,
+body[data-ia-a-role] .pay-slip-grid>button,
+body[data-ia-a-role] .correction-picker button,
+body[data-ia-a-role] .management-tabs button.selected,
+body[data-ia-a-role] .document-subfolders button.selected,
+body[data-ia-a-role] .archive-switch button:not(.selected),
+body[data-ia-a-role] .access-denied,
+body[data-ia-a-role] .home-news-grid article,
+body[data-ia-a-role] .custom-values{
+  background:var(--ia-surface);border-color:var(--ia-line);color:var(--ia-text)
+}
+body[data-ia-a-role] .clock-card p,
+body[data-ia-a-role] .clock-card small,
+body[data-ia-a-role] .personal-alert small,
+body[data-ia-a-role] .home-news-grid time,
+body[data-ia-a-role] .home-news-grid p{color:var(--ia-muted)}
+body[data-ia-a-role] .clock-card.running{border-color:var(--ia-warning);background:color-mix(in srgb,var(--ia-warning) 10%,var(--ia-surface))}
+body[data-ia-a-role] .clock-card.complete{border-color:var(--ia-success);background:color-mix(in srgb,var(--ia-success) 10%,var(--ia-surface))}
+body[data-ia-a-role] .clock-running>span{color:var(--ia-warning)}
+body[data-ia-a-role] .clock-complete strong{color:var(--ia-success)}
+body[data-ia-a-role] .clock-confirm{background:color-mix(in srgb,var(--ia-success) 12%,var(--ia-surface));color:var(--ia-text)}
+body[data-ia-a-role] .clock-confirm .clock-icon{background:var(--ia-success);color:var(--ia-button-text)}
+body[data-ia-a-role] .clock-confirm.departure{background:color-mix(in srgb,var(--ia-warning) 12%,var(--ia-surface))}
+body[data-ia-a-role] .home-news,
+body[data-ia-a-role] .archive-switch button.selected{background:var(--ia-shell);color:var(--ia-shell-text);border-color:var(--ia-line)}
+body[data-ia-a-role] .personal-today{background:var(--ia-surface);color:var(--ia-text);border-color:var(--ia-line)}
+body[data-ia-a-role] .personal-today p{color:var(--ia-muted)}
+body[data-ia-a-role] .personal-credentials>div>span{color:var(--ia-success)}
+body[data-ia-a-role] .calendar-legend,
+body[data-ia-a-role] .month-days button:hover,
+body[data-ia-a-role] .month-days button.has-event{background:var(--ia-surface-soft);color:var(--ia-text)}
+body[data-ia-a-role] .custom-values summary{color:var(--ia-accent-strong)}
+body[data-ia-a-role] .btn.danger{border-color:var(--ia-danger);background:color-mix(in srgb,var(--ia-danger) 12%,var(--ia-surface));color:var(--ia-text)}
+body[data-ia-a-role] .btn.danger:hover{background:color-mix(in srgb,var(--ia-danger) 20%,var(--ia-surface))}
+body[data-ia-a-role] .departure-actions{border-color:color-mix(in srgb,var(--ia-danger) 45%,var(--ia-line));background:color-mix(in srgb,var(--ia-danger) 9%,var(--ia-surface));color:var(--ia-text)}
+body[data-ia-a-role] .worker-alert-shortcut{border-left-color:var(--ia-accent);background:linear-gradient(120deg,var(--ia-surface-soft),var(--ia-surface));color:var(--ia-text)}
+body[data-ia-a-role] .access-test-banner{border-color:var(--ia-warning);background:color-mix(in srgb,var(--ia-warning) 14%,var(--ia-surface));color:var(--ia-text)}
+body[data-ia-a-role] .access-test-banner small{color:var(--ia-muted)}
+body[data-ia-a-role] .profit-table>button.profit-gain{border-left-color:var(--ia-success);background:color-mix(in srgb,var(--ia-success) 11%,var(--ia-surface))}
+body[data-ia-a-role] .profit-table>button.profit-loss{border-left-color:var(--ia-danger);background:color-mix(in srgb,var(--ia-danger) 10%,var(--ia-surface))}
+body[data-ia-a-role] .profit-table>button.profit-watch{border-left-color:var(--ia-warning);background:color-mix(in srgb,var(--ia-warning) 12%,var(--ia-surface))}
+body[data-ia-a-role] .profit-table>button.profit-gain>b,
+body[data-ia-a-role] .team-profitability tr.profit-gain td:last-child{color:var(--ia-success)}
+body[data-ia-a-role] .profit-table>button.profit-loss>b,
+body[data-ia-a-role] .team-profitability tr.profit-loss td:last-child{color:var(--ia-danger)}
+body[data-ia-a-role] .profit-table>button.profit-watch>b,
+body[data-ia-a-role] .team-profitability tr.profit-watch td:last-child{color:var(--ia-warning)}
+body[data-ia-a-role] .weather-forecast-intro,
+body[data-ia-a-role] .weather-day-relative,
+body[data-ia-a-role] .weather-day-sun,
+body[data-ia-a-role] .weather-source,
+body[data-ia-a-role] .weather-day-metrics small{color:var(--ia-paper-muted)}
+body[data-ia-a-role] .weather-detail .weather-day{background:var(--ia-paper-soft);border-color:var(--ia-paper-line);color:var(--ia-paper-text)}
+body[data-ia-a-role] .weather-day-relative{background:var(--ia-paper);border:1px solid var(--ia-paper-line)}
+body[data-ia-a-role] .weather-day-temperature{border-color:var(--ia-paper-line)}
+body[data-ia-a-role] .weather-day-metrics>div{background:var(--ia-paper);border:1px solid var(--ia-paper-line)}
+body[data-ia-a-role] .weather-source a{color:var(--ia-accent-strong)}
+body[data-ia-a-role] .theme-button{border-color:var(--ia-control-line);background:var(--ia-surface);color:var(--ia-text)}
+body[data-ia-a-role] .theme-choice.selected,
+body[data-ia-a-role] .theme-choice:hover{border-color:var(--ia-control-line)}
+body[data-ia-a-role] .ia-worker-job,
+body[data-ia-a-role] .ia-quick-actions{background:var(--ia-surface);border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .ia-worker-job p{color:var(--ia-muted)}
+body[data-ia-a-role] .ia-state-error{border-color:var(--ia-danger)}
+body[data-ia-a-role] .ia-state-success{border-color:var(--ia-success)}
+body[data-ia-a-role] .access-member-list>button{border:1px solid transparent;color:var(--ia-text);transition:background .15s ease,border-color .15s ease,color .15s ease}
+body[data-ia-a-role] .access-member-list>button:hover{background:var(--ia-surface-soft);border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .access-member-list>button:active{background:var(--ia-surface-raised);color:var(--ia-text)}
+body[data-ia-a-role] .access-member-list>button:focus-visible{outline:3px solid var(--ia-focus);outline-offset:2px}
+body[data-ia-a-role] .access-member-list>button.selected{background:var(--ia-surface-raised);border-color:var(--ia-accent);box-shadow:inset 3px 0 var(--ia-accent-strong);color:var(--ia-text)}
+body[data-ia-a-role] .access-member-list>button.selected strong{color:var(--ia-text)}
+body[data-ia-a-role] .access-member-list>button.selected small,
+body[data-ia-a-role] .access-member-list>button.selected em{color:var(--ia-muted)}
+body[data-ia-a-role] .access-member-list>button:disabled{background:var(--ia-surface-soft);border-color:var(--ia-line);color:var(--ia-muted);cursor:not-allowed}
+body[data-ia-a-role] .access-preview-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+body[data-ia-a-role] .access-preview-unavailable{flex-basis:100%;color:var(--ia-muted)}
+body[data-ia-a-role] .access-preview-actions button:disabled{background:var(--ia-surface-soft);border-color:var(--ia-line);color:var(--ia-muted);opacity:1;cursor:not-allowed}
+body[data-ia-a-role] .access-profile-fields,
+body[data-ia-a-role] .access-reset,
+body[data-ia-a-role] .access-locked-message,
+body[data-ia-a-role] .permission-row,
+body[data-ia-a-role] .sensitive-grid>label{border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .permission-row:not(.permission-head):hover{background:var(--ia-surface-soft);color:var(--ia-text)}
+body[data-ia-a-role] .permission-row small,
+body[data-ia-a-role] .sensitive-grid small{color:var(--ia-muted)}
+body[data-ia-a-role] .access-member-list>button.selected>i{color:var(--ia-text)}
+body[data-ia-a-role] .access-owner-note,
+body[data-ia-a-role] .access-directory,
+body[data-ia-a-role] .access-profile-card,
+body[data-ia-a-role] .access-project-scope,
+body[data-ia-a-role] .permission-panel,
+body[data-ia-a-role] .sensitive-panel{background:var(--ia-surface);border-color:var(--ia-line);color:var(--ia-text)}
+body[data-ia-a-role] .access-directory-head,
+body[data-ia-a-role] .access-profile-fields,
+body[data-ia-a-role] .permission-panel .panel-head,
+body[data-ia-a-role] .sensitive-panel .panel-head{border-color:var(--ia-line)}
+body[data-ia-a-role] .access-profile-fields label,
+body[data-ia-a-role] .access-profile-person>div>span,
+body[data-ia-a-role] .access-profile-stats span{color:var(--ia-muted)}
+body[data-ia-a-role] .access-profile-stats b{color:var(--ia-accent-strong)}
+body[data-ia-a-role] .access-lock{background:var(--ia-accent-strong);color:var(--ia-button-text)}
+body[data-ia-a-role] .access-reset,
+body[data-ia-a-role] .access-locked-message{background:var(--ia-surface-soft);border-color:var(--ia-line);color:var(--ia-muted)}
+body[data-ia-a-role] .permission-row>label,
+body[data-ia-a-role] .sensitive-grid>label{border-color:var(--ia-line)}
+body[data-ia-a-role] .permission-head{background:var(--ia-surface-soft);color:var(--ia-muted)}
+body[data-ia-a-role] .permission-row label i,
+body[data-ia-a-role] .sensitive-grid label>i{background:var(--ia-surface);border-color:var(--ia-control-line)}
+body[data-ia-a-role] .permission-row input:checked+i,
+body[data-ia-a-role] .sensitive-grid input:checked+i{background:var(--ia-accent-strong);border-color:var(--ia-accent-strong)}
+body[data-ia-a-role] .permission-row input:checked+i:after,
+body[data-ia-a-role] .sensitive-grid input:checked+i:after{color:var(--ia-button-text)}
+body[data-ia-a-role] .permission-row input:disabled+i,
+body[data-ia-a-role] .sensitive-grid input:disabled+i{background:var(--ia-surface-soft);border-color:var(--ia-line);opacity:1}
+body[data-ia-a-role] .permission-row label:focus-within i,
+body[data-ia-a-role] .sensitive-grid label:focus-within>i{outline:3px solid var(--ia-focus);outline-offset:2px}
+@media(max-width:760px){
+  body[data-ia-a-role] .ia-b-planning-head{
+    gap:6px;
+  }
+  body[data-ia-a-role] .ia-b-planning-head>.ia-b-view-switch{
+    order:1;
+    width:100%;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:2px!important;
+    padding:3px;
+    border-radius:10px;
+  }
+  body[data-ia-a-role] .ia-b-planning-head>.ia-b-period{order:2}
+  body[data-ia-a-role] .ia-b-planning-head>.ia-b-actions{order:3;margin-left:0}
+  body[data-ia-a-role] .ia-b-view-switch>button{
+    min-width:0;
+    min-height:36px!important;
+    padding:6px 4px!important;
+    border-radius:7px;
+    font-size:.76rem;
+    white-space:nowrap;
+  }
+}

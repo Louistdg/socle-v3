@@ -1,0 +1,196 @@
+name: SOCLE Release Gate
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: socle-release-gate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    name: Core / Node 22
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Git diff check
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check HEAD^
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+
+      - name: Verify runtime
+        run: |
+          node --version
+          node -e "const major=Number(process.versions.node.split('.')[0]); if (major < 22) { console.error('Node 22+ required'); process.exit(1); }"
+
+      - name: Clean dependency install
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f package-lock.json ]]; then
+            npm ci
+          elif [[ -f package.json ]]; then
+            npm install --ignore-scripts --package-lock=false
+          else
+            echo "No npm manifest on this ref; no external npm dependency install required."
+          fi
+
+      - name: Build frontend + worker
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f package.json ]] && node -e "const p=require('./package.json'); process.exit(p.scripts?.build ? 0 : 1)"; then
+            npm run build
+          else
+            node scripts/build.mjs
+          fi
+
+      - name: Check BatiNova XL QA syntax
+        run: node --check scripts/simulation/batinova-xl/qa-report.mjs
+
+      - name: Hermetic business tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f scripts/test.mjs ]]; then
+            node scripts/test.mjs
+          else
+            count=0
+            for test in tests/*.mjs; do
+              case "$(basename "$test")" in
+                browser-15.mjs|browser-identities-15.mjs|data-15.mjs) continue ;;
+              esac
+              echo
+              echo "=== $(basename "$test") ==="
+              node --experimental-sqlite "$test"
+              count=$((count+1))
+            done
+            if [[ "$count" -eq 0 ]]; then
+              echo "No hermetic business test suite was executed." >&2
+              exit 1
+            fi
+            echo "Executed $count hermetic business test suites."
+          fi
+
+      - name: BatiNova XL pack presence
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/simulation/batinova-xl/qa-report.mjs --packs-only
+
+      - name: Prepare BatiNova XL simulation
+        shell: bash
+        env:
+          BATXL_SIMULATION: "1"
+          BATXL_ORGANIZATION_ID: "org-local-owner"
+        run: |
+          set -euo pipefail
+          rm -rf data
+          mkdir -p data
+          test -s scripts/simulation/batinova-xl/fixtures/socle-batinova-script1-final-2026-09-24.sqlite
+          cp scripts/simulation/batinova-xl/fixtures/socle-batinova-script1-final-2026-09-24.sqlite data/socle.sqlite
+          node --experimental-sqlite scripts/simulation/batinova-xl/batinova-script3.mjs
+
+      - name: BatiNova XL QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f data/socle.sqlite
+          node --experimental-sqlite scripts/simulation/batinova-xl/qa-report.mjs --require-targets
+
+  browser:
+    name: Browser / Chromium
+    needs: core
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+
+      - name: Clean dependency install
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f package-lock.json ]]; then
+            npm ci
+          elif [[ -f package.json ]]; then
+            npm install --ignore-scripts --package-lock=false
+          fi
+
+      - name: Build browser candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f package.json ]] && node -e "const p=require('./package.json'); process.exit(p.scripts?.build ? 0 : 1)"; then
+            npm run build
+          else
+            node scripts/build.mjs
+          fi
+
+      - name: Detect browser prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f scripts/batinova-script2.mjs && -f tests/browser-15.mjs && -f tests/browser-identities-15.mjs ]]; then
+            echo "RUN_SOCLE_BROWSER_GATE=true" >> "$GITHUB_ENV"
+          else
+            echo "RUN_SOCLE_BROWSER_GATE=false" >> "$GITHUB_ENV"
+            echo "::notice::Browser gate skipped because the BatiNova/browser harness is not present on this ref."
+          fi
+
+      - name: Prepare BatiNova data
+        if: env.RUN_SOCLE_BROWSER_GATE == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf data
+          mkdir -p data
+          test -s scripts/simulation/batinova-xl/fixtures/socle-batinova-script1-final-2026-09-24.sqlite
+          cp scripts/simulation/batinova-xl/fixtures/socle-batinova-script1-final-2026-09-24.sqlite data/socle.sqlite
+          node --experimental-sqlite scripts/simulation/batinova-xl/batinova-script3.mjs
+
+      - name: Browser RBAC identities and functional smoke x3
+        if: env.RUN_SOCLE_BROWSER_GATE == 'true'
+        shell: bash
+        run: node --experimental-sqlite scripts/browser-gate.mjs --runs=3
+
+      - name: Dump browser/server logs on failure
+        if: failure()
+        shell: bash
+        run: |
+          for log in tests/artifacts/browser-gate/*.log; do
+            if [[ -f "$log" ]]; then
+              echo "$log"
+              cat "$log"
+            fi
+          done
+
+      - name: Upload browser screenshots
+        if: always() && env.RUN_SOCLE_BROWSER_GATE == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: socle-browser-artifacts
+          path: tests/artifacts/
+          if-no-files-found: ignore

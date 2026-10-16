@@ -1,0 +1,25 @@
+SOCLE — VERSION VIERGE
+
+Double-cliquez sur « Ouvrir Socle vierge.cmd ».
+Adresse sur ce PC : http://127.0.0.1:4281/
+Commencez dans Entreprise, puis ajoutez vos personnes, équipes et chantiers.
+
+Aucune entreprise, personne, tâche, facture, photo ou donnée de démonstration
+n'est préencodée. Les écrans, catégories proposées et fonctionnalités sont conservés.
+Les pauses et coûts horaires sont à renseigner : ils commencent à zéro.
+
+Les données de CETTE version seront dans son propre dossier data/socle.sqlite.
+L’ancienne copie dans Documents utilisait le port 4173. La version de référence est désormais ce worktree sur le port 4281.
+Gardez la fenêtre du serveur ouverte pendant l'utilisation.
+
+Pour remettre un exemplaire vierge : utilisez l'archive Socle-vierge.zip d'origine.
+Elle ne contient pas de base de données. Ne transmettez pas le dossier data
+d'une version dans laquelle vous avez déjà saisi des informations.
+
+Prérequis pour un autre PC : Windows et Node.js 24 ou plus récent.
+Les capacités et limites existantes sont conservées, notamment le stockage
+des photos encore temporaire et les connexions externes non configurées.
+
+La conception de cette édition suit le référentiel DESIGN-SOCLE.md : le
+chantier est le centre de la chaîne devis → terrain → coûts → rentabilité.
+Toute évolution doit respecter ce référentiel.

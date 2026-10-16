@@ -1,0 +1,10 @@
+.git
+node_modules
+data
+private
+reports
+tests
+dist
+*.sqlite*
+*.log
+.env*
