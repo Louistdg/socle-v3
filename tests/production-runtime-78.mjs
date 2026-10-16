@@ -7,6 +7,7 @@ import {spawn} from 'node:child_process';
 import {once} from 'node:events';
 import net from 'node:net';
 import {randomBytes} from 'node:crypto';
+import {createHash} from 'node:crypto';
 import {productionConfig} from '../scripts/production-config.mjs';
 import {openProductionDatabase} from '../scripts/production-db.mjs';
 import {provisionCredential} from '../scripts/production-auth.mjs';
@@ -54,7 +55,17 @@ try {
   assert.equal((await api(base, '/health')).status, 200);
   assert.equal((await api(base, '/health', {method: 'HEAD'})).status, 200);
   assert.equal((await api(base, '/')).headers.get('location'), '/login');
-  const loginHtml = await (await api(base, '/login')).text();
+  const loginResponse = await api(base, '/login');
+  const loginHtml = await loginResponse.text();
+  const loginCsp = loginResponse.headers.get('content-security-policy');
+  assert.ok(loginCsp, '/login must send a non-empty Content-Security-Policy header');
+  const inlineStyle = loginHtml.match(/<style>([\s\S]*?)<\/style>/)?.[1];
+  assert.ok(inlineStyle, '/login must retain its inline style block');
+  const styleHash = createHash('sha256').update(inlineStyle).digest('base64');
+  assert.ok(loginCsp.split(';').some(directive => directive.trim() === `style-src 'sha256-${styleHash}'`), '/login CSP must authorize its exact inline style block');
+  const activationResponse = await api(base, '/invite/activate');
+  assert.ok(activationResponse.headers.get('content-security-policy'), '/invite/activate must send a non-empty Content-Security-Policy header');
+  assert.match(activationResponse.headers.get('content-security-policy'), /script-src 'self'/);
   assert.match(loginHtml, /type="password"/); assert.doesNotMatch(loginHtml, /Marc|David|Anthony|ACCOUNTING|__local-test/);
   for (const path of ['/__local-test/identities', '/__local-test/login', '/__local-test/logout', '/%5f%5flocal-test/login']) {
     assert.equal((await api(base, path)).status, 404);
