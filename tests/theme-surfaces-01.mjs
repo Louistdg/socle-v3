@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {parseColor,rgbColor,contrastRatio} from './helpers/color-contrast.mjs';
+
+assert.deepEqual(parseColor('#f7f8f2'),[247,248,242]);
+assert.deepEqual(parseColor('#abc'),[170,187,204]);
+assert.deepEqual(parseColor('rgb(247, 248, 242)'),[247,248,242]);
+assert.deepEqual(parseColor('rgb(247 248 242)'),[247,248,242]);
+assert.deepEqual(parseColor('rgba(247,248,242,1)'),[247,248,242]);
+assert.equal(rgbColor('#f7f8f2'),rgbColor('rgb(247, 248, 242)'));
+assert.equal(contrastRatio('#ffffff','#000000'),21);
+assert.equal(contrastRatio('#ffffff','#ffffff'),1);
+assert.equal(contrastRatio('#abcdef','#123456'),contrastRatio('#123456','#abcdef'));
+assert.ok(contrastRatio('#767676','#ffffff')>=4.5);
+assert.ok(contrastRatio('#777777','#ffffff')<4.5);
+assert.ok(contrastRatio('#e8eef4','#29483f')>=4.5,'thème nuit : tuile survolée lisible');
+assert.ok(contrastRatio('#b1bfce','#29483f')>=4.5,'thème nuit : libellé de tuile survolée lisible');
+assert.ok(contrastRatio('#1c3036','#cbdad5')>=4.5,'thème clair : tuile survolée lisible');
+for(const invalid of ['#gggggg','#12345','rgb(256,0,0)','rgb(NaN,0,0)','unknown'])assert.throws(()=>parseColor(invalid));
+const v3Css=readFileSync(new URL('../web/v3.css',import.meta.url),'utf8');
+assert.match(v3Css,/\.v3-kpi-link:hover,\.v3-kpi-link:focus-visible\{background:var\(--v3-selected\)!important;color:var\(--v3-ink\)!important/,'les tuiles financières gardent le contraste du thème au survol et au focus');
+console.log('THEME_SURFACES_COLOR_PARSER=PASS — hex/RGB, luminance et seuil 4.5:1.');

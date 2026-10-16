@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import worker from '../dist/server/index.js';
+const response=await worker.fetch(new Request('https://socle.test/'),{}),html=await response.text();
+const scripts=[...html.matchAll(/<script\b([^>]*?)\bsrc="([^"]+)"/g)];
+assert.equal(new Set(scripts.map(s=>s[2])).size,scripts.length,'Chaque script exécuté une seule fois');
+assert.ok(scripts.every(s=>s[1].includes('defer')),'Scripts non bloquants dans leur ordre de dépendance');
+assert.equal(scripts.filter(s=>s[2].includes('production-runtime.js')).length,1);
+assert.ok(!scripts.some(s=>s[2].includes('stock-zxing.js')),'Le décodeur ne doit jamais charger sur accueil');
+assert.equal([...html.matchAll(/rel="stylesheet"/g)].length,1,'Une seule feuille de style bloquante');
+const css=await(await worker.fetch(new Request('https://socle.test/socle.css'),{})).text();
+assert.ok(css.includes('.audit-person-identity')===false||css.length>1000);
+assert.ok(css.indexOf('.purchase-line label')>css.indexOf('.v3-layout-choice'),'Corrections appliquées après le style de base');
+const pkg=JSON.parse((await import('node:fs/promises')).readFile?await(await import('node:fs/promises')).readFile(new URL('../package.json',import.meta.url),'utf8'):'{}');
+assert.equal(pkg.version,'3.0.0');assert.equal(pkg.releaseName,'pub socle V3');
+console.log('Release assets: unique runtime, deferred scripts, lazy scanner, CSS cascade and version passed.');

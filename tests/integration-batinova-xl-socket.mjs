@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {existsSync,readFileSync,readdirSync} from 'node:fs';
+const root=new URL('../',import.meta.url);
+for(const name of ['0029_project_tenant_integrity.sql','0030_document_registry_transversal.sql','0031_supplier_payments.sql','0032_project_field_operations.sql']) assert.ok(existsSync(new URL('drizzle/'+name,root)),name+' manquant');
+assert.equal(existsSync(new URL('drizzle/0033_project_field_operations.sql',root)),false,'0033 UNO ne doit pas exister');
+const worker=readFileSync(new URL('worker/index.js',root),'utf8');
+for(const token of ['supplierPaymentsRoute','approvedContractChangesCents','uploadMatches=(document,relations)','fieldPortalRoute','fieldPhotoUploadRoute','documentHistoryRoute','canonicalManagedRoleCodes']) assert.ok(worker.includes(token),'worker manque '+token);
+const script=readFileSync(new URL('scripts/batinova-script2.mjs',root),'utf8');
+assert.doesNotMatch(script,/role:'PROJECT_MANAGER'|role:'LOGISTICS'/);
+assert.ok((script.match(/role:'TEAM_LEAD'/g)||[]).length>=2,'TEAM_LEAD demo attendu');
+assert.ok(existsSync(new URL('worker/project-financial-revenue.js',root)));
+assert.ok(existsSync(new URL('web/field-portal.js',root)));
+const migrations=readdirSync(new URL('drizzle/',root)).filter(x=>/^\d+.*\.sql$/.test(x)).sort();
+assert.ok(migrations.includes('0029_project_tenant_integrity.sql')&&migrations.includes('0030_document_registry_transversal.sql')&&migrations.includes('0031_supplier_payments.sql')&&migrations.includes('0032_project_field_operations.sql'));
+console.log('integration-batinova-xl-socket: static composition PASS');

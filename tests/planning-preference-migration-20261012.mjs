@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import {readFileSync,readdirSync} from 'node:fs';
+import {DatabaseSync} from 'node:sqlite';
+
+const db=new DatabaseSync(':memory:');
+db.exec('PRAGMA foreign_keys=ON');
+const dir=new URL('../drizzle/',import.meta.url),files=readdirSync(dir).filter(name=>/^\d+.*\.sql$/.test(name)).sort();
+const lastBefore=files.indexOf('0049_time_entry_monthly_archive.sql');
+assert.notEqual(lastBefore,-1,'La base comporte la migration précédente attendue.');
+for(const name of files.slice(0,lastBefore+1))db.exec(readFileSync(new URL(name,dir),'utf8'));
+const stamp='2026-10-12T08:00:00.000Z';
+db.prepare("INSERT INTO organizations(id,name,legal_name,country,currency,created_at,updated_at) VALUES('org','Entreprise test','Entreprise test','BE','EUR',?,?)").run(stamp,stamp);
+db.prepare("INSERT INTO profiles(id,first_name,last_name,email,created_at,updated_at) VALUES('owner','Patron','Test','owner@test.invalid',?,?)").run(stamp,stamp);
+db.prepare("INSERT INTO roles(id,organization_id,code,name,created_at) VALUES('role-owner','org','OWNER','Patron',?)").run(stamp);
+db.prepare("INSERT INTO organization_members(id,organization_id,user_id,role_id,status,joined_at,created_at,updated_at) VALUES('member','org','owner','role-owner','active',?,?,?)").run(stamp,stamp,stamp);
+db.prepare("INSERT INTO user_preferences(organization_id,user_id,namespace,preference_key,schema_version,value_json,created_at,updated_at) VALUES('org','owner','dashboard','density',1,'{\"density\":\"compact\"}',?,?)").run(stamp,stamp);
+db.exec(readFileSync(new URL('../drizzle/0050_planning_visible_days_preference.sql',import.meta.url),'utf8'));
+assert.deepEqual(db.prepare("SELECT namespace,preference_key,value_json FROM user_preferences WHERE organization_id='org' AND user_id='owner'").all().map(row=>({...row})),[{namespace:'dashboard',preference_key:'density',value_json:'{"density":"compact"}'}],'La migration conserve les préférences déjà enregistrées.');
+assert.doesNotThrow(()=>db.prepare("INSERT INTO organization_preferences(organization_id,preference_key,schema_version,value_json,created_at,updated_at,updated_by) VALUES('org','planning-visible-days',1,'{\"days\":[1,2,3,4,5]}',?,?,'owner')").run(stamp,stamp),'La base accepte le réglage partagé des jours du planning.');
+assert.deepEqual(db.prepare('PRAGMA foreign_key_check').all(),[],'La migration conserve les clés étrangères.');
+assert.equal(db.prepare('PRAGMA integrity_check').get().integrity_check,'ok','La base reste intègre après migration.');
+db.close();
+console.log('planning-preference-migration-20261012: conservation des préférences et nouveau réglage validés.');

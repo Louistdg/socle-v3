@@ -4,6 +4,7 @@ data/
 tests/
 !tests/
 tests/*
+!tests/*.mjs
 !tests/time-entry-monthly-20261012.mjs
 !tests/time-entry-monthly-ui-20261012.mjs
 !tests/document-triage-20261012.mjs

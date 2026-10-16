@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {gunzipSync} from 'node:zlib';
+import {prepareAssetResponse} from '../scripts/http-assets.mjs';
+const source = 'const example = 123;\n'.repeat(1000);
+const req = {url:'/app.js',method:'GET',headers:{'accept-encoding':'gzip'}};
+const original = () => new Response(source, {headers:{'content-type':'application/javascript'}});
+const compressed = await prepareAssetResponse(req, original());
+assert.equal(compressed.headers.get('content-encoding'), 'gzip');
+assert.equal(gunzipSync(Buffer.from(await compressed.arrayBuffer())).toString(), source);
+assert.equal((await prepareAssetResponse({...req,headers:{...req.headers,'if-none-match':compressed.headers.get('etag')}},original())).status,304);
+assert.equal((await prepareAssetResponse({...req,url:'/api/state'},original())).headers.get('etag'), null);
+assert.equal((await prepareAssetResponse({...req,headers:{'accept-encoding':'gzip;q=0, br;q=0'}},original())).headers.get('content-encoding'),null);
+assert.equal((await prepareAssetResponse(req,new Response('denied',{status:401}))).status,401);
+console.log('Authenticated static asset compression and revalidation passed.');

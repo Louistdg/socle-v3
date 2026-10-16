@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+
+const ui=readFileSync(new URL('../web/documents-server.js',import.meta.url),'utf8');
+let n=0;const ok=(v,m)=>{assert.ok(v,m);n++};
+
+ok(ui.includes('function documentRegistryUrl'),'URL de recherche documentaire serveur présente');
+ok(ui.includes("params.set('q'"),'recherche texte transmise au serveur');
+ok(ui.includes("params.set('relation_type'"),'filtrage relation transmis au serveur');
+ok(ui.includes("params.set('relation_id'"),'identifiant de contexte transmis au serveur');
+ok(ui.includes('function queueServerDocumentsReload'),'recherche serveur temporisée présente');
+ok(ui.includes("params.set('cursor'"),'curseur documentaire transmis au serveur');
+ok(ui.includes("params.set('limit'"),'taille de page documentaire transmise au serveur');
+ok(ui.includes('async function loadMoreServerDocuments'),'chargement progressif du registre présent');
+ok(ui.includes('serverDocumentsNextCursor=data.nextCursor||null'),'curseur suivant conservé côté client');
+ok(ui.includes('loadMoreServerDocuments()'),'action Afficher plus reliée au chargement suivant');
+ok(!ui.includes("const q=String(docQuery||'').toLowerCase(),visible=serverDocuments.filter"),'la recherche principale ne dépend plus seulement des 250 documents déjà chargés');
+ok(ui.includes('async function appendSecureDocumentContext'),'panneau documentaire transversal présent');
+ok(ui.includes("documentRegistryUrl({q:'',documentType:'',origin:'',relationType:type,relationId:String(targetId)})"),'chaque contexte recharge ses documents depuis le serveur');
+ok(ui.includes('function installDocumentContextHooks'),'hooks installés après chargement des modules métier');
+ok(ui.includes("'invoice'"),'facture reliée au registre');
+ok(ui.includes("'expense'"),'dépense reliée au registre');
+ok(ui.includes("'asset'"),'matériel/véhicule relié au registre');
+ok(ui.includes("'person'"),'personnel relié au registre');
+ok(ui.includes("'quote'"),'devis relié au registre');
+ok(ui.includes("documentUploadForm('"),'upload depuis contexte réutilise le registre unique');
+ok(ui.includes("+'/history'"),'historique disponible dans UI');
+ok(ui.includes('safeDocumentUrl(')&&ui.includes('/api/documents/'),'contenu ouvert uniquement via route API same-origin');
+ok(!/https?:\/\/[^'\"\s]+(?:documents|storage|bucket)/i.test(ui),'aucune URL publique permanente de stockage ajoutée');
+new Function(ui);n++;
+console.log('document-registry-ui-contexts-30: '+n+' assertions passed');

@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const index=readFileSync(new URL('../web/index.html',import.meta.url),'utf8');
+const ui=readFileSync(new URL('../web/profile-avatar.js',import.meta.url),'utf8');
+const css=readFileSync(new URL('../web/profile-avatar.css',import.meta.url),'utf8');
+assert.match(index,/profile-avatar\.css/);assert.match(index,/profile-avatar\.js/);
+for(const token of ['/api/profile/avatar/meta',"method:'PUT'","method:'DELETE'",'512','image/jpeg'])assert.ok(ui.includes(token),token);
+assert.ok(ui.includes('Ajouter une photo')&&ui.includes('Modifier ma photo')&&ui.includes('Supprimer'));
+assert.ok(css.includes('object-fit:cover'));
+assert.ok(ui.includes('function socleAvatarCharacter(seed)'),'personnage illustré déterministe');
+assert.ok(ui.includes('socleAvatarCatalogue')&&ui.includes('socleAvatarIsOwnProfile()'),'galerie de variantes visuelles et garde du profil');
+assert.ok(ui.includes('soclePersonAvatar(person||avatar.dataset.personId)'),'personnage déterminé par la personne affichée');
+console.log('profile-avatar-ui-98: 12 assertions passed');
