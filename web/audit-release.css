@@ -5,6 +5,8 @@ body.socle-v3[data-v3-theme] #nav button.active{color:var(--v3-ink)!important}
 body.socle-v3[data-v3-theme] :is(.tabs,.module-switch,.filter-pills,.management-tabs,.ia-b-section-switch) button.selected{background:var(--v3-selected)!important;color:var(--v3-ink)!important}
 body.socle-v3[data-v3-theme] :is(.v3-version,.ia-home-portal-mark,.ia-home-portal b){color:var(--v3-ink)!important}
 body.socle-v3[data-v3-theme] :is(.personal-official-links,.personal-company-links) a b{color:var(--v3-ink)!important;font-size:14px}
+/* Le numero de jour du planning ouvrier etait en accent sur fond teinte : 4,15:1 pour 9,6px (sous le seuil AA). */
+body.socle-v3[data-v3-theme] .ia-b-worker-day-number{color:var(--v3-ink)!important;font-size:.75rem!important}
 body.socle-v3 #saveStatus{min-height:20px;box-sizing:border-box}
 body.socle-v3 #main{min-height:calc(100vh - 180px)}
 body.socle-loading #main{visibility:hidden}
