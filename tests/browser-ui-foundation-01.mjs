@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import esbuild from 'esbuild';
 import {connectBrowser,waitForApp} from './helpers/browser-cdp.mjs';
 import {contrastRatio} from './helpers/color-contrast.mjs';
 
@@ -32,6 +34,10 @@ try{
   const api=await tab.evaluate("Object.keys(SocleUI).filter(k=>k!=='version').sort()", 'ui-foundation-api');
   assert.deepEqual(api,['CompactFilterBar','ContentSection','ContentStage','ContextLine','DetailDrilldown','KpiStrip','PageHeader','PageShell','PrimaryAction','fromLegacyMarkup','renderHTML']);
 
+  // Independent cascade contract: changing build order or omitting a source must fail.
+const cssSources=['style.css','organization.css','planning.css','ia-a-ui.css','ui-foundation.css','stock-catalog-v2.css','stock-barcode.css','profile-avatar.css','mobile-nav.css','v3.css','v3-themes.css','quote-roofing-metre.css','document-triage.css','audit-release.css'];
+const cssSourceBodies=await Promise.all(cssSources.map(name=>readFile(new URL('../web/'+name,import.meta.url),'utf8').then(text=>text.replace(/\r\n/g,'\n'))));
+const expectedCSS=(await esbuild.transform(cssSourceBodies.join('\n'),{loader:'css',minify:true,legalComments:'inline'})).code;
   const snapshots=new Map();
   const palettes=[];
   for(const [width,height] of widths){
@@ -42,22 +48,23 @@ try{
       for(let node=walker.nextNode();node;node=walker.nextNode()){
         if(node.nodeValue.includes(String.fromCharCode(92)+'n'))parasite.push(node.nodeValue);
       }
-      const css=[...document.querySelectorAll('link[rel="stylesheet"]')];
-      const hrefs=css.map(link=>new URL(link.href).pathname.split('/').at(-1));
+      const css=[...document.styleSheets];
       return{
         parasite,
         visibleParasite:document.body.innerText.includes(String.fromCharCode(92)+'n'),
-        cssLoaded:['style.css','ia-a-ui.css','ui-foundation.css'].every(name=>{
-          const link=css.find(item=>new URL(item.href).pathname.endsWith('/'+name));
-          return Boolean(link&&link.sheet);
-        }),
-        cssOrder:['ia-a-ui.css','ui-foundation.css','stock-catalog-v2.css','stock-barcode.css','profile-avatar.css','mobile-nav.css'].map(name=>hrefs.indexOf(name))
+        cssLoaded:css.some(sheet=>sheet.href&&new URL(sheet.href).pathname==='/socle.css'&&!sheet.disabled&&sheet.cssRules.length>0),
+        hrefs:css.map(sheet=>sheet.href)
+
       };
     })()`,'ui-foundation-page-integrity-'+width);
     assert.deepEqual(pageIntegrity.parasite,[],'aucun text node parasite littéral \\n à '+width+'px');
     assert.equal(pageIntegrity.visibleParasite,false,'aucun littéral \\n visible à '+width+'px');
     assert.equal(pageIntegrity.cssLoaded,true,'CSS de base et Foundation chargés à '+width+'px');
-    assert.ok(pageIntegrity.cssOrder.every((position,index)=>position>=0&&(index===0||position>pageIntegrity.cssOrder[index-1])),'ordre de chargement CSS conservé à '+width+'px');
+    const servedCSS=await tab.evaluate(`fetch('/socle.css',{cache:'no-store'}).then(async response=>({status:response.status,type:response.headers.get('content-type'),body:await response.text()}))`,'ui-foundation-served-css-'+width);
+    assert.equal(servedCSS.status,200,'CSS servi avec succès');
+    assert.ok(servedCSS.type?.includes('text/css'),'Type CSS correct');
+    assert.ok(servedCSS.body===expectedCSS,'Toutes les feuilles sources sont servies intégralement dans l’ordre canonique à '+width+'px');
+    console.log('CSS_CASCADE_PROOF='+JSON.stringify({width,hrefs:pageIntegrity.hrefs,loaded:pageIntegrity.cssLoaded,sources:cssSources,exactBundleMatch:true}));
     for(const theme of themes){
       const result=await tab.evaluate(`(async()=>{
         iaAApplyTheme(${JSON.stringify(theme)},false);
