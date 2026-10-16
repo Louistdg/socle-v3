@@ -7,6 +7,14 @@ tests/*
 !tests/time-entry-monthly-20261012.mjs
 !tests/time-entry-monthly-ui-20261012.mjs
 !tests/document-triage-20261012.mjs
+!tests/roofing-metre-predevis-01.mjs
+!tests/stock-barcode-01.mjs
+!tests/stock-barcode-zxing-01.mjs
+!tests/supplier-invoice-pdf-01.mjs
+!tests/v3-money.mjs
+!tests/stock-catalog-v2-01.mjs
+!tests/stock-multi-location-16.mjs
+!tests/stock-camera-cancellation-20261016.mjs
 reports/
 private/
 .env

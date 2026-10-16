@@ -19,11 +19,11 @@
     "@zxing/browser": "0.1.5",
     "@zxing/library": "0.21.3",
     "esbuild": "0.28.2",
-    "pdfjs-dist": "6.4.299"
-  },
-  "dependencies": {
+    "pdfjs-dist": "6.4.299",
     "@tesseract.js-data/fra": "^1.0.0",
-    "tesseract.js": "^7.0.0"
+    "tesseract.js": "^7.0.0",
+    "tesseract.js-core": "7.0.0"
   },
+  "dependencies": {},
   "releaseName": "pub socle V3"
 }
