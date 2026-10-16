@@ -107,6 +107,16 @@ try {
   assert.equal((html.match(/<script\b[^>]*\bsrc=["']\/?production-runtime\.js["']/g)||[]).length,1,'The production runtime must execute once, including when the built page already contains it.');
   const configScript = await (await api(base, '/production-runtime.js', {headers:{cookie}})).text();
   assert.match(configScript, /SOCLE_PRODUCTION=true/);
+  for (const path of ['/production-runtime.js','/app.js','/socle.css']) {
+    const headers={cookie,'accept-encoding':'gzip'};
+    const get=await api(base,path,{headers});
+    const head=await api(base,path,{method:'HEAD',headers});
+    assert.equal(head.status,200);
+    for(const name of ['etag','content-length','content-encoding','cache-control'])assert.equal(head.headers.get(name),get.headers.get(name),`${path}: HEAD ${name} matches GET`);
+    assert.equal((await head.arrayBuffer()).byteLength,0);
+    assert.equal((await api(base,path,{headers:{...headers,'if-none-match':get.headers.get('etag')}})).status,304);
+    await get.arrayBuffer();
+  }
   assert.equal((await api(base, '/api/state', {method:'PUT', headers:{cookie, origin:'https://attacker.test'}, body:'{}'})).status, 403);
   assert.equal((await api(base, '/api/state', {method:'PUT', headers:{cookie}, body:'{}'})).status, 403);
   await runtime.close(); runtime = null;

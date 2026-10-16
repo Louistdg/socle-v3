@@ -7,6 +7,17 @@ let stockBarcodeContext={projectId:null};
 let stockBarcodeDetector=null;
 let stockBarcodeZxingReader=null;
 let stockBarcodeZxingControls=null;
+let stockBarcodeCameraGeneration=0;
+let stockBarcodeLibraryPromise=null;
+function stockBarcodeLoadLibrary(){
+  if(globalThis.SocleStockZXing)return Promise.resolve();
+  if(!stockBarcodeLibraryPromise)stockBarcodeLibraryPromise=new Promise((resolve,reject)=>{
+    const script=document.createElement('script');script.src='/stock-zxing.js';script.async=true;
+    script.onload=()=>resolve();script.onerror=()=>{script.remove();stockBarcodeLibraryPromise=null;reject(new Error('Lecteur indisponible'));};
+    document.head.append(script);
+  });
+  return stockBarcodeLibraryPromise;
+}
 const stockBarcodeInline=value=>esc(JSON.stringify(value));
 
 const stockBarcodeL={0:'0001101',1:'0011001',2:'0010011',3:'0111101',4:'0100011',5:'0110001',6:'0101111',7:'0111011',8:'0110111',9:'0001011'};
@@ -61,6 +72,7 @@ function stockBarcodeFallbackDecode(video){
   const image=ctx.getImageData(0,0,width,height);for(const ratio of [.42,.5,.58]){const found=stockBarcodeDecodeLine(image,Math.min(height-1,Math.max(0,Math.round(height*ratio))));if(found)return found}return null;
 }
 function stockBarcodeStopCamera(){
+  stockBarcodeCameraGeneration++;
   if(stockBarcodeFrame){cancelAnimationFrame(stockBarcodeFrame);stockBarcodeFrame=0}
   try{stockBarcodeZxingControls?.stop?.()}catch{}
   stockBarcodeZxingControls=null;stockBarcodeZxingReader=null;
@@ -110,26 +122,33 @@ async function stockBarcodeCameraLoop(video){
 }
 async function stockBarcodeStartCamera(){
   const video=document.querySelector('[data-stock-barcode-video]');if(!video)return;
+  const generation=stockBarcodeCameraGeneration;
   if(!navigator.mediaDevices?.getUserMedia){stockBarcodeStatus('Aucune caméra navigateur disponible. Saisie manuelle disponible.','error');return}
   try{
-    stockBarcodeStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});video.srcObject=stockBarcodeStream;await video.play();
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
+    if(generation!==stockBarcodeCameraGeneration||!video.isConnected){stream.getTracks().forEach(track=>track.stop());return;}
+    stockBarcodeStream=stream;video.srcObject=stockBarcodeStream;await video.play();
     if('BarcodeDetector' in globalThis){
       try{const supported=await BarcodeDetector.getSupportedFormats?.(),wanted=['ean_13','ean_8','upc_a','code_128','code_39','itf'];stockBarcodeDetector=new BarcodeDetector(supported?.length?{formats:wanted.filter(format=>supported.includes(format))}:undefined)}
       catch{stockBarcodeDetector=null}
     }
+    if(!stockBarcodeDetector)await stockBarcodeLoadLibrary().catch(()=>{});
+    if(generation!==stockBarcodeCameraGeneration||!video.isConnected||!stockBarcodeStream)return;
     let usingZxing=false;
     if(!stockBarcodeDetector&&globalThis.SocleStockZXing?.createReader){
       try{
-        stockBarcodeZxingReader=globalThis.SocleStockZXing.createReader();
-        stockBarcodeZxingControls=await stockBarcodeZxingReader.decodeFromVideoElement(video,(result)=>{
-          if(result?.getText())setTimeout(()=>stockBarcodeHandle(result.getText(),globalThis.SocleStockZXing.symbology(result.getBarcodeFormat())),0);
+        const reader=globalThis.SocleStockZXing.createReader();
+        const controls=await reader.decodeFromVideoElement(video,(result)=>{
+          if(result?.getText())setTimeout(()=>{if(generation===stockBarcodeCameraGeneration&&video.isConnected)stockBarcodeHandle(result.getText(),globalThis.SocleStockZXing.symbology(result.getBarcodeFormat()));},0);
         });
+        if(generation!==stockBarcodeCameraGeneration||!video.isConnected||!stockBarcodeStream){try{controls?.stop?.()}catch{}return;}
+        stockBarcodeZxingReader=reader;stockBarcodeZxingControls=controls;
         usingZxing=Boolean(stockBarcodeZxingControls);
-      }catch{try{stockBarcodeZxingControls?.stop?.()}catch{}stockBarcodeZxingControls=null;stockBarcodeZxingReader=null}
+      }catch{if(generation!==stockBarcodeCameraGeneration)return;try{stockBarcodeZxingControls?.stop?.()}catch{}stockBarcodeZxingControls=null;stockBarcodeZxingReader=null}
     }
     stockBarcodeStatus(stockBarcodeDetector?'Caméra active · détection native.':usingZxing?'Caméra active · lecteur ZXing embarqué.':'Caméra active · lecteur EAN de secours.','success');
     if(!usingZxing)stockBarcodeFrame=requestAnimationFrame(()=>stockBarcodeCameraLoop(video));
-  }catch(error){stockBarcodeStatus(error?.name==='NotAllowedError'?'Accès caméra refusé. Utilisez la saisie manuelle.':'Caméra indisponible. Utilisez la saisie manuelle.','error')}
+  }catch(error){if(generation===stockBarcodeCameraGeneration)stockBarcodeStatus(error?.name==='NotAllowedError'?'Accès caméra refusé. Utilisez la saisie manuelle.':'Caméra indisponible. Utilisez la saisie manuelle.','error')}
 }
 function stockBarcodeOpenScanner(options={}){
   stockBarcodeStopCamera();stockBarcodeContext={projectId:options.projectId?String(options.projectId):null};stockBarcodeLastValue='';stockBarcodeLastAt=0;

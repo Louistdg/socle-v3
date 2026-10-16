@@ -112,9 +112,9 @@ peopleView=function(){
   const filtered=people.filter(p=>(personCategory==='Tous'||p.category===personCategory)&&(tradeFilter==='Tous'||p.trade===tradeFilter));
   const assigned=new Set(teams.flatMap(t=>t.members));
   return heading('Personnel & équipes','Les dossiers individuels et les équipes sont volontairement séparés.',false)+`
-    <div class="module-switch" role="tablist" aria-label="Vue du personnel">
-      <button class="${peopleSection==='people'?'selected':''}" onclick="peopleSection='people';render()">Tout le personnel <b>${people.length}</b></button>
-      <button class="${peopleSection==='teams'?'selected':''}" onclick="peopleSection='teams';render()">Équipes attitrées <b>${teams.length}</b></button>
+    <div class="module-switch" role="group" aria-label="Vue du personnel">
+      <button aria-pressed="${peopleSection==='people'}" class="${peopleSection==='people'?'selected':''}" onclick="peopleSection='people';render()">Tout le personnel <b>${people.length}</b></button>
+      <button aria-pressed="${peopleSection==='teams'}" class="${peopleSection==='teams'?'selected':''}" onclick="peopleSection='teams';render()">Équipes attitrées <b>${teams.length}</b></button>
     </div>
     ${peopleSection==='people'?`
       <div class="people-toolbar balanced-toolbar"><div class="filter-pills">${types.map(v=>`<button class="${v===personCategory?'selected':''}" onclick="personCategory='${v}';render()">${v==='Tous'?'Tous les statuts':v}</button>`).join('')}</div><div><label class="inline-select">Métier<select onchange="tradeFilter=this.value;render()">${trades.map(v=>`<option ${v===tradeFilter?'selected':''}>${esc(v)}</option>`).join('')}</select></label><button class="btn primary" onclick="personForm()">+ Personne</button></div></div>

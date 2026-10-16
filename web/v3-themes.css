@@ -51,14 +51,14 @@ body.socle-v3 .v3-context-hidden{display:none!important}
 .v3-layout-choice{display:flex;min-height:52px;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;padding:8px 10px;border:1px solid var(--v3-line);border-radius:8px;background:var(--v3-paper);color:var(--v3-ink);text-align:left;cursor:pointer}
 .v3-layout-choice[aria-checked=true]{border-color:var(--v3-accent);box-shadow:inset 0 0 0 1px var(--v3-accent)}
 .v3-layout-choice small{color:var(--v3-muted)}
-body.socle-v3[data-mobile-layout=wide] #main{zoom:.75;box-sizing:border-box!important}
-@media(min-width:900px){body.socle-v3[data-mobile-layout=wide] #main{width:calc((100vw - 218px) / .75)!important;max-width:none!important;margin-inline:0!important;padding:24px 30px 48px!important}}
-@media(max-width:899px){body.socle-v3[data-mobile-layout=wide] #main{width:133.333vw!important;max-width:none!important;margin-inline:0!important;padding:4px 5px calc(224px + env(safe-area-inset-bottom,0px))!important}}
+body.socle-v3[data-mobile-layout=wide] #main{zoom:1;box-sizing:border-box!important}
+@media(min-width:900px){body.socle-v3[data-mobile-layout=wide] #main{width:100%!important;max-width:none!important;margin-inline:0!important;padding:24px 30px 48px!important}}
+@media(max-width:899px){body.socle-v3[data-mobile-layout=wide] #main{width:100%!important;max-width:none!important;margin-inline:0!important;padding:4px 5px calc(224px + env(safe-area-inset-bottom,0px))!important}}
 @media(max-width:760px){
  body.socle-v3[data-mobile-layout=wide] #main .heading,body.socle-v3[data-mobile-layout=wide] #main .ui-page-header{margin-bottom:9px!important}
  body.socle-v3[data-mobile-layout=wide] #main :is(.planning-head,.simple-head,.personal-head,.job-workspace-head){margin-bottom:9px!important}
- body.socle-v3[data-mobile-layout=wide] #main :is(button,.btn){min-height:60px}
- body.socle-v3[data-mobile-layout=wide] #main :is(input,select,textarea){min-height:60px}
+ body.socle-v3[data-mobile-layout=wide] #main :is(button,.btn){min-height:44px}
+ body.socle-v3[data-mobile-layout=wide] #main :is(input,select,textarea){min-height:44px}
  body.socle-v3[data-mobile-layout=wide] #main :is(.panel,.panel-head,.ia-role-head,.ia-summary-card,.ia-week-card,.server-finance,.profit-kpis>div,.account-kpis>div){padding:9px!important}
  body.socle-v3[data-mobile-layout=wide] #main .ia-role-head{padding:10px!important}
  body.socle-v3[data-mobile-layout=wide] #main :is(.v3-section-tabs,.management-tabs,.filter-pills){margin-bottom:10px!important}

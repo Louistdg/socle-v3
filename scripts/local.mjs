@@ -193,7 +193,7 @@ const server = createServer(async (incoming, outgoing) => {
     const response = await worker.fetch(request, env);
     let body=Buffer.from(await response.arrayBuffer());
     if((url.pathname==='/'||url.pathname==='/index.html')&&response.headers.get('content-type')?.includes('text/html')){
-      const html=body.toString('utf8').replace('<script src="/production-runtime.js"></script>','<script src="/__local-test/production-runtime.js"></script>');
+      const html=body.toString('utf8').replace('src="/production-runtime.js"','src="/__local-test/production-runtime.js"');
       if(html===body.toString('utf8'))throw Error('Le runtime de test local ne peut pas être installé dans index.html.');
       body=Buffer.from(html);
     }

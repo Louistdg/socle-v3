@@ -1,6 +1,6 @@
 {
   "name": "socle-v3",
-  "version": "0.0.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "packageManager": "npm@10.9.9",
@@ -24,5 +24,6 @@
   "dependencies": {
     "@tesseract.js-data/fra": "^1.0.0",
     "tesseract.js": "^7.0.0"
-  }
+  },
+  "releaseName": "pub socle V3"
 }
