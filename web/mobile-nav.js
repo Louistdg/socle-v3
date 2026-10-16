@@ -9,6 +9,20 @@ function navigationContract(){return globalThis.SOCLE_NAVIGATION||null}
 globalThis.SOCLE_NAVIGATION_V2=globalThis.SOCLE_NAVIGATION;
 
 function isMobile(){return window.matchMedia?window.matchMedia('(max-width:'+MOBILE_MAX+'px)').matches:Number(window.innerWidth||document.documentElement.clientWidth||9999)<=MOBILE_MAX}
+// Fixed chrome must follow the visible viewport when a wide module overflows.
+function syncMobileViewport(){
+  var viewport=window.visualViewport;if(!viewport||!isMobile())return;
+  var nav=document.querySelector('#socleMobileNav'),dialog=document.querySelector('#socleMobileMoreDialog');
+  [nav,dialog].filter(Boolean).forEach(function(node){
+    node.style.left=viewport.offsetLeft+'px';
+    node.style.right='auto';
+    node.style.width=viewport.width+'px';
+    node.style.boxSizing='border-box';
+    node.style.bottom='auto';
+    if(node===dialog){node.style.height=(viewport.height*.94)+'px';node.style.maxHeight=(viewport.height*.94)+'px'}
+    node.style.top=(viewport.offsetTop+viewport.height-node.getBoundingClientRect().height)+'px';
+  });
+}
 function escapeHtml(value){
   if(typeof esc==='function')return esc(String(value==null?'':value));
   return String(value==null?'':value).replace(/[&<>"']/g,function(char){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[char]});
@@ -116,6 +130,7 @@ function openMobileMore(){
   var dialog=renderMobileMoreDialog();
   if(toggle)toggle.setAttribute('aria-expanded','true');
   if(!dialog.open)dialog.showModal();
+  syncMobileViewport();
 }
 function closeMobileMore(returnFocus){
   var dialog=document.querySelector('#socleMobileMoreDialog');
@@ -171,6 +186,7 @@ function sanitizePersonalSubtitle(){
 function syncMobileChrome(){
   if(typeof globalThis.syncSocleDesktopNavigation==='function')globalThis.syncSocleDesktopNavigation();
   renderBottomNav();
+  syncMobileViewport();
   syncPersonalMobileCleanup();
   sanitizePersonalSubtitle();
 }
@@ -192,6 +208,10 @@ if(originalRender){
   };
 }
 window.addEventListener('resize',syncMobileChrome,{passive:true});
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize',syncMobileViewport,{passive:true});
+  window.visualViewport.addEventListener('scroll',syncMobileViewport,{passive:true});
+}
 document.addEventListener('keydown',function(event){if(event.key==='Escape')closeMobileMore(false)});
 document.addEventListener('DOMContentLoaded',syncMobileChrome);
 queueMicrotask(syncMobileChrome);
