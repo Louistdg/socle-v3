@@ -8,6 +8,7 @@ import {createHash} from 'node:crypto';
 import {productionConfig} from './production-config.mjs';
 import {openProductionDatabase} from './production-db.mjs';
 import {productionAuth} from './production-auth.mjs';
+import {prepareAssetResponse} from './http-assets.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const unsafeMethods = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
@@ -268,7 +269,7 @@ export async function startProduction({env = process.env, logger = console, invi
     }
 
     if (path === '/production-runtime.js') {
-      return ['GET', 'HEAD'].includes(incoming.method) ? response(incoming.method === 'HEAD' ? null : runtimeScript, 200, {'content-type': 'application/javascript;charset=utf-8'}) : errorResponse(405, 'Method not allowed');
+      return ['GET', 'HEAD'].includes(incoming.method) ? response(runtimeScript, 200, {'content-type': 'application/javascript;charset=utf-8'}) : errorResponse(405, 'Method not allowed');
     }
     const headers = new Headers();
     for (const [name, value] of Object.entries(incoming.headers)) {
@@ -277,7 +278,8 @@ export async function startProduction({env = process.env, logger = console, invi
     headers.set('oai-authenticated-user-id', identity.userId);
     headers.set('oai-authenticated-user-email', identity.email);
     const body = ['GET', 'HEAD'].includes(incoming.method) ? undefined : await bodyOf(incoming);
-    let result = await worker.fetch(new Request(url, {method: incoming.method, headers, body}), workerEnv);
+    const workerMethod = incoming.method === 'HEAD' && !path.startsWith('/api/') && /\.(?:js|mjs|css)$/.test(path) ? 'GET' : incoming.method;
+    let result = await worker.fetch(new Request(url, {method: workerMethod, headers, body}), workerEnv);
     if (incoming.method === 'GET' && result.headers.get('content-type')?.includes('text/html')) {
       const sourceHtml = await result.text();
       const hasProductionRuntime = /<script\b[^>]*\bsrc\s*=\s*["']\/?production-runtime\.js(?:\?[^"']*)?["']/i.test(sourceHtml);
@@ -292,9 +294,9 @@ export async function startProduction({env = process.env, logger = console, invi
   const server = http.createServer((incoming, outgoing) => {
     const task = (async () => {
       try {
-        const result = await dispatch(incoming);
+        const result = await prepareAssetResponse(incoming, await dispatch(incoming));
         const headers = Object.fromEntries(result.headers);
-        Object.assign(headers, {'cache-control': 'no-store', 'x-content-type-options': 'nosniff', 'referrer-policy': headers['referrer-policy'] || 'same-origin', 'strict-transport-security': 'max-age=31536000', 'x-frame-options': 'DENY'});
+        Object.assign(headers, {'cache-control': result.headers.get('etag') ? headers['cache-control'] : 'no-store', 'x-content-type-options': 'nosniff', 'referrer-policy': headers['referrer-policy'] || 'same-origin', 'strict-transport-security': 'max-age=31536000', 'x-frame-options': 'DENY'});
         outgoing.writeHead(result.status, headers);
         if (incoming.method === 'HEAD' || !result.body) outgoing.end();
         else await pipeline(Readable.fromWeb(result.body), outgoing);

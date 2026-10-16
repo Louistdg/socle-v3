@@ -14,6 +14,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  release:
+    name: Publish pub socle V3
+    needs: [core, browser]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'pub socle V3')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create named release after validation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create pub-socle-v3 --target "$GITHUB_SHA" --title "pub socle V3" --notes-file docs/pub-socle-v3.md
+
   core:
     name: Core / Node 22
     runs-on: ubuntu-latest

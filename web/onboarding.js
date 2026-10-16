@@ -12,7 +12,7 @@ if(!fieldGroups.some(([label])=>label==='Comptabilité & situation de départ'))
 function onboardingPersonFields(form,person){
   if(!form||form.querySelector('.onboarding-hr-fields'))return;
   const hr=person?.employment||{};
-  const section=document.createElement('section');section.className='onboarding-hr-fields';section.innerHTML=`<p class="form-section-title">Emploi, paie & coût interne</p><div class="form-two">
+  const section=document.createElement('details');section.className='onboarding-hr-fields';section.innerHTML=`<summary>Emploi, paie & coût interne</summary><div class="form-two">
     <label>Statut<select name="staffType">${['Dirigeant indépendant','Employé','Ouvrier','Apprenti','Stagiaire','Intérimaire'].map(v=>`<option ${v===(hr.staffType||person?.category)?'selected':''}>${v}</option>`).join('')}</select></label>
     <label>Commission paritaire<input name="jointCommittee" value="${esc(hr.jointCommittee||'')}" placeholder="CP 124, CP 200…"></label>
     <label>Catégorie barémique<input name="wageCategory" value="${esc(hr.wageCategory||'')}"></label>
@@ -26,7 +26,8 @@ function onboardingPersonFields(form,person){
     <label>Secrétariat social<input name="socialOffice" value="${esc(hr.socialOffice||company.socialOffice||'')}"></label>
     <label>Référence paie<input name="payrollReference" value="${esc(hr.payrollReference||'')}"></label>
   </div>`;
-  form.prepend(section);
+  form.querySelector('.modal-actions')?.before(section);
+  const identity=form.querySelector('[name="name"]')?.closest('.form-two');if(identity)form.prepend(identity);
 }
 function onboardingPersonForm(id=0){personEditForm(id);onboardingPersonFields(document.querySelector('#modalbody form'),getPerson(id))}
 personForm=function(id){if(id)return showPersonDossier(id);return onboardingPersonForm(0)};

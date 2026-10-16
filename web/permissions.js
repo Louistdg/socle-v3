@@ -281,7 +281,7 @@ function permissionsView(){
         ${projectPanel}
         <section class="panel permission-panel">
           <div class="panel-head"><div><p class="eyebrow">RUBRIQUES DU LOGICIEL</p><h2>Ce que cette personne peut faire</h2></div><span class="subtle">Décocher « Voir » masque toute la rubrique.</span></div>
-          <div class="permission-table">
+          <div class="permission-table" tabindex="0" role="region" aria-label="Droits par rubrique : voir, ajouter et modifier">
             <div class="permission-row permission-head"><span>Rubrique</span><span>Voir</span><span>Ajouter</span><span>Modifier</span></div>
             ${accessModules.map(module=>{const p=assignment.modules[module.key];return `<div class="permission-row"><span><strong>${esc(module.label)}</strong><small>${esc(module.detail)}</small></span>${['view','add','edit'].map(action=>`<label><input type="checkbox" ${p[action]?'checked':''} ${locked?'disabled':''} aria-label="${action==='view'?'Voir':action==='add'?'Ajouter dans':'Modifier'} ${esc(module.label)}" onchange="toggleModuleAccess('${jsString(member.key)}','${jsString(module.key)}','${jsString(action)}',this.checked)"><i aria-hidden="true"></i></label>`).join('')}</div>`}).join('')}
           </div>

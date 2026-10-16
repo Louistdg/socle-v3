@@ -102,7 +102,7 @@ function bindMobileMenuRoutes(dialog){
 }
 function renderMobileMoreDialog(){
   var dialog=mobileMoreDialog();
-  dialog.innerHTML='<div class="socle-mobile-sheet-grabber" aria-hidden="true"></div><header class="socle-mobile-sheet-head"><div><p class="eyebrow">NAVIGATION</p><h2 id="socleMobileMoreTitle">Rubriques</h2><span>Ouvrez directement une rubrique autorisée pour votre compte.</span></div><button type="button" class="socle-mobile-sheet-close" data-mobile-menu-close aria-label="Fermer le menu">×</button></header><label class="socle-mobile-menu-search"><span class="sr-only">Rechercher une rubrique</span><input type="search" data-mobile-menu-search placeholder="Rechercher une rubrique…" autocomplete="off"></label><div class="socle-mobile-menu-groups"></div><footer class="socle-mobile-menu-foot"><span>Les droits d’accès de votre compte restent inchangés.</span>'+mobileLogoutMarkup()+'</footer>';
+  dialog.innerHTML='<div class="socle-mobile-sheet-grabber" aria-hidden="true"></div><div class="socle-mobile-sheet-head"><div><p class="eyebrow">NAVIGATION</p><h2 id="socleMobileMoreTitle">Rubriques</h2><span>Ouvrez directement une rubrique autorisée pour votre compte.</span></div><button type="button" class="socle-mobile-sheet-close" data-mobile-menu-close aria-label="Fermer le menu">×</button></div><label class="socle-mobile-menu-search"><span class="sr-only">Rechercher une rubrique</span><input type="search" data-mobile-menu-search placeholder="Rechercher une rubrique…" autocomplete="off"></label><div class="socle-mobile-menu-groups"></div><footer class="socle-mobile-menu-foot"><span>Les droits d’accès de votre compte restent inchangés.</span>'+mobileLogoutMarkup()+'</footer>';
   var search=dialog.querySelector('[data-mobile-menu-search]'),results=dialog.querySelector('.socle-mobile-menu-groups');
   var updateResults=function(){results.innerHTML=mobileMoreGroupsMarkup(search.value);bindMobileMenuRoutes(dialog)};
   search.addEventListener('input',updateResults);
@@ -134,7 +134,7 @@ function renderBottomNav(){
   nav.innerHTML=keys.map(function(key){
     var entry=item(key),active=typeof view!=='undefined'&&view===key;
     return '<button type="button" data-mobile-route="'+escapeHtml(key)+'" class="'+(active?'active':'')+'" '+(active?'aria-current="page"':'')+'><span class="socle-mobile-nav-icon" aria-hidden="true">'+escapeHtml(entry.icon)+'</span><span>'+escapeHtml(entry.short)+'</span></button>';
-  }).join('')+'<button type="button" data-mobile-menu-toggle aria-label="Ouvrir les autres rubriques" aria-haspopup="dialog" aria-expanded="'+(menuOpen?'true':'false')+'" class="'+(moreActive?'active':'')+'" '+(moreActive?'aria-current="location"':'')+'><span class="socle-mobile-nav-icon" aria-hidden="true">⋯</span><span>Plus</span></button>';
+  }).join('')+'<button type="button" data-mobile-menu-toggle aria-label="Plus — ouvrir les autres rubriques" aria-haspopup="dialog" aria-expanded="'+(menuOpen?'true':'false')+'" class="'+(moreActive?'active':'')+'" '+(moreActive?'aria-current="location"':'')+'><span class="socle-mobile-nav-icon" aria-hidden="true">⋯</span><span>Plus</span></button>';
 }
 function secondaryKeys(){
   var contract=navigationContract();

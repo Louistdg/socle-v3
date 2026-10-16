@@ -46,7 +46,7 @@ assert.ok(bytes.length>600_000,'French model is present in the deployed asset ma
 const page=await worker.fetch(new Request('https://socle.test/'),{});
 const html=await page.text();
 assert.match(html,/document-triage\.js/);
-assert.match(html,/document-triage\.css/);
+assert.match(html,/socle\.css/);
 assert.match(page.headers.get('content-security-policy')||'',/wasm-unsafe-eval/);
 assert.match(page.headers.get('content-security-policy')||'',/worker-src 'self' blob:/);
 
