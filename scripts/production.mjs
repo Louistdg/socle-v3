@@ -279,7 +279,9 @@ export async function startProduction({env = process.env, logger = console, invi
     const body = ['GET', 'HEAD'].includes(incoming.method) ? undefined : await bodyOf(incoming);
     let result = await worker.fetch(new Request(url, {method: incoming.method, headers, body}), workerEnv);
     if (incoming.method === 'GET' && result.headers.get('content-type')?.includes('text/html')) {
-      const html = (await result.text()).replace('<script ', '<script src="/production-runtime.js"></script><script ');
+      const sourceHtml = await result.text();
+      const hasProductionRuntime = /<script\b[^>]*\bsrc\s*=\s*["']\/?production-runtime\.js(?:\?[^"']*)?["']/i.test(sourceHtml);
+      const html = hasProductionRuntime ? sourceHtml : sourceHtml.replace('<script ', '<script src="/production-runtime.js"></script><script ');
       result = new Response(html, {status: result.status, headers: result.headers});
       result.headers.delete('content-length');
       result.headers.delete('etag');

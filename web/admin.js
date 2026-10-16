@@ -131,7 +131,7 @@ const officialLinks=[
  {name:'e-Box Enterprise',detail:'Courrier officiel de l’entreprise',url:'https://finances.belgium.be/fr/E-services/e-box-enterprise'}
 ];
 
-function ensurePersonData(){people.forEach(p=>{p.hr??={leaveTotal:20,leave:[],lateness:[],tickets:[],permits:[],history:[]};p.hr.leaveTotal=Number(p.hr.leaveTotal)||0;p.hr.leave??=[];p.hr.lateness??=[];p.hr.tickets??=[];p.hr.permits??=[];p.hr.history??=[]})}
+function ensurePersonData(){people.forEach(p=>{p.training??=[];p.hr??={leaveTotal:20,leave:[],lateness:[],tickets:[],permits:[],history:[]};p.hr.leaveTotal=Number(p.hr.leaveTotal)||0;p.hr.leave??=[];p.hr.lateness??=[];p.hr.tickets??=[];p.hr.permits??=[];p.hr.history??=[]})}
 ensurePersonData();
 const restoreWorkspaceBeforePersonnel=restoreWorkspace;
 restoreWorkspace=function(s){restoreWorkspaceBeforePersonnel(s);if(Array.isArray(s.newsItems))newsItems=s.newsItems;ensurePersonData()};

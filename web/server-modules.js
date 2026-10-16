@@ -120,6 +120,20 @@ function bindSocleMobileOrganizationMenuDismissal(){
   });
   window.addEventListener('resize',()=>{if(!window.matchMedia('(max-width:760px)').matches)closeSocleMobileOrganizationMenu()});
 }
+function socleOrganizationDisplayLabels(organizations){
+  const groups=new Map(),labels=new Map();
+  for(const organization of organizations){const key=String(organization.name).trim().toLocaleLowerCase('fr');if(!groups.has(key))groups.set(key,[]);groups.get(key).push(organization)}
+  for(const group of groups.values()){
+    const candidates=group.map(organization=>{
+      if(group.length===1)return String(organization.name);
+      const created=new Date(organization.created_at||'');
+      const date=Number.isNaN(created.getTime())?'':new Intl.DateTimeFormat('fr-BE',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Europe/Brussels'}).format(created);
+      return String(organization.name)+(date?' · créée le '+date:'');
+    });
+    group.forEach((organization,index)=>{const candidate=candidates[index],duplicate=candidates.filter(label=>label===candidate).length>1;labels.set(String(organization.id),candidate+(duplicate?' · espace '+(index+1):''))});
+  }
+  return labels;
+}
 async function initOrganizationSwitcher(){
   const select=document.querySelector('#organizationSwitcher'),label=document.querySelector('#organizationLabel'),status=document.querySelector('#organizationSwitcherStatus');
   if(!select)return null;
@@ -128,9 +142,10 @@ async function initOrganizationSwitcher(){
   if(status){status.hidden=true;status.textContent=''}
   try{
     const organizations=(await loadSocleOrganizations()).filter(item=>item&&String(item.id||'').trim()&&String(item.name||'').trim());
+    const displayLabels=socleOrganizationDisplayLabels(organizations),displayName=organization=>displayLabels.get(String(organization.id))||String(organization.name);
     const ids=new Set(organizations.map(item=>String(item.id)));
     if(!ids.has(activeSocleOrganizationId)&&organizations.length)setActiveSocleOrganizationId(organizations[0].id);
-    const options=organizations.map(item=>{const option=document.createElement('option');option.value=String(item.id);option.textContent=String(item.name);option.selected=String(item.id)===activeSocleOrganizationId;return option});
+    const options=organizations.map(item=>{const option=document.createElement('option');option.value=String(item.id);option.textContent=displayName(item);option.selected=String(item.id)===activeSocleOrganizationId;return option});
     select.replaceChildren(...options);
     select.value=activeSocleOrganizationId;
     // Le select natif reste un état de secours. L'interface visible utilise le nom actif et des boutons explicites.
@@ -148,7 +163,8 @@ async function initOrganizationSwitcher(){
       label.replaceChildren();
       const current=document.createElement('strong');
       current.className='organization-current';
-      current.textContent=String(active.name);
+      current.textContent=displayName(active);
+      current.title=displayName(active);
       label.appendChild(current);
 
       const mobileTrigger=document.createElement('button');
@@ -156,8 +172,8 @@ async function initOrganizationSwitcher(){
       mobileTrigger.className='organization-mobile-trigger';
       mobileTrigger.textContent='⌄';
       mobileTrigger.dataset.hasMenu=String(hasMobileMenu);
-      mobileTrigger.setAttribute('aria-label','Changer d’entreprise · entreprise active : '+String(active.name));
-      mobileTrigger.title='Changer d’entreprise · '+String(active.name);
+      mobileTrigger.setAttribute('aria-label','Changer d’entreprise · entreprise active : '+displayName(active));
+      mobileTrigger.title='Changer d’entreprise · '+displayName(active);
       if(hasMobileMenu){
         mobileTrigger.setAttribute('aria-haspopup','menu');
         mobileTrigger.setAttribute('aria-expanded','false');
@@ -178,8 +194,9 @@ async function initOrganizationSwitcher(){
           const button=document.createElement('button');
           button.type='button';
           button.className='organization-choice';
-          button.textContent=String(item.name);
-          button.title='Basculer vers '+String(item.name);
+          button.textContent=displayName(item);
+          button.title='Basculer vers '+displayName(item);
+          button.dataset.organizationId=String(item.id);
           button.setAttribute('role','menuitem');
           button.addEventListener('click',async()=>{
             setSocleMobileOrganizationMenu(label,false);

@@ -22,7 +22,7 @@
     padding:0 6px;border:0;background:transparent;overflow:hidden;
   }
   body[data-mobile-nav="true"] .workspace>small{display:none!important}
-  body[data-mobile-nav="true"] #organizationLabel{display:block;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+  body[data-mobile-nav="true"] #organizationLabel{display:flex!important;align-items:center;flex-wrap:nowrap;gap:6px;width:100%;min-width:0;max-width:100%;overflow:hidden;white-space:normal;font-size:12px}
   body[data-mobile-nav="true"] #organizationSwitcher{max-width:160px;min-width:0;height:44px;min-height:44px;font-size:14px}
   body[data-mobile-nav="true"] .quick-create{
     width:44px;height:44px;min-width:44px;padding:0;border-radius:12px;margin-left:auto;

@@ -2583,7 +2583,7 @@ async function organizationsRoute(request,env,ctx){
     return json({organization},201);
   }
   if(request.method!=='GET')return json({error:'Méthode non autorisée.'},405);
-  const organizations=await rows(env.DB.prepare("SELECT o.id,o.name,o.legal_name,o.country,o.currency,r.code role_code,om.person_id FROM organization_members om JOIN organizations o ON o.id=om.organization_id JOIN roles r ON r.id=om.role_id AND r.organization_id=om.organization_id WHERE om.user_id=? AND om.status='active' ORDER BY COALESCE(om.joined_at,om.created_at),o.name").bind(ctx.uid));
+  const organizations=await rows(env.DB.prepare("SELECT o.id,o.name,o.legal_name,o.country,o.currency,o.created_at,r.code role_code,om.person_id FROM organization_members om JOIN organizations o ON o.id=om.organization_id JOIN roles r ON r.id=om.role_id AND r.organization_id=om.organization_id WHERE om.user_id=? AND om.status='active' ORDER BY COALESCE(om.joined_at,om.created_at),o.name").bind(ctx.uid));
   return json({activeOrganizationId:ctx.organizationId,organizations});
 }
 async function invitationRosterRoute(request,env,ctx){

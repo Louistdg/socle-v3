@@ -1,13 +1,13 @@
-/* Appearance is a browser preference; it never changes business permissions. */
+/* Theme is a browser preference; authenticated density belongs to the active workspace. */
 (()=>{'use strict';
 const themes=[['atelier','Atelier','Clair et équilibré'],['ardoise','Ardoise','Bleu professionnel'],['terre','Sauge','Vert mousse, sombre et apaisant'],['nuit','Nuit','Confort dans la pénombre'],['graphite','Graphite','Sombre, doux et épuré'],['carmin','Carmin','Prune profond et corail vif'],['contraste','Contraste','Bleu nuit et jaune lumineux']];
 const key='socle-v3.theme';let selected='atelier';
 try{const saved=localStorage.getItem(key);if(themes.some(t=>t[0]===saved))selected=saved;}catch{}
 function apply(id){selected=id;document.body.dataset.v3Theme=id;try{localStorage.setItem(key,id);}catch{}document.querySelectorAll('.v3-theme-choice').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.theme===id)));}
 const layoutKey='socle-v3.mobile-layout';let mobileLayout='standard';
-try{if(localStorage.getItem(layoutKey)==='wide')mobileLayout='wide';}catch{}
+try{if(typeof serverJson!=='function'&&localStorage.getItem(layoutKey)==='wide')mobileLayout='wide';}catch{}
 function applyLayout(mode){mobileLayout=mode==='wide'?'wide':'standard';document.body.dataset.mobileLayout=mobileLayout;try{localStorage.setItem(layoutKey,mobileLayout);}catch{}document.querySelectorAll('.v3-layout-choice').forEach(b=>{b.setAttribute('aria-checked',String(b.dataset.layout===mobileLayout));b.setAttribute('aria-pressed',String(b.dataset.layout===mobileLayout));});}
-async function loadLayoutPreference(){if(typeof serverJson!=='function')return;try{const result=await serverJson('/api/me/preferences/dashboard/density');const value=result.preference?.value?.density;if(value==='wide'||value==='standard')applyLayout(value);}catch{}}
+async function loadLayoutPreference(){if(typeof serverJson!=='function')return;try{const result=await serverJson('/api/me/preferences/dashboard/density');const value=result.preference?.value?.density;applyLayout(value==='wide'?'wide':'standard');}catch{}}
 async function saveLayoutPreference(mode){applyLayout(mode);if(typeof serverJson!=='function')return;try{await serverJson('/api/me/preferences/dashboard/density',{method:'PUT',body:JSON.stringify({schemaVersion:1,value:{density:mobileLayout}})});}catch{}}
 apply(selected);
 document.addEventListener('DOMContentLoaded',()=>{

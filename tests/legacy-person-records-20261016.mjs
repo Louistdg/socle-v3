@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+
+const source=readFileSync(new URL('../web/admin.js',import.meta.url),'utf8');
+const start=source.indexOf('function ensurePersonData()');
+const end=source.indexOf('\nensurePersonData();',start);
+assert.ok(start>=0&&end>start);
+const originalTraining=['Formation existante'];
+const people=[{id:'old',name:'Ancienne fiche'},{id:'current',training:originalTraining,hr:{leaveTotal:12,leave:[{date:'2026-10-01'}]}}];
+const ctx={people};vm.createContext(ctx);vm.runInContext(source.slice(start,end),ctx);
+ctx.ensurePersonData();
+assert.ok(Array.isArray(people[0].training),'An old record without training must remain usable in Mon espace and Documents.');
+assert.equal(people[0].training.length,0,'No training is invented for old records.');
+assert.equal(people[1].training,originalTraining,'Recorded training is preserved.');
+assert.equal(people[1].hr.leaveTotal,12);
+assert.equal(people[1].hr.leave.length,1);
+assert.equal(people[0].id,'old');
+ctx.ensurePersonData();assert.equal(people[0].training.length,0,'Normalization is idempotent.');
+console.log('legacy-person-records-20261016: optional training defaults safely; existing records preserved.');
