@@ -724,8 +724,6 @@ function iaAEnhancePersonnelRows(){
     row.dataset.iaInteractiveRow='true';
     row.tabIndex=0;
     var personButton=row.querySelector('.person-cell');
-    var name=personButton&&personButton.textContent?personButton.textContent.trim():'personne';
-    row.setAttribute('aria-label','Ouvrir le dossier de '+name);
     row.addEventListener('click',function(event){
       if(event.target&&event.target.closest&&event.target.closest('button,a,input,select,textarea'))return;
       if(personButton)personButton.click();
