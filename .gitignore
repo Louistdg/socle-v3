@@ -23,5 +23,33 @@ data/*.sqlite
 data/*.sqlite-*
 tests/artifacts/
 
+# Browser Gate suites, the helpers they import, and the fixtures they read.
+!tests/helpers/
+!tests/helpers/browser-cdp.mjs
+!tests/helpers/color-contrast.mjs
+!tests/helpers/bl-scan-fixture.mjs
+!tests/fixtures/
+!tests/fixtures/create-multi-org-isolation-db.mjs
+!tests/fixtures/multi-org-isolation-01.mjs
+!tests/fixtures/document-triage-invoice.png
+!tests/fixtures/MULTI-ORG-ISOLATION-01.md
+!tests/browser-15.mjs
+!tests/browser-access-preview-theme-contrast-01.mjs
+!tests/browser-bl-scan-01ab.mjs
+!tests/browser-document-triage-20261012.mjs
+!tests/browser-e2e-02-quote-preproject.mjs
+!tests/browser-home-person-scope-01.mjs
+!tests/browser-identities-15.mjs
+!tests/browser-mobile-density-162.mjs
+!tests/browser-mobile-navigation-129.mjs
+!tests/browser-multi-org-isolation-01.mjs
+!tests/browser-navigation-convergence-01.mjs
+!tests/browser-regression-116.mjs
+!tests/browser-stock-barcode-01.mjs
+!tests/browser-stock-catalog-v2-01.mjs
+!tests/browser-ui-foundation-01.mjs
+!tests/browser-ui-frame-audit-01.mjs
+!tests/browser-v3-theme-visual-01.mjs
+
 private/
 reports/
