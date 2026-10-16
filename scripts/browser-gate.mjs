@@ -10,6 +10,25 @@ import {fileURLToPath} from 'node:url';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const candidatePath=join(root,'data','socle.sqlite');
 const artifactsPath=join(root,'tests','artifacts','browser-gate');
+const browserSuites=[
+  {name:'browser-access-preview-theme-contrast-01.mjs'},
+  {name:'browser-ui-frame-audit-01.mjs'},
+  {name:'browser-v3-theme-visual-01.mjs'},
+  {name:'browser-ui-foundation-01.mjs'},
+  {name:'browser-regression-116.mjs'},
+  {name:'browser-mobile-navigation-129.mjs'},
+  {name:'browser-navigation-convergence-01.mjs'},
+  {name:'browser-mobile-density-162.mjs'},
+  {name:'browser-stock-catalog-v2-01.mjs'},
+  {name:'browser-stock-barcode-01.mjs'},
+  {name:'browser-e2e-02-quote-preproject.mjs'},
+  {name:'browser-bl-scan-01ab.mjs'},
+  {name:'browser-home-person-scope-01.mjs'},
+  {name:'browser-multi-org-isolation-01.mjs',runner:'multi-org'},
+  {name:'browser-identities-15.mjs'},
+  {name:'browser-15.mjs',capture:'purchases'},
+  {name:'browser-document-triage-20261012.mjs'}
+];
 const interruption=new AbortController();
 const interrupt=signal=>interruption.abort(new Error('Browser Gate interrompu : '+signal));
 const onSigint=()=>interrupt('SIGINT'),onSigterm=()=>interrupt('SIGTERM');
@@ -18,14 +37,14 @@ function options(){
   const values={runs:'3',port:'4386','cdp-port':'9222',chrome:process.env.SOCLE_CHROME||'',only:''};
   for(const argument of process.argv.slice(2)){
     if(argument==='--help'){
-      console.log('Usage: node scripts/browser-gate.mjs [--runs=3] [--port=4386] [--cdp-port=9222] [--chrome=executable] [--only=document-triage|planning-regression]');
+      console.log('Usage: node scripts/browser-gate.mjs [--runs=3] [--port=4386] [--cdp-port=9222] [--chrome=executable] [--only=browser-suite-name.mjs]');
       return null;
     }
     const match=/^--(runs|port|cdp-port|chrome|only)=(.+)$/.exec(argument);
     if(!match)throw new Error('Option Browser Gate inconnue ou vide : '+argument);
     values[match[1]]=match[2];
   }
-    if(values.only&&!['document-triage','planning-regression'].includes(values.only))throw new Error('Test Browser Gate inconnu : --only='+values.only);
+  if(values.only&&!browserSuites.some(suite=>suite.name===values.only))throw new Error('Test Browser Gate inconnu : --only='+values.only+' (nom attendu parmi les suites Browser Gate)');
   for(const name of ['runs','port','cdp-port']){
     if(!/^\d+$/.test(values[name]))throw new Error('Option entière invalide : --'+name);
     values[name]=Number(values[name]);
@@ -165,7 +184,7 @@ async function runTest(name,index,env,children){
   if(result.code!==0)throw new Error(name+' en échec (code '+result.code+', signal '+(result.signal||'aucun')+') ; voir '+logPath);
 }
 
-async function runMultiOrgBrowserTest(index,env,children,runDirectory){
+async function runMultiOrgBrowserTest(suiteName,index,env,children,runDirectory){
   const probe=createServer();
   const port=await new Promise((resolvePromise,reject)=>{
     probe.once('error',reject);
@@ -181,7 +200,7 @@ async function runMultiOrgBrowserTest(index,env,children,runDirectory){
   children.push(server);
   try{
     await waitForHttp(isolatedBase+'/',server,'SOCLE local multi-organisation',60000);
-    await runTest('browser-multi-org-isolation-01.mjs',index,{...env,SOCLE_TEST_URL:isolatedBase},children);
+    await runTest(suiteName,index,{...env,SOCLE_TEST_URL:isolatedBase},children);
   }finally{
     await stop(server);
   }
@@ -231,36 +250,29 @@ async function run(index,configuration,chrome,originalHash){
     ],join(artifactsPath,'chrome-'+index+'.log'));
     children.push(browser);
     await waitForHttp(cdpUrl+'/json/version',browser,'Chromium CDP',30000,{cdp:true});
-    if(configuration.only==='document-triage'){
-      await runTest('browser-document-triage-20261012.mjs',index,env,children);
+    const runSuite=async suite=>{
+      if(suite.runner==='multi-org')await runMultiOrgBrowserTest(suite.name,index,env,children,runDirectory);
+      else await runTest(suite.name,index,env,children);
+    };
+    if(configuration.only){
+      const suite=browserSuites.find(candidate=>candidate.name===configuration.only);
+      const suiteStarted=Date.now();
+      await runSuite(suite);
+      if(suite.capture){
+        const screenshot=join(root,'tests','artifacts','batinova-15-purchases.png');
+        if(existsSync(screenshot)&&(await stat(screenshot)).mtimeMs>=suiteStarted-1000)await copyFile(screenshot,join(artifactsPath,'purchases-'+index+'.png'));
+      }
       testSucceeded=true;
       return;
     }
-    if(configuration.only==='planning-regression'){
-      await runTest('browser-regression-116.mjs',index,env,children);
-      testSucceeded=true;
-      return;
+    for(const suite of browserSuites){
+      const suiteStarted=Date.now();
+      await runSuite(suite);
+      if(suite.capture){
+        const screenshot=join(root,'tests','artifacts','batinova-15-purchases.png');
+        if(existsSync(screenshot)&&(await stat(screenshot)).mtimeMs>=suiteStarted-1000)await copyFile(screenshot,join(artifactsPath,'purchases-'+index+'.png'));
+      }
     }
-    await runTest('browser-access-preview-theme-contrast-01.mjs',index,env,children);
-    await runTest('browser-ui-frame-audit-01.mjs',index,env,children);
-    await runTest('browser-v3-theme-visual-01.mjs',index,env,children);
-    await runTest('browser-ui-foundation-01.mjs',index,env,children);
-    await runTest('browser-regression-116.mjs',index,env,children);
-    await runTest('browser-mobile-navigation-129.mjs',index,env,children);
-    await runTest('browser-navigation-convergence-01.mjs',index,env,children);
-    await runTest('browser-mobile-density-162.mjs',index,env,children);
-    await runTest('browser-stock-catalog-v2-01.mjs',index,env,children);
-    await runTest('browser-stock-barcode-01.mjs',index,env,children);
-    await runTest('browser-e2e-02-quote-preproject.mjs',index,env,children);
-    await runTest('browser-bl-scan-01ab.mjs',index,env,children);
-    await runTest('browser-home-person-scope-01.mjs',index,env,children);
-    await runMultiOrgBrowserTest(index,env,children,runDirectory);
-    await runTest('browser-identities-15.mjs',index,env,children);
-    const smokeStarted=Date.now();
-    await runTest('browser-15.mjs',index,env,children);
-    const screenshot=join(root,'tests','artifacts','batinova-15-purchases.png');
-    if(existsSync(screenshot)&&(await stat(screenshot)).mtimeMs>=smokeStarted-1000)await copyFile(screenshot,join(artifactsPath,'purchases-'+index+'.png'));
-    await runTest('browser-document-triage-20261012.mjs',index,env,children);
     testSucceeded=true;
   }catch(error){errors.push(error);}
   finally{
