@@ -318,7 +318,7 @@ async function captureVisual(tab,role){
         }
         if(route==='personal'&&viewport.mobile){
           const themeProbe=await tab.evaluate(`(()=>{const trigger=document.querySelector('.v3-theme-button'),menu=document.querySelector('#v3-theme-menu');if(!trigger||!menu)return null;trigger.click();const choices=[...menu.querySelectorAll('.v3-theme-choice')],beforeId=document.body.dataset.v3Theme||'',beforeBg=getComputedStyle(document.body).backgroundColor,opened=!menu.hidden,target=choices.find(choice=>choice.dataset.theme!==beforeId);if(!target)return{choices:choices.length,opened,beforeId,beforeBg,afterId:beforeId,afterBg:beforeBg};target.click();const afterId=document.body.dataset.v3Theme||'',afterBg=getComputedStyle(document.body).backgroundColor;choices.find(choice=>choice.dataset.theme===beforeId)?.click();return{choices:choices.length,opened,beforeId,beforeBg,afterId,afterBg};})()`,'mobile-theme-switch:'+role);
-          assert.ok(themeProbe&&themeProbe.choices===7,'Le sélecteur V3 conserve ses sept thèmes');
+          assert.ok(themeProbe&&themeProbe.choices>=13,'Le sélecteur V3 propose au moins ses treize thèmes (obtenu '+(themeProbe?themeProbe.choices:'aucun')+')');
           assert.equal(themeProbe.opened,true,'Le bouton Apparence ouvre le sélecteur V3');
           assert.ok(themeProbe.afterId!==themeProbe.beforeId,'Le choix de thème mobile change réellement le thème actif');
           assert.notEqual(themeProbe.afterBg,themeProbe.beforeBg,'Le choix de thème mobile change réellement la couleur du shell');
