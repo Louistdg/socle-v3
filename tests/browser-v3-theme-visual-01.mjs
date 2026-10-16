@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {connectBrowser,waitForApp} from './helpers/browser-cdp.mjs';
+import {connectBrowser,waitForApp,waitFor} from './helpers/browser-cdp.mjs';
 import {contrastRatio,rgbColor} from './helpers/color-contrast.mjs';
 
 if(!process.env.SOCLE_CDP_URL){console.log('browser-v3-theme-visual-01: SKIP hors Browser Gate');process.exit(0)}
@@ -18,11 +18,34 @@ try{
   for(const [width,height] of widths){
     await tab.call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<761,screenWidth:width,screenHeight:height});
     if(width<761){
-      const menu=await tab.evaluate("(()=>{const button=document.querySelector('.v3-theme-button'),menu=document.querySelector('#v3-theme-menu');if(!button||!menu)throw Error('Sélecteur V3 des thèmes absent.');if(menu.hidden)button.click();menu.scrollTop=menu.scrollHeight;const last=menu.querySelector('[data-theme=contraste]'),box=menu.getBoundingClientRect(),item=last.getBoundingClientRect();return{overflow:getComputedStyle(menu).overflowY,scrollHeight:menu.scrollHeight,clientHeight:menu.clientHeight,lastVisible:item.bottom<=box.bottom+1&&item.top>=box.top-1,expanded:button.getAttribute('aria-expanded')}})()",'v3-theme-mobile-scroll-'+width);
+      const menu=await tab.evaluate(`(async()=>{
+        const button=document.querySelector('.v3-theme-button'),menu=document.querySelector('#v3-theme-menu');
+        if(!button||!menu)throw Error('Sélecteur V3 des thèmes absent.');
+        if(menu.hidden)button.click();
+        menu.querySelector('.v3-theme-choice').click();
+        button.click();
+        menu.scrollTop=menu.scrollHeight;
+        await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+        const choices=[...menu.querySelectorAll('.v3-theme-choice')],last=choices.at(-1),box=menu.getBoundingClientRect(),item=last.getBoundingClientRect(),viewport=window.visualViewport;
+        const visibleTop=Math.max(box.top+menu.clientTop,viewport?.offsetTop||0),visibleBottom=Math.min(box.top+menu.clientTop+menu.clientHeight,(viewport?.offsetTop||0)+(viewport?.height||innerHeight));
+        const visibleLeft=Math.max(box.left+menu.clientLeft,viewport?.offsetLeft||0),visibleRight=Math.min(box.left+menu.clientLeft+menu.clientWidth,(viewport?.offsetLeft||0)+(viewport?.width||innerWidth));
+        const point={x:item.left+item.width/2,y:item.top+item.height/2};
+        return{overflow:getComputedStyle(menu).overflowY,scrollHeight:menu.scrollHeight,clientHeight:menu.clientHeight,choices:choices.length,lastTheme:last.dataset.theme,selectedBefore:document.body.dataset.v3Theme,lastVisible:item.top>=visibleTop-1&&item.bottom<=visibleBottom+1&&item.left>=visibleLeft-1&&item.right<=visibleRight+1,lastReceivesPointer:last.contains(document.elementFromPoint(point.x,point.y)),point,expanded:button.getAttribute('aria-expanded')};
+      })()`, 'v3-theme-mobile-scroll-'+width);
       assert.equal(menu.overflow,'auto','Le menu des thèmes autorise le défilement vertical sur téléphone.');
+      assert.equal(menu.choices,themes.length,'Tous les thèmes sont présents dans le menu mobile.');
+      assert.equal(menu.lastTheme,themes.at(-1),'Le contrôle porte sur le dernier thème réellement rendu.');
+      assert.equal(menu.selectedBefore,themes[0],'Le toucher doit sélectionner un thème différent du thème actif.');
       assert.equal(menu.lastVisible,true,'Le dernier thème est atteignable dans le menu mobile.');
+      assert.equal(menu.lastReceivesPointer,true,'Le dernier thème reçoit les interactions sans être recouvert.');
       assert.equal(menu.expanded,'true','Le sélecteur de thèmes reste ouvert pendant le défilement.');
-      await tab.evaluate("document.querySelector('.v3-theme-button').click()",'v3-theme-close-menu-'+width);
+      await tab.call('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
+      await tab.call('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[menu.point]});
+      await tab.call('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+      await waitFor(()=>tab.evaluate(`document.body.dataset.v3Theme===${JSON.stringify(themes.at(-1))}&&document.querySelector('#v3-theme-menu').hidden`,'v3-theme-mobile-tap-ready-'+width),'sélection tactile du dernier thème à '+width+'px',5000);
+      const chosen=await tab.evaluate("({theme:document.body.dataset.v3Theme,stored:localStorage.getItem('socle-v3.theme'),expanded:document.querySelector('.v3-theme-button').getAttribute('aria-expanded')})",'v3-theme-mobile-tap-'+width);
+      assert.deepEqual(chosen,{theme:themes.at(-1),stored:themes.at(-1),expanded:'false'},'Le toucher du dernier thème applique et mémorise ce choix, puis ferme le menu.');
+      console.log('V3_THEME_MOBILE_ACCESS='+JSON.stringify({width,...menu,chosen}));
     }
 
     const pageBackgrounds=[];
@@ -43,7 +66,7 @@ try{
         if(route==='home')pageBackgrounds.push(rgbColor(metrics.palette.bg));
       }
     }
-    assert.equal(new Set(pageBackgrounds).size,themes.length,'Les sept thèmes visibles ont des fonds distincts à '+width+'px.');
+    assert.equal(new Set(pageBackgrounds).size,themes.length,'Les thèmes visibles ont des fonds distincts à '+width+'px.');
   }
   console.log('BROWSER_V3_THEME_VISUAL_01=PASS '+JSON.stringify({themes,widths:widths.map(([width])=>width),pages:routes.map(([route])=>route),checks:results.length,mobileMenu:'scrollable'}));
 }finally{await browser.close()}
