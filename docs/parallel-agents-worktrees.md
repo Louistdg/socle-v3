@@ -1,23 +1,25 @@
 # Deux agents en parallèle : un worktree chacun
 
-## Démarrer les deux arbres (PowerShell, depuis le dépôt principal)
+## Créer les arbres (PowerShell, seulement si absents)
 
 ```powershell
 $repo = 'D:\Codex\SOCLE-V3\v3-source'
 $base = (git -C $repo rev-parse HEAD).Trim()
-$trees = 'D:\Codex\SOCLE-V3\worktrees'
+$trees = 'D:\Codex\SOCLE-V3\work'
 New-Item -ItemType Directory -Force $trees | Out-Null
-git -C $repo worktree add -b agents/t3-magasinier "$trees\T3-MAGASINIER" $base
-git -C $repo worktree add -b agents/t4-charpentier "$trees\T4-CHARPENTIER" $base
+git -C $repo worktree add -b agent/t3 "$trees\T3" $base
+git -C $repo worktree add -b agent/t4 "$trees\T4" $base
 ```
+
+Les arbres `D:\Codex\SOCLE-V3\work\T3` et `work\T4` sont déjà enregistrés sur `agent/t3` et `agent/t4`. Dans cet état, ne relancer pas les commandes `worktree add` ; utiliser directement ces deux chemins.
 
 Donner à chaque agent **uniquement** le chemin de son arbre et sa mission. Les deux branches partent du même commit, mais chaque agent écrit dans un dossier physique distinct. Ne pas ouvrir les deux missions dans le dépôt principal. Ne pas réutiliser une branche déjà attachée à un worktree. Chaque arbre a son propre `node_modules` ignoré ; si les dépendances manquent, exécuter `npm ci` dans cet arbre.
 
 ## Vérifier les changements séparément
 
 ```powershell
-$trees = 'D:\Codex\SOCLE-V3\worktrees'
-foreach ($name in 'T3-MAGASINIER','T4-CHARPENTIER') {
+$trees = 'D:\Codex\SOCLE-V3\work'
+foreach ($name in 'T3','T4') {
   $tree = Join-Path $trees $name
   git -C $tree status --short
   git -C $tree add -N -- .   # rend les nouveaux fichiers visibles dans le diff, sans ajouter leur contenu à l'index
@@ -33,9 +35,9 @@ Chaque `git diff` est celui d'un seul agent. Après revue, l’opérateur peut f
 Préparer une fixture `data/` indépendante dans **chaque** worktree, selon le workflow habituel ; ne pas partager ni déplacer celle du dépôt principal. Lancer les deux gates avec des ports distincts, par exemple :
 
 ```powershell
-# Dans T3-MAGASINIER
+# Dans T3
 node --experimental-sqlite scripts/browser-gate.mjs --runs=1 --port=5586 --cdp-port=10422 --only=browser-identities-15.mjs
-# Dans T4-CHARPENTIER
+# Dans T4
 node --experimental-sqlite scripts/browser-gate.mjs --runs=1 --port=5686 --cdp-port=10522 --only=browser-regression-116.mjs
 ```
 
