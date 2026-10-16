@@ -8,7 +8,7 @@ var MOBILE_GROUPS=[['priority','Priorités'],['operations','Opérations'],['supp
 function navigationContract(){return globalThis.SOCLE_NAVIGATION||null}
 globalThis.SOCLE_NAVIGATION_V2=globalThis.SOCLE_NAVIGATION;
 
-function isMobile(){return Number(window.innerWidth||document.documentElement.clientWidth||9999)<=MOBILE_MAX}
+function isMobile(){return window.matchMedia?window.matchMedia('(max-width:'+MOBILE_MAX+'px)').matches:Number(window.innerWidth||document.documentElement.clientWidth||9999)<=MOBILE_MAX}
 function escapeHtml(value){
   if(typeof esc==='function')return esc(String(value==null?'':value));
   return String(value==null?'':value).replace(/[&<>"']/g,function(char){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[char]});
