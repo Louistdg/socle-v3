@@ -3,7 +3,11 @@ body.socle-v3[data-mobile-layout=wide] #main{zoom:1;max-width:1480px!important}
 body.socle-v3[data-v3-theme] :is(.tabs,.module-switch,.filter-pills,.management-tabs,.ia-b-section-switch) button{color:var(--v3-ink)!important;opacity:1}
 body.socle-v3[data-v3-theme] #nav button.active{color:var(--v3-ink)!important}
 body.socle-v3[data-v3-theme] :is(.tabs,.module-switch,.filter-pills,.management-tabs,.ia-b-section-switch) button.selected{background:var(--v3-selected)!important;color:var(--v3-ink)!important}
-body.socle-v3[data-v3-theme] :is(.v3-version,.ia-home-portal-mark,.ia-home-portal b){color:var(--v3-ink)!important}
+body.socle-v3[data-v3-theme] :is(.v3-version,.ia-home-portal b){color:var(--v3-ink)!important}
+/* .ia-home-portal-mark est retire de cette liste : la pastille est desormais une
+   tuile pleine a la couleur de la marque, avec un texte choisi par service.
+   L'ancien garde-fou corrigeait un vrai defaut (couleur de marque sur teinte a
+   15 % : 3,29 a 3,72), mais le nouveau design passe AA de 5,00 a 9,43. */
 body.socle-v3[data-v3-theme] :is(.personal-official-links,.personal-company-links) a b{color:var(--v3-ink)!important;font-size:14px}
 /* Le numero de jour du planning ouvrier etait en accent sur fond teinte : 4,15:1 pour 9,6px (sous le seuil AA). */
 body.socle-v3[data-v3-theme] .ia-b-worker-day-number{color:var(--v3-ink)!important;font-size:.75rem!important}

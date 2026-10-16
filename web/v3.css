@@ -91,25 +91,28 @@ body.socle-v3[data-socle-theme][data-ia-a-role] #main .personal-weather-actions{
 body.socle-v3[data-socle-theme][data-ia-a-role] #main .personal-weather-actions .btn{min-height:42px}
 @media(max-width:600px){body.socle-v3[data-socle-theme][data-ia-a-role] #main .personal-weather{grid-template-columns:minmax(0,1fr);gap:12px;padding:15px!important}body.socle-v3[data-socle-theme][data-ia-a-role] #main .personal-weather-summary{grid-template-columns:54px minmax(0,1fr);gap:12px}body.socle-v3[data-socle-theme][data-ia-a-role] #main .personal-weather-symbol{width:54px;height:54px;border-radius:15px;font-size:31px}body.socle-v3[data-socle-theme][data-ia-a-role] #main .personal-weather-copy strong{font-size:21px}body.socle-v3[data-socle-theme][data-ia-a-role] #main .personal-weather-open{grid-column:2;justify-self:start;margin-top:-4px}body.socle-v3[data-socle-theme][data-ia-a-role] #main .personal-weather-actions{flex-direction:row;min-width:0;padding:12px 0 0;border-left:0;border-top:1px solid var(--v3-line)}body.socle-v3[data-socle-theme][data-ia-a-role] #main .personal-weather-actions .btn{flex:1;padding:8px;font-size:12px}}
 
-/* Official portals: recognizable service colors, with a quiet surface that follows the selected theme. */
+/* Official portals: the mark is a solid tile in the service's own colour, so the
+   brand stays recognizable whatever theme is selected. The tile colour is opaque,
+   therefore the label on it is chosen per service and does not follow the theme.
+   Only Forem needs dark ink: its cyan #13bdc9 is too light for white. */
 body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a{display:grid;grid-template-columns:40px minmax(0,1fr) 18px;align-items:center;justify-content:initial;gap:10px;min-height:62px;padding:9px 11px;border:1px solid var(--v3-line)!important;border-left:4px solid var(--portal-color,var(--v3-accent))!important;border-radius:11px;background:var(--v3-surface)!important;color:var(--v3-ink)!important;font-size:.9rem;font-weight:750;text-decoration:none;box-shadow:0 2px 8px #0c17200c;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a{display:grid;grid-template-columns:40px minmax(0,1fr) 18px;align-items:center;justify-content:initial;gap:10px;min-height:62px;padding:9px 11px;border:1px solid var(--v3-line)!important;border-left:4px solid var(--portal-color,var(--v3-accent))!important;border-radius:11px;background:var(--v3-paper)!important;color:var(--v3-ink)!important;font-size:.9rem;font-weight:750;text-decoration:none;box-shadow:0 2px 8px #0c17200c;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
 body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a:hover{transform:translateY(-1px);box-shadow:0 7px 18px #0c172018;border-color:var(--portal-color,var(--v3-accent))!important;filter:none}
-body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:color-mix(in srgb,var(--portal-color,var(--v3-accent)) 15%,var(--v3-surface));color:var(--portal-color,var(--v3-ink));font-size:.68rem;font-weight:850;letter-spacing:.01em}
+body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--portal-color,var(--v3-accent));color:var(--portal-on-color,var(--v3-accent-text));font-size:.68rem;font-weight:850;letter-spacing:.01em}
 body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-label{min-width:0;overflow-wrap:anywhere}
 body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-arrow{color:var(--v3-muted);font-size:1rem;text-align:right}
-body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="fgtb"]{--portal-color:#bd2b27}
-body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="career"]{--portal-color:#146f92}
-body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="forem"]{--portal-color:#b84353}
-body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="minfin"]{--portal-color:#08778d}
-body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="pension"]{--portal-color:#8f234b}
-body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#477c34}
-body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="cgslb"]{--portal-color:#4d3590}
+body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="fgtb"]{--portal-color:#bd2b27;--portal-on-color:#fff}
+body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="career"]{--portal-color:#146f92;--portal-on-color:#fff}
+body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="forem"]{--portal-color:#13bdc9;--portal-on-color:#10202a}
+body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="minfin"]{--portal-color:#08778d;--portal-on-color:#fff}
+body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="pension"]{--portal-color:#8f234b;--portal-on-color:#fff}
+body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#477c34;--portal-on-color:#fff}
+body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a[data-portal="cgslb"]{--portal-color:#4d3590;--portal-on-color:#fff}
 body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-home-portal-links a:focus-visible{outline:3px solid var(--v3-accent);outline-offset:2px}
 
 /* The desktop week uses the selected day count; the phone stacks workdays for quick scanning. */
 body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-b-week-board{grid-template-columns:repeat(var(--planning-visible-days,5),minmax(0,1fr));min-width:0;gap:8px}
-body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-b-weekday-settings{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;margin:9px 0;padding:10px 12px;border:1px solid var(--v3-line);border-radius:10px;background:var(--v3-surface-soft);color:var(--v3-ink)}
+body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-b-weekday-settings{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;margin:9px 0;padding:10px 12px;border:1px solid var(--v3-line);border-radius:10px;background:var(--v3-soft);color:var(--v3-ink)}
 body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-b-weekday-settings>div{display:grid;gap:3px;flex:1 1 240px;min-width:0}
 body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-b-weekday-settings small{color:var(--v3-muted);font-size:.8rem}
 body.socle-v3[data-socle-theme][data-ia-a-role] #main .ia-b-weekday-settings label{display:flex;align-items:center;gap:7px;white-space:nowrap;font-weight:700}
