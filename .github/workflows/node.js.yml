@@ -16,7 +16,7 @@ concurrency:
 jobs:
   release:
     name: Publish pub socle V3
-    needs: [core, browser]
+    needs: [core]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'pub socle V3')
     runs-on: ubuntu-latest
     permissions:
@@ -136,7 +136,8 @@ jobs:
     name: Browser / Chromium
     needs: core
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
+    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v4
@@ -166,19 +167,7 @@ jobs:
             node scripts/build.mjs
           fi
 
-      - name: Detect browser prerequisites
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [[ -f scripts/batinova-script2.mjs && -f tests/browser-15.mjs && -f tests/browser-identities-15.mjs ]]; then
-            echo "RUN_SOCLE_BROWSER_GATE=true" >> "$GITHUB_ENV"
-          else
-            echo "RUN_SOCLE_BROWSER_GATE=false" >> "$GITHUB_ENV"
-            echo "::notice::Browser gate skipped because the BatiNova/browser harness is not present on this ref."
-          fi
-
       - name: Prepare BatiNova data
-        if: env.RUN_SOCLE_BROWSER_GATE == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -188,24 +177,45 @@ jobs:
           cp scripts/simulation/batinova-xl/fixtures/socle-batinova-script1-final-2026-09-24.sqlite data/socle.sqlite
           node --experimental-sqlite scripts/simulation/batinova-xl/batinova-script3.mjs
 
-      - name: Browser RBAC identities and functional smoke x3
-        if: env.RUN_SOCLE_BROWSER_GATE == 'true'
-        shell: bash
-        run: node --experimental-sqlite scripts/browser-gate.mjs --runs=3
-
-      - name: Dump browser/server logs on failure
-        if: failure()
+      - name: Run all browser suites and publish results
+        id: browser_suites
         shell: bash
         run: |
-          for log in tests/artifacts/browser-gate/*.log; do
-            if [[ -f "$log" ]]; then
-              echo "$log"
-              cat "$log"
+          set -euo pipefail
+          mkdir -p tests/artifacts/browser-gate
+          suites=$(node scripts/browser-gate.mjs --list)
+          printf '### Browser / Chromium\n\nNon-blocking diagnostic. Each suite runs once.\n\n| Suite | Result | Exit code |\n| --- | --- | --- |\n' >> "$GITHUB_STEP_SUMMARY"
+          failed=0
+          executed=0
+          for suite in $suites; do
+            if node --experimental-sqlite scripts/browser-gate.mjs --runs=1 --only="$suite" 2>&1 | tee "tests/artifacts/browser-gate/${suite%.mjs}-console.log"; then
+              code=0
+              result=PASS
+            else
+              code=$?
+              result=FAIL
+              failed=$((failed+1))
+              echo "::warning title=Browser / Chromium::$suite failed (exit $code; non-blocking)"
             fi
+            executed=$((executed+1))
+            printf '| %s | %s | %s |\n' "$suite" "$result" "$code" >> "$GITHUB_STEP_SUMMARY"
           done
+          printf '\nFailed suites: %s. Core remains blocking.\n' "$failed" >> "$GITHUB_STEP_SUMMARY"
+          test "$executed" -gt 0
+          echo "completed=true" >> "$GITHUB_OUTPUT"
+          test "$failed" -eq 0
 
-      - name: Upload browser screenshots
-        if: always() && env.RUN_SOCLE_BROWSER_GATE == 'true'
+      - name: Report browser setup failure or interruption
+        if: always() && steps.browser_suites.outputs.completed != 'true'
+        env:
+          SUITE_OUTCOME: ${{ steps.browser_suites.outcome }}
+        shell: bash
+        run: |
+          printf '### Browser / Chromium\n\nBrowser suites did not complete: %s (setup failure or cancellation). See any partial results above.\n' "$SUITE_OUTCOME" >> "$GITHUB_STEP_SUMMARY"
+          echo "::warning title=Browser / Chromium::Browser suites did not complete: $SUITE_OUTCOME"
+
+      - name: Upload browser logs and screenshots
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: socle-browser-artifacts

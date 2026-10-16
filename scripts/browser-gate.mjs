@@ -37,7 +37,11 @@ function options(){
   const values={runs:'3',port:'4386','cdp-port':'9222',chrome:process.env.SOCLE_CHROME||'',only:''};
   for(const argument of process.argv.slice(2)){
     if(argument==='--help'){
-      console.log('Usage: node scripts/browser-gate.mjs [--runs=3] [--port=4386] [--cdp-port=9222] [--chrome=executable] [--only=browser-suite-name.mjs]');
+      console.log('Usage: node scripts/browser-gate.mjs [--runs=3] [--port=4386] [--cdp-port=9222] [--chrome=executable] [--only=browser-suite-name.mjs] [--list]');
+      return null;
+    }
+    if(argument==='--list'){
+      for(const suite of browserSuites)console.log(suite.name);
       return null;
     }
     const match=/^--(runs|port|cdp-port|chrome|only)=(.+)$/.exec(argument);
