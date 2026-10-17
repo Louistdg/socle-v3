@@ -27,7 +27,8 @@ const browserSuites=[
   {name:'browser-multi-org-isolation-01.mjs',runner:'multi-org'},
   {name:'browser-identities-15.mjs'},
   {name:'browser-15.mjs',capture:'purchases'},
-  {name:'browser-document-triage-20261012.mjs'}
+  {name:'browser-document-triage-20261012.mjs'},
+  {name:'browser-planning-drag-step2.mjs'}
 ];
 const interruption=new AbortController();
 const interrupt=signal=>interruption.abort(new Error('Browser Gate interrompu : '+signal));
