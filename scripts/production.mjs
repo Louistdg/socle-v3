@@ -118,6 +118,7 @@ export async function startProduction({env = process.env, logger = console, invi
   // Import the source-built worker before creating/modifying the volume database.
   const worker = (await import(pathToFileURL(join(root, 'dist/server/index.js')).href)).default;
   const storage = openProductionDatabase({databasePath: config.databasePath, migrationsDirectory: join(root, 'drizzle')});
+  if(!backupDestination)logger.error('ÉCHEC SAUVEGARDE SQLite — destination non configurée; aucune copie automatique ne sera créée.');
   let backupTimer, backupBusy=false;
   const runBackup=async()=>{if(!backupDestination||backupBusy)return;backupBusy=true;try{await createProductionBackup({database:storage.database,databasePath:config.databasePath,config:backupDestination,logger});}catch{}finally{backupBusy=false;}};
   const auth = productionAuth(storage.database, config.sessionSecret);
