@@ -72,13 +72,21 @@ console.log('MATCHING_RENDER=invoice lines, review warning, non-persistence and 
 
 const quantity={value:'8',trim(){return this.value}};
 const price={value:'14',trim(){return this.value}};
+const invoiceReference={value:' mat-1 ',trim(){return this.value}};
+const referenceResult={textContent:''};
 const quantityResult={textContent:''};
 const priceResult={textContent:''};
-const row={dataset:{acceptedMilli:'6000',orderedUnitPriceCents:'1250',unit:'kg'},querySelector(selector){return ({'[name="invoicedQuantity"]':quantity,'[name="invoicedUnitPrice"]':price,'[data-quantity-variance]':quantityResult,'[data-price-variance]':priceResult})[selector]}};
+const row={dataset:{acceptedMilli:'6000',orderedUnitPriceCents:'1250',orderReference:'MAT-1',unit:'kg'},querySelector(selector){return ({'[name="invoiceReference"]':invoiceReference,'[name="invoicedQuantity"]':quantity,'[name="invoicedUnitPrice"]':price,'[data-reference-variance]':referenceResult,'[data-quantity-variance]':quantityResult,'[data-price-variance]':priceResult})[selector]}};
 context.updateSupplierInvoiceReconciliation({querySelectorAll:()=>[row]});
+assert.equal(referenceResult.textContent,'Références alignées');
+const matchingReferenceResult=referenceResult.textContent;
 assert.match(quantityResult.textContent,/Facturé au-delà du reçu/);
 assert.match(priceResult.textContent,/Facturé/);
 assert.match(priceResult.textContent,/de plus/);
+invoiceReference.value='MAT-9';
+context.updateSupplierInvoiceReconciliation({querySelectorAll:()=>[row]});
+assert.equal(referenceResult.textContent,'Référence différente de la commande');
+console.log(`MATCHING_REFERENCE=${matchingReferenceResult}; ${referenceResult.textContent}`);
 console.log(`MATCHING_MANUAL_VALUES=${quantityResult.textContent}; ${priceResult.textContent}`);
 
 assert.ok(ui.includes('openSupplierInvoiceReconciliation'),'server invoice list opens the reconciliation review');
