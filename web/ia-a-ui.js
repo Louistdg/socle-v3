@@ -214,7 +214,8 @@ function iaASummaryItem(item){
 }
 function iaASummaryList(options){
   var opts=options||{},slice=iaASliceSummary(opts.items||[]);
-  var body=slice.visible.length?slice.visible.map(opts.renderItem||iaASummaryItem).join(''):iaAState('empty',opts.emptyTitle||'Rien à signaler',opts.emptyDetail||'Aucun élément dans cette vue.');
+  var emptyAction=opts.emptyAction||opts.moreAction||'',emptyLabel=opts.emptyActionLabel||(emptyAction?'Voir la rubrique':'');
+  var body=slice.visible.length?slice.visible.map(opts.renderItem||iaASummaryItem).join(''):iaAState('empty',opts.emptyTitle||'Rien à signaler',opts.emptyDetail||'Aucun élément à traiter pour l’instant. Les nouveaux éléments apparaîtront ici.',emptyLabel,emptyAction);
   var more=slice.hasMore&&opts.moreAction?'<button class="ia-show-more" type="button" onclick="'+opts.moreAction+'">Afficher les '+slice.hiddenCount+' autres</button>':'';
   return '<section class="panel ia-summary"><div class="panel-head ia-summary-head"><div><p class="eyebrow">'+iaAEscape(opts.eyebrow||'APERÇU')+'</p><h2>'+iaAEscape(opts.title||'')+' <span class="count">'+slice.total+'</span></h2></div>'+(opts.actionLabel&&opts.action?'<button class="btn" type="button" onclick="'+opts.action+'">'+iaAEscape(opts.actionLabel)+'</button>':'')+'</div><div class="ia-summary-list">'+body+'</div>'+more+'</section>';
 }
@@ -227,7 +228,8 @@ function iaACollectionModel(items,options){
 }
 function iaAListShell(options){
   var opts=options||{},count=Number(opts.count||0);
-  return '<section class="ia-list-shell"><header class="ia-list-head"><div><p class="eyebrow">'+iaAEscape(opts.eyebrow||'LISTE COMPLÈTE')+'</p><h1>'+iaAEscape(opts.title||'')+' <span class="count">'+count+'</span></h1></div>'+(opts.primaryLabel&&opts.primaryAction?'<button class="btn primary" type="button" onclick="'+opts.primaryAction+'">'+iaAEscape(opts.primaryLabel)+'</button>':'')+'</header><div class="ia-list-toolbar">'+(opts.searchId?'<label class="ia-search"><span class="sr-only">Rechercher</span><input id="'+iaAEscape(opts.searchId)+'" type="search" placeholder="'+iaAEscape(opts.searchPlaceholder||'Rechercher…')+'"></label>':'')+(opts.filtersHtml||'')+(opts.sortHtml||'')+'</div><div class="ia-list-body">'+(opts.bodyHtml||iaAState('empty','Aucun élément','Cette liste est vide.'))+'</div></section>';
+  var emptyDetail=opts.emptyDetail||(opts.primaryLabel?'Aucun élément n’est encore enregistré ici. Utilisez « '+opts.primaryLabel+' » ci-dessus pour créer le premier.':'Aucun élément n’est encore enregistré ici. Les éléments apparaîtront après leur ajout.');
+  return '<section class="ia-list-shell"><header class="ia-list-head"><div><p class="eyebrow">'+iaAEscape(opts.eyebrow||'LISTE COMPLÈTE')+'</p><h1>'+iaAEscape(opts.title||'')+' <span class="count">'+count+'</span></h1></div>'+(opts.primaryLabel&&opts.primaryAction?'<button class="btn primary" type="button" onclick="'+opts.primaryAction+'">'+iaAEscape(opts.primaryLabel)+'</button>':'')+'</header><div class="ia-list-toolbar">'+(opts.searchId?'<label class="ia-search"><span class="sr-only">Rechercher</span><input id="'+iaAEscape(opts.searchId)+'" type="search" placeholder="'+iaAEscape(opts.searchPlaceholder||'Rechercher…')+'"></label>':'')+(opts.filtersHtml||'')+(opts.sortHtml||'')+'</div><div class="ia-list-body">'+(opts.bodyHtml||iaAState('empty',opts.emptyTitle||'Aucun élément',emptyDetail))+'</div></section>';
 }
 function iaAOpenTasks(){
   var source=typeof reminders!=='undefined'&&Array.isArray(reminders)?reminders:(typeof tasks!=='undefined'&&Array.isArray(tasks)?tasks:[]);
@@ -535,7 +537,7 @@ function iaACommandNormalize(value){return String(value||'').normalize('NFD').re
 var iaACommandState={dialog:null,input:null,list:null,announcement:null,help:null,restore:null,items:[],active:0,query:''};
 function iaACommandEnsure(){
   var state=iaACommandState;if(state.dialog||typeof document==='undefined'||typeof document.createElement!=='function'||typeof document.querySelector!=='function')return;
-  var trigger=document.createElement('button');trigger.id='ia-command-trigger';trigger.type='button';trigger.className='ia-command-trigger';trigger.textContent='Commandes';trigger.setAttribute('aria-haspopup','dialog');trigger.setAttribute('aria-label','Ouvrir les commandes et les raccourcis');
+  var trigger=document.createElement('button');trigger.id='ia-command-trigger';trigger.type='button';trigger.className='ia-command-trigger';var compact=matchMedia('(max-width:640px)');trigger.textContent=compact.matches?'⌕':'Commandes';compact.addEventListener?.('change',function(event){trigger.textContent=event.matches?'⌕':'Commandes'});trigger.setAttribute('aria-haspopup','dialog');trigger.setAttribute('aria-label','Ouvrir les commandes et les raccourcis');
   var topbar=document.querySelector('.topbar');if(topbar)topbar.appendChild(trigger);
   var dialog=document.createElement('dialog');dialog.id='ia-command-dialog';dialog.className='ia-command-dialog';dialog.setAttribute('aria-labelledby','ia-command-title');
   dialog.innerHTML='<div class="ia-command-panel"><header class="ia-command-head"><h2 id="ia-command-title"></h2><button type="button" class="ia-command-close" aria-label="Fermer">Fermer</button></header><div class="ia-command-content"></div></div>';
