@@ -11,8 +11,8 @@ const index=readFileSync(join(root,'web/index.html'),'utf8');
 const production=readFileSync(join(root,'scripts/production.mjs'),'utf8');
 const paletteIds=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre'];
 const paletteNames=['Ciment','Ardoise','Mousse','Bitume','Graphite','Grès','Chantier','Béton','Lin','Zinc','Sapin','Acajou','Cuivre'];
-const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft','--sx-info-soft'];
-const aliases={'--v3-bg':'--sx-canvas','--v3-paper':'--sx-surface','--v3-ink':'--sx-ink','--v3-muted':'--sx-muted','--v3-line':'--sx-line','--v3-accent':'--sx-accent','--v3-soft':'--sx-raised','--v3-selected':'--sx-overlay','--v3-control-line':'--sx-line-strong','--v3-accent-text':'--sx-on-accent','--v3-accent-text-on-tint':'--sx-ink'};
+const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-ink','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft','--sx-info-soft'];
+const aliases={'--v3-bg':'--sx-canvas','--v3-paper':'--sx-surface','--v3-ink':'--sx-ink','--v3-muted':'--sx-muted','--v3-line':'--sx-line','--v3-accent':'--sx-accent','--v3-soft':'--sx-raised','--v3-selected':'--sx-overlay','--v3-control-line':'--sx-line-strong','--v3-accent-text':'--sx-on-accent','--v3-accent-text-on-tint':'--sx-accent-ink'};
 function declarations(block){return Object.fromEntries([...block.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+)\s*;/g)].map(m=>[m[1],m[2].trim()]));}
 function color(value){
   const h=/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(value);
@@ -55,7 +55,7 @@ for(let i=0;i<themeMatches.length;i++){
   for(const role of roles)assert(role in d,id+': jeton requis absent '+role);
   for(const [alias,target] of Object.entries(aliases))assert.equal(d[alias],'var('+target+')',id+': alias '+alias);
   const surface=color(d['--sx-surface']),raised=color(d['--sx-raised']),ink=color(d['--sx-ink']),muted=color(d['--sx-muted']),accent=color(d['--sx-accent']),onAccent=color(d['--sx-on-accent']),ring=color(d['--sx-accent-line']);
-  const values={textSurface:ratio(ink,surface),textRaised:ratio(ink,raised),mutedSurface:ratio(muted,surface),textAccent:ratio(onAccent,accent),activeLine:ratio(ring,surface),focusRing:ratio(accent,surface)};
+  const values={textSurface:ratio(ink,surface),textRaised:ratio(ink,raised),mutedSurface:ratio(muted,surface),textAccent:ratio(onAccent,accent),activeLine:ratio(ring,surface),focusRing:ratio(ring,surface)};
   assert(values.textSurface>=4.5,id+': texte/surface '+round(values.textSurface)+' < 4.5');
   assert(values.textRaised>=4.5,id+': texte/levée '+round(values.textRaised)+' < 4.5');
   assert(values.mutedSurface>=4.5,id+': explicatif/surface '+round(values.mutedSurface)+' < 4.5');

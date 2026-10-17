@@ -38,12 +38,12 @@ const check=(label,fg,bg)=>{
 };
 console.log('Palettes détectées :',names.length,'->',names.join(', '));
 for(const n of names){
-  for(const token of ['--sx-accent','--sx-soft','--sx-overlay','--sx-on-accent','--v3-accent-text','--v3-accent-text-on-tint']){
+  for(const token of ['--sx-accent','--sx-accent-ink','--sx-soft','--sx-overlay','--sx-on-accent','--v3-accent-text','--v3-accent-text-on-tint']){
     if(!shared.get(n)?.[token]||!resolveToken(n,token)){console.error(`${n}: déclaration requise absente ou non résolue ${token}`);failures++;}
   }
 }
-check('Texte accent sur surface douce','--sx-accent','--sx-soft');
-check('Texte accent sur surface sélectionnée','--sx-accent','--sx-overlay');
+check('Texte accent sur surface douce','--sx-accent-ink','--sx-soft');
+check('Texte accent sur surface sélectionnée','--sx-accent-ink','--sx-overlay');
 check('Texte bouton sur accent','--sx-on-accent','--sx-accent');
 check('Texte principal sur surface','--sx-ink','--sx-surface');
 check('Texte principal sur canevas','--sx-ink','--sx-canvas');

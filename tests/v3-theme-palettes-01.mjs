@@ -6,7 +6,7 @@ const css=readFileSync(new URL('../web/v3-themes.css',import.meta.url),'utf8');
 const v3css=readFileSync(new URL('../web/v3.css',import.meta.url),'utf8');
 const tokenCss=readFileSync(new URL('../web/design-tokens.css',import.meta.url),'utf8');
 const paletteIds=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre'];
-const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft','--sx-info-soft'];
+const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-ink','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft','--sx-info-soft'];
 const themeRules=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)];
 const blocks=themeRules.filter(([,selector])=>/^body\.socle-v3\[data-v3-theme="[^"]+"\]$/.test(selector.trim()));
 function declarations(block){return Object.fromEntries([...block.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+)\s*;/g)].map(match=>[match[1],match[2].trim()]));}
@@ -20,6 +20,7 @@ for(const id of paletteIds){
   for(const role of roles)assert.ok(role in theme,`${id}: jeton ${role} présent dans la cascade partagée`);
   assert.equal(theme['--v3-bg'],'var(--sx-canvas)',`${id}: alias historique du fond`);
   assert.equal(theme['--v3-paper'],'var(--sx-surface)',`${id}: alias historique des panneaux`);
+  assert.equal(theme['--v3-accent-text-on-tint'],'var(--sx-accent-ink)',`${id}: ancien jeton de texte redirigé vers le rôle accent texte`);
   assert.equal(theme['--ia-accent'],'var(--sx-accent)',`${id}: alias IA conservé`);
   assert.ok(js.includes(`['${id}'`),`${id}: option dans le sélecteur`);
   assert.ok(css.includes(`.v3-theme-swatch[data-palette=${id}]`)||css.includes('.v3-theme-swatch{'),`${id}: pastille thématique`);
@@ -32,7 +33,7 @@ assert.match(mobileMenu,/overflow-x:hidden/,'le menu ne peut pas partir horizont
 assert.match(mobileMenu,/overscroll-behavior:contain/,'le geste reste dans le menu quand sa liste défile');
 assert.match(mobileMenu,/touch-action:pan-y/,'le balayage vertical au doigt est explicitement autorisé');
 assert.match(mobileMenu,/env\(safe-area-inset-bottom/,'la zone sûre basse des téléphones est préservée');
-assert.match(css,/body\.socle-v3\[data-socle-theme\] :focus-visible\{outline:3px solid var\(--sx-accent\)!important/,'le focus visible suit la palette active');
+assert.match(css,/body\.socle-v3\[data-socle-theme\] :focus-visible\{outline:3px solid var\(--sx-accent-line\)!important/,'le focus visible suit le rôle de trait accentué');
 assert.match(v3css,/\.v3-hero[^}]*background:var\(--sx-accent\)/,'le bandeau principal utilise le rôle accent partagé');
 assert.match(v3css,/\.v3-note\{padding:var\(--sx-space-4\) var\(--sx-space-5\);background:var\(--v3-soft\)/,'les encarts suivent les couleurs et espacements du thème');
 assert.match(css,/@media\(max-width:899px\)\{body\.socle-v3 #main\{width:min\(100%,760px\)!important;max-width:760px!important;margin-inline:auto!important\}\}/,'le contenu reste centré dans la largeur disponible');

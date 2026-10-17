@@ -150,7 +150,7 @@
   }
   .socle-mobile-nav button .socle-mobile-nav-icon{color:inherit;opacity:1}
   .socle-mobile-nav button.active{
-    background:var(--sx-accent);color:var(--sx-ink);box-shadow:var(--sx-shadow-1);
+    background:var(--sx-accent);color:var(--sx-on-accent);box-shadow:var(--sx-shadow-1);
   }
   .socle-mobile-nav button:focus-visible{outline:2px solid var(--ia-accent,var(--sx-accent-line));outline-offset:-2px}
   .socle-mobile-extras{margin-top:var(--sx-space-3)}
