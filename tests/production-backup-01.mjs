@@ -13,5 +13,3 @@ try{
  const ro=join(root,'readonly');await mkdir(ro);await chmod(ro,0o444);if(process.platform!=='win32')await assert.rejects(createProductionBackup({database:db,databasePath:dbPath,config:{kind:'local',directory:ro},logger}));await chmod(ro,0o755);
  assert.ok(logs.some(x=>x.includes('ÉCHEC SAUVEGARDE SQLite')));console.log('production-backup-01: PASS 2 générations, integrity_check=ok, organizations=1; erreurs destination/permissions/config signalées.');
 }finally{db.close();await rm(root,{recursive:true,force:true});}
-
-

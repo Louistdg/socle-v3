@@ -42,4 +42,3 @@ export async function createProductionBackup({database,databasePath,config,logge
   await putS3(config,key,bytes);logger.log(`Sauvegarde SQLite vérifiée et déposée dans le bucket, objet=${key}, ${bytes.length} octets, organizations=${before.count}.`);return {name,size:bytes.length,...before};
  }catch(error){logger.error('ÉCHEC SAUVEGARDE SQLite — copie non garantie:',error.message);throw error;}finally{if(temp)await rm(temp,{force:true}).catch(()=>{});}
 }
-
