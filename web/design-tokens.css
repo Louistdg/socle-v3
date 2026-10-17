@@ -7,7 +7,7 @@
   --sx-accent:#7C25CA; --sx-accent-hover:#8E33DE; --sx-accent-soft:rgba(124,37,202,.16); --sx-accent-line:rgba(124,37,202,.45);
   --sx-dot-grid:rgba(255,255,255,.045);
   --sx-ok:#22C55E; --sx-warn:#E2A33C; --sx-danger:#E5484D; --sx-info:#4C8DFF;
-  --sx-ok-soft:rgba(34,197,94,.16); --sx-warn-soft:rgba(226,163,60,.16); --sx-danger-soft:rgba(229,72,77,.16);
+  --sx-ok-soft:rgba(34,197,94,.16); --sx-warn-soft:rgba(226,163,60,.16); --sx-danger-soft:rgba(229,72,77,.16); --sx-info-soft:rgba(76,141,255,.16);
   --sx-font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --sx-font-mono:ui-monospace,"Cascadia Mono",Consolas,monospace;
   --sx-text-2xs:11px; --sx-text-xs:12px; --sx-text-sm:13px; --sx-text-base:14px; --sx-text-lg:16px; --sx-text-xl:20px; --sx-text-2xl:26px;
