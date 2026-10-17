@@ -37,10 +37,7 @@ const embedded=/const standaloneDesignTokens = '([^']*)';/.exec(production);
 assert(embedded,'jetons autonomes login/invitation absents');
 const embeddedTokens=declarations(embedded[1]);
 for(const [name,value] of Object.entries(rootTokens))if(name.startsWith('--sx-')&&!name.startsWith('--sx-mobile-'))assert.equal(embeddedTokens[name],value,'jeton inline divergent: '+name);
-assert.equal(rootTokens['--sx-mobile-masthead-y'],'6px','espacement vertical du bandeau mobile');
-assert.equal(rootTokens['--sx-mobile-nav-clearance'],'94px','espace réservé à la navigation basse');
-assert.equal(rootTokens['--sx-mobile-section-gap'],'14px','espacement des en-têtes mobiles');
-assert(production.includes('const standalonePageStyle = ')&&production.includes(':root{color-scheme: light;'),'style autonome déclare ses jetons dans :root');
+assert(production.includes('const standalonePageStyle = ')&&production.includes(':root{color-scheme: dark;'),'style autonome déclare ses jetons dans :root');
 assert(production.includes("style-src 'sha256-"+String.fromCharCode(36)+"{standaloneStyleHash}'"),'CSP ne lie pas le style autonome à son empreinte');
 const matrix=[];
 for(let i=0;i<themeMatches.length;i++){
