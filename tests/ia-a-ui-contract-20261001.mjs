@@ -196,7 +196,7 @@ assert.ok(css.includes('.ia-compact-footer')&&css.includes('.ia-list-more'),'aff
 assert.ok(css.includes('Interaction harmony 2026-10-03'),'passe harmonie interactions présente');
 assert.ok(css.includes('.project-row:hover')&&css.includes('background:var(--ia-surface-soft)!important'),'chantiers restent lisibles au survol');
 assert.ok(css.includes('.server-invoices tbody tr:hover'),'factures restent lisibles au survol');
-assert.ok(css.includes('dialog .link')&&css.includes('color:var(--ia-accent-strong)!important'),'liens de modal liés au contraste du thème');
+assert.ok(css.includes('dialog .link')&&css.includes('color:var(--sx-accent-ink)!important'),'liens de modal liés au contraste du thème');
 assert.ok(css.includes('.people-table tbody tr:hover'),'personnel reste lisible au survol');
 
 assert.ok(css.includes('Interaction contrast pass 2026-10-02'),'passe interaction/contraste présente');
@@ -216,7 +216,7 @@ assert.ok(ui.includes("iaAApplyRenderedListLimit('people'"),'personnel limité �
 assert.ok(css.includes('Readability + interaction patch 2026-10-03'),'correctif lisibilité chantier/personnel présent');
 assert.ok(css.includes('.compact-job:hover')&&css.includes('background:var(--ia-surface-raised)!important'),'chantiers lisibles au survol');
 assert.ok(css.includes('dialog .person-section')&&css.includes('color:var(--ia-paper-text)!important'),'dossier personnel texte foncé');
-assert.ok(css.includes('dialog .link')&&css.includes('color:var(--ia-accent-strong)!important'),'liens de modal contrastés selon le thème');
+assert.ok(css.includes('dialog .link')&&css.includes('color:var(--sx-accent-ink)!important'),'liens de modal contrastés selon le thème');
 assert.ok(html.includes('ia-a-ui.css'),'CSS IA-A chargé');
 assert.ok(html.includes('ia-a-ui.js'),'JS IA-A chargé');
 assert.ok(build.includes("'ia-a-ui.css'"),'CSS IA-A inclus au build');

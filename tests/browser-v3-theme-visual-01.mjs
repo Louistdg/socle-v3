@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {connectBrowser,waitForApp,waitFor} from './helpers/browser-cdp.mjs';
-import {contrastRatio,rgbColor} from './helpers/color-contrast.mjs';
+import {contrastRatio,parseColor,rgbColor} from './helpers/color-contrast.mjs';
 
 if(!process.env.SOCLE_CDP_URL){console.log('browser-v3-theme-visual-01: SKIP hors Browser Gate');process.exit(0)}
 
@@ -54,12 +54,12 @@ try{
       console.log('V3_THEME_MOBILE_ACCESS='+JSON.stringify({width,...menu,chosen}));
     }
 
-    const pageBackgrounds=[];
+    const pageBackgrounds=[],surfaceByTheme=new Map(),surfaceBlueDeltaByTheme=new Map();
     for(const theme of themes){
       const chosen=await tab.evaluate("(()=>{const theme="+JSON.stringify(theme)+";const button=document.querySelector('.v3-theme-button'),menu=document.querySelector('#v3-theme-menu');if(!button||!menu)throw Error('Sélecteur V3 des thèmes absent.');if(menu.hidden)button.click();const option=menu.querySelector('[data-theme=\"'+theme+'\"]');if(!option)throw Error('Thème absent: '+theme);option.click();return{theme:document.body.dataset.v3Theme,stored:localStorage.getItem('socle-v3.theme')}})()",'v3-theme-select-'+theme+'-'+width);
       assert.deepEqual(chosen,{theme,stored:theme},'Le sélecteur de thème applique et mémorise '+theme+'.');
       for(const [route,selector] of routes){
-        const metrics=await tab.evaluate("(async()=>{const route=__ROUTE__,selector=__SELECTOR__;navigate(route);const deadline=Date.now()+7000;while(Date.now()<deadline&&(view!==route||!document.querySelector('#main '+selector)||(route==='accounting'&&serverFinanceState==='loading')))await new Promise(resolve=>setTimeout(resolve,25));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));const main=document.querySelector('#main'),target=main?.querySelector(selector),style=getComputedStyle(document.body),palette=Object.fromEntries(['bg','paper','soft','selected','ink','muted','accent','accent-text'].map(name=>[name,style.getPropertyValue('--v3-'+name).trim()]));return{route,width:innerWidth,theme:document.body.dataset.v3Theme,stored:localStorage.getItem('socle-v3.theme'),heading:main?.querySelector('h1')?.textContent.trim()||'',found:Boolean(target),overflow:document.documentElement.scrollWidth>innerWidth,canvas:style.backgroundColor,palette}})()".replace('__ROUTE__',JSON.stringify(route)).replace('__SELECTOR__',JSON.stringify(selector)),'v3-theme-'+theme+'-'+route+'-'+width);
+        const metrics=await tab.evaluate("(async()=>{const route=__ROUTE__,selector=__SELECTOR__;navigate(route);const deadline=Date.now()+7000;while(Date.now()<deadline&&(view!==route||!document.querySelector('#main '+selector)||(route==='accounting'&&serverFinanceState==='loading')))await new Promise(resolve=>setTimeout(resolve,25));await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));const main=document.querySelector('#main'),target=main?.querySelector(selector),style=getComputedStyle(document.body),palette=Object.fromEntries(['bg','paper','soft','selected','ink','muted','accent','accent-text'].map(name=>[name,style.getPropertyValue('--v3-'+name).trim()]));palette.accentInk=style.getPropertyValue('--sx-accent-ink').trim();return{route,width:innerWidth,theme:document.body.dataset.v3Theme,stored:localStorage.getItem('socle-v3.theme'),heading:main?.querySelector('h1')?.textContent.trim()||'',found:Boolean(target),overflow:document.documentElement.scrollWidth>innerWidth,canvas:style.backgroundColor,palette}})()".replace('__ROUTE__',JSON.stringify(route)).replace('__SELECTOR__',JSON.stringify(selector)),'v3-theme-'+theme+'-'+route+'-'+width);
         assert.equal(metrics.theme,theme,'Le thème actif correspond au choix '+theme+'.');
         assert.equal(metrics.stored,theme,'Le thème est mémorisé après sélection: '+theme+'.');
         assert.equal(metrics.found,true,route+' affiche son contenu à '+width+'px avec '+theme+'.');
@@ -68,11 +68,22 @@ try{
         assert.ok(contrastRatio(metrics.palette.ink,metrics.palette.paper)>=4.5,'Texte principal lisible sur panneau: '+theme+'.');
         assert.ok(contrastRatio(metrics.palette.muted,metrics.palette.paper)>=4.5,'Texte secondaire lisible sur panneau: '+theme+'.');
         assert.ok(contrastRatio(metrics.palette['accent-text'],metrics.palette.accent)>=4.5,'Bouton principal lisible: '+theme+'.');
+        assert.ok(contrastRatio(metrics.palette.accentInk,metrics.palette.soft)>=4.5,'Texte accentué lisible sur surface douce: '+theme+'.');
+        assert.ok(contrastRatio(metrics.palette.accentInk,metrics.palette.selected)>=4.5,'Texte accentué lisible sur surface sélectionnée: '+theme+'.');
+        if(theme==='nuit'||theme==='graphite')assert.equal(rgbColor(metrics.palette.accent),'rgb(124, 37, 202)','Le violet de référence reste le remplissage de '+theme+'.');
         results.push(metrics);
-        if(route==='home')pageBackgrounds.push(rgbColor(metrics.palette.bg));
+        if(route==='home'){
+          const background=rgbColor(metrics.palette.bg),surface=rgbColor(metrics.palette.paper);
+          pageBackgrounds.push(background);surfaceByTheme.set(theme,surface);
+          const blueDelta=Math.abs(parseColor(background)[2]-parseColor(surface)[2]);
+          surfaceBlueDeltaByTheme.set(theme,blueDelta);
+          assert.ok(blueDelta>=6,'La surface se distingue du canevas au canal bleu: '+theme+'.');
+        }
       }
     }
     assert.equal(new Set(pageBackgrounds).size,themes.length,'Les thèmes visibles ont des fonds distincts à '+width+'px.');
+    assert.notEqual(surfaceByTheme.get('nuit'),surfaceByTheme.get('graphite'),'Nuit et Graphite gardent des surfaces distinctes à '+width+'px.');
+    if(width===1440)console.log('V3_THEME_SURFACE_IDENTITY='+JSON.stringify({nuitBlueDelta:surfaceBlueDeltaByTheme.get('nuit'),graphiteBlueDelta:surfaceBlueDeltaByTheme.get('graphite'),nuitSurface:surfaceByTheme.get('nuit'),graphiteSurface:surfaceByTheme.get('graphite'),surfacesDistinct:surfaceByTheme.get('nuit')!==surfaceByTheme.get('graphite')}));
   }
   console.log('BROWSER_V3_THEME_VISUAL_01=PASS '+JSON.stringify({themes,widths:widths.map(([width])=>width),pages:routes.map(([route])=>route),checks:results.length,mobileMenu:'scrollable'}));
 }finally{await browser.close()}
