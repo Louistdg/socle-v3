@@ -6,15 +6,21 @@ const css=readFileSync(new URL('../web/v3-themes.css',import.meta.url),'utf8');
 const v3css=readFileSync(new URL('../web/v3.css',import.meta.url),'utf8');
 const tokenCss=readFileSync(new URL('../web/design-tokens.css',import.meta.url),'utf8');
 const paletteIds=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre'];
-const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft'];
-const blocks=[...css.matchAll(/body\.socle-v3\[data-v3-theme="([^"]+)"\]\{([^}]+)\}/g)];
+const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft','--sx-info-soft'];
+const themeRules=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)];
+const blocks=themeRules.filter(([,selector])=>/^body\.socle-v3\[data-v3-theme="[^"]+"\]$/.test(selector.trim()));
+function declarations(block){return Object.fromEntries([...block.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+)\s*;/g)].map(match=>[match[1],match[2].trim()]));}
+function effectiveTheme(id){const result={};for(const [,selectorText,block] of themeRules){const selectors=selectorText.split(',').map(value=>value.trim());if(selectors.includes('body.socle-v3[data-v3-theme]')||selectors.includes(`body.socle-v3[data-v3-theme="${id}"]`))Object.assign(result,declarations(block));}return result;}
 const mobileMenu=[...css.matchAll(/\.v3-theme-menu\{([^}]+)\}/g)].map(match=>match[1]).find(rule=>rule.includes('100dvh'))||'';
-assert.deepEqual(blocks.map(match=>match[1]),paletteIds,'les treize palettes gardent leurs identifiants et leur ordre');
-for(const [,id,block] of blocks){
-  for(const role of roles)assert.match(block,new RegExp(`${role}:\\s*[^;]+;`),`${id}: jeton ${role} présent`);
-  assert.match(block,/--v3-bg:var\(--sx-canvas\)/,`${id}: alias historique du fond`);
-  assert.match(block,/--v3-paper:var\(--sx-surface\)/,`${id}: alias historique des panneaux`);
-  assert.match(block,/--ia-accent:var\(--sx-accent\)/,`${id}: alias IA conservé`);
+const registeredIds=[...js.matchAll(/\['([^']+)','([^']+)'/g)].slice(0,13).map(match=>match[1]);
+assert.deepEqual(registeredIds,paletteIds,'les treize palettes gardent leurs identifiants et leur ordre');
+assert.equal(blocks.length,13,'treize règles de palette conservent un point d’entrée dédié');
+for(const id of paletteIds){
+  const theme=effectiveTheme(id);
+  for(const role of roles)assert.ok(role in theme,`${id}: jeton ${role} présent dans la cascade partagée`);
+  assert.equal(theme['--v3-bg'],'var(--sx-canvas)',`${id}: alias historique du fond`);
+  assert.equal(theme['--v3-paper'],'var(--sx-surface)',`${id}: alias historique des panneaux`);
+  assert.equal(theme['--ia-accent'],'var(--sx-accent)',`${id}: alias IA conservé`);
   assert.ok(js.includes(`['${id}'`),`${id}: option dans le sélecteur`);
   assert.ok(css.includes(`.v3-theme-swatch[data-palette=${id}]`)||css.includes('.v3-theme-swatch{'),`${id}: pastille thématique`);
 }

@@ -11,7 +11,7 @@ const index=readFileSync(join(root,'web/index.html'),'utf8');
 const production=readFileSync(join(root,'scripts/production.mjs'),'utf8');
 const paletteIds=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre'];
 const paletteNames=['Ciment','Ardoise','Mousse','Bitume','Graphite','Grès','Chantier','Béton','Lin','Zinc','Sapin','Acajou','Cuivre'];
-const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft'];
+const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft','--sx-info-soft'];
 const aliases={'--v3-bg':'--sx-canvas','--v3-paper':'--sx-surface','--v3-ink':'--sx-ink','--v3-muted':'--sx-muted','--v3-line':'--sx-line','--v3-accent':'--sx-accent','--v3-soft':'--sx-raised','--v3-selected':'--sx-overlay','--v3-control-line':'--sx-line-strong','--v3-accent-text':'--sx-on-accent','--v3-accent-text-on-tint':'--sx-ink'};
 function declarations(block){return Object.fromEntries([...block.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+)\s*;/g)].map(m=>[m[1],m[2].trim()]));}
 function color(value){
@@ -24,8 +24,17 @@ function color(value){
 function luminance(c){const values=c.slice(0,3).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4});return .2126*values[0]+.7152*values[1]+.0722*values[2];}
 function ratio(a,b){const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);}
 function round(n){return Math.round(n*100)/100;}
-const themeMatches=[...themes.matchAll(/body\.socle-v3\[data-v3-theme="([^"]+)"\]\{([^}]*)\}/g)];
+const themeRules=[...themes.matchAll(/([^{}]+)\{([^{}]*)\}/g)];
+const themeMatches=themeRules.filter(([,selector])=>/^body\.socle-v3\[data-v3-theme="[^"]+"\]$/.test(selector.trim()));
 assert.equal(themeMatches.length,13,'exactement treize blocs de palette complets');
+function effectiveTheme(id){
+  const result={};
+  for(const [,selectorText,body] of themeRules){
+    const selectors=selectorText.split(',').map(value=>value.trim());
+    if(selectors.includes('body.socle-v3[data-v3-theme]')||selectors.includes(`body.socle-v3[data-v3-theme="${id}"]`))Object.assign(result,declarations(body));
+  }
+  return result;
+}
 const jsNames=[...themeJs.matchAll(/\['([^']+)','([^']+)'/g)].slice(0,13);
 assert.deepEqual(jsNames.map(m=>[m[1],m[2]]),paletteIds.map((id,i)=>[id,paletteNames[i]]),'identifiants, libellés et ordre existants');
 assert(index.indexOf('href="design-tokens.css"')>=0&&index.indexOf('href="design-tokens.css"')<index.indexOf('href="style.css"'),'les jetons chargent avant les feuilles');
@@ -41,8 +50,8 @@ assert(production.includes('const standalonePageStyle = ')&&production.includes(
 assert(production.includes("style-src 'sha256-"+String.fromCharCode(36)+"{standaloneStyleHash}'"),'CSP ne lie pas le style autonome à son empreinte');
 const matrix=[];
 for(let i=0;i<themeMatches.length;i++){
-  const [,id,body]=themeMatches[i];assert.equal(id,paletteIds[i],'ordre palette '+(i+1));
-  const d=declarations(body);
+  const id=/data-v3-theme="([^"]+)"/.exec(themeMatches[i][1])[1];assert.equal(id,paletteIds[i],'ordre palette '+(i+1));
+  const d=effectiveTheme(id);
   for(const role of roles)assert(role in d,id+': jeton requis absent '+role);
   for(const [alias,target] of Object.entries(aliases))assert.equal(d[alias],'var('+target+')',id+': alias '+alias);
   const surface=color(d['--sx-surface']),raised=color(d['--sx-raised']),ink=color(d['--sx-ink']),muted=color(d['--sx-muted']),accent=color(d['--sx-accent']),onAccent=color(d['--sx-on-accent']),ring=color(d['--sx-accent-line']);
@@ -57,7 +66,7 @@ for(let i=0;i<themeMatches.length;i++){
 }
 const cssFiles=['style.css','v3.css','ui-foundation.css','mobile-nav.css'];
 for(const file of cssFiles){
- const css=readFileSync(join(root,'web',file),'utf8');
+ const css=readFileSync(file==='style.css'&&process.env.SOCLE_STYLE_FILE?process.env.SOCLE_STYLE_FILE:join(root,'web',file),'utf8');
  assert(!/(#[0-9a-f]{3,8}\b|rgba?\s*\()/i.test(css),'couleur littérale hors jetons dans '+file);
 }
 const allCss=cssFiles.map(f=>readFileSync(join(root,'web',f),'utf8')).join('\n')+'\n'+themes.replace(/--sx-[\w-]+\s*:\s*[^;{}]+;/g,'');
