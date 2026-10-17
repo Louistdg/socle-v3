@@ -40,6 +40,17 @@ try{
   await tab.evaluate(`navigate('planning');iaBSetPlanningAnchor(${JSON.stringify(setup.sourceDate)});${frames}`,'open-fixture-week');
   await waitFor(()=>tab.evaluate(`!iaBPlanningState.loading&&iaBPlanningState.data&&document.querySelector('[data-assignment-id="${setup.id}"]')`,'fixture-rendered',5_000),'l’affectation test est rendue',15_000);
 
+  // Le glissé n'existe que pour un pointeur fin. Un Chromium sans interface sous
+  // Linux annonce « aucun survol, pointeur grossier » : le produit refuse alors
+  // le geste, à juste titre. Le harnais force donc un pointeur de bureau
+  // (--blink-settings), et cette assertion le vérifie explicitement plutôt que
+  // de laisser la suite dépendre du matériel annoncé par la machine.
+  const pointer=await tab.evaluate(`(()=>({combo:matchMedia('(hover: hover) and (pointer: fine)').matches,available:iaBPlanningDragAvailable(),draggable:document.querySelectorAll('#main .ia-b-slot[draggable="true"]').length}))()`,'pointer-capability');
+  assert.equal(pointer.combo,true,'Le harnais doit annoncer un pointeur fin et un survol (voir --blink-settings de scripts/browser-gate.mjs).');
+  assert.equal(pointer.available,true,'Avec un pointeur fin, le glissé est disponible.');
+  assert.ok(pointer.draggable>0,'Avec un pointeur fin, les cartes du planning sont déplaçables.');
+  console.log('DRAG_POINTER='+JSON.stringify(pointer));
+
   const cancel=await tab.evaluate(`(()=>{const card=document.querySelector('[data-assignment-id="${setup.id}"]'),data=new DataTransfer();card.dispatchEvent(new DragEvent('dragstart',{bubbles:true,cancelable:true,dataTransfer:data}));const selected=card.classList.contains('is-move-selected');card.dispatchEvent(new DragEvent('dragend',{bubbles:true}));return{selected,requests:window.__planningDragRequests.length,sourceDate:iaBPlanningState.data.assignments.find(row=>String(row.id)===${JSON.stringify(setup.id)})?.date,selection:iaBMoveSelection}})()`,'cancel-drag');
   assert.equal(cancel.selected,true,'La carte source est visible comme sélectionnée pendant le geste.');
   assert.equal(cancel.requests,0,'L’annulation n’envoie aucune requête au serveur.');
@@ -71,8 +82,10 @@ try{
 
   await tab.call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true,screenWidth:390,screenHeight:844});
   await tab.call('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:5});
-  await tab.evaluate(frames,'mobile-layout-settled');
-  const mobile=await tab.evaluate(`(()=>({draggable:document.querySelectorAll('#main .ia-b-slot[draggable="true"]').length,moveChoices:document.querySelectorAll('#main .ia-b-move-choice').length,hasTouchHandlers:typeof iaBPlanningDragSource==='undefined'}))()`,'mobile-drag-availability');
+  await tab.call('Emulation.setEmulatedMedia',{features:[{name:'hover',value:'none'},{name:'pointer',value:'coarse'}]});
+  await tab.evaluate(`render();${frames}`,'mobile-layout-settled');
+  const mobile=await tab.evaluate(`(()=>({available:iaBPlanningDragAvailable(),draggable:document.querySelectorAll('#main .ia-b-slot[draggable="true"]').length,moveChoices:document.querySelectorAll('#main .ia-b-move-choice').length,hasTouchHandlers:typeof iaBPlanningDragSource==='undefined'}))()`,'mobile-drag-availability');
+  assert.equal(mobile.available,false,'Au doigt, le glissé de bureau se désactive.');
   assert.equal(mobile.draggable,0,'Aucune carte n’est déplaçable au doigt.');
   assert.ok(mobile.moveChoices>0,'Le contrôle de l’étape 1 reste disponible au tactile.');
   console.log('DRAG_MOBILE='+JSON.stringify(mobile));

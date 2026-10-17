@@ -248,6 +248,7 @@ async function run(index,configuration,chrome,originalHash){
     checkInterrupted();
     const browser=startLogged(chrome,[
       '--headless=new','--no-sandbox','--disable-dev-shm-usage','--no-first-run','--no-default-browser-check',
+      '--blink-settings=primaryPointerType=4,availablePointerTypes=4,primaryHoverType=2,availableHoverTypes=2',
       '--disable-background-networking','--disable-component-update','--disable-default-apps','--disable-extensions','--disable-sync',
       '--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows',
       '--remote-debugging-address=127.0.0.1','--remote-debugging-port='+configuration['cdp-port'],
