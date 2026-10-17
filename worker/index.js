@@ -1084,14 +1084,15 @@ async function projectNoteRoute(request,env,ctx,projectId,noteId=null){
   await ensureLegacyFieldDataImported(env,ctx,state||{});
   if(request.method==='GET'&&!noteId){
     const list=await rows(env.DB.prepare("SELECT n.*,p.first_name,p.last_name FROM field_project_notes n LEFT JOIN profiles p ON p.id=n.created_by WHERE n.organization_id=? AND n.project_id=? AND n.archived_at IS NULL AND (?='OWNER' OR n.visibility<>'Patron uniquement') ORDER BY n.created_at DESC,n.id DESC LIMIT 250").bind(ctx.organizationId,String(projectId),ctx.roleCode));
-    return json({notes:list.map(row=>({id:row.id,projectId:String(row.project_id),date:row.note_date,visibility:row.visibility,text:row.body,photoName:row.photo_name||'',photoDocumentIds:parseJson(row.photo_document_ids_json||'[]',[]),authorPersonId:row.author_person_id||null,createdBy:row.created_by,author:[row.first_name,row.last_name].filter(Boolean).join(' ')||row.created_by,createdAt:row.created_at,updatedAt:row.updated_at||row.created_at}))});
+    return json({notes:list.map(row=>({id:row.id,projectId:String(row.project_id),date:row.note_date,category:row.category||'Avancement',visibility:row.visibility,text:row.body,photoName:row.photo_name||'',photoDocumentIds:parseJson(row.photo_document_ids_json||'[]',[]),authorPersonId:row.author_person_id||null,createdBy:row.created_by,author:[row.first_name,row.last_name].filter(Boolean).join(' ')||row.created_by,createdAt:row.created_at,updatedAt:row.updated_at||row.created_at}))});
   }
   if(request.method==='POST'&&!noteId){
     await requirePermission(env,ctx,'project_notes.create');
-    const data=await body(request,50000),visibility=String(data.visibility||'Équipe et patron'),text=fieldText(data.text||'',4000),photoIds=await fieldPhotoDocumentIds(env,ctx,projectId,data.photoDocumentIds),key=optionalOperationKey(data);
+    const data=await body(request,50000),visibility=String(data.visibility||'Équipe et patron'),category=String(data.category||'Avancement'),text=fieldText(data.text||'',4000),photoIds=await fieldPhotoDocumentIds(env,ctx,projectId,data.photoDocumentIds),key=optionalOperationKey(data);
+    if(!['Avancement','Problème','Livraison','Sécurité'].includes(category))return json({error:"Type de relève invalide."},400);
     if(!['Équipe et patron','Patron uniquement'].includes(visibility)||(!text&&!photoIds.length))return json({error:"Remarque chantier invalide."},400);
     if(ctx.roleCode!=='OWNER'&&visibility==='Patron uniquement')return json({error:"Seul le propriétaire peut créer une remarque privée patron."},403);
-    const replayMatchesNote=replay=>String(replay.project_id)===String(projectId)&&replay.body===text&&String(replay.visibility||'')===String(visibility||'')&&JSON.stringify(parseJson(replay.photo_document_ids_json||'[]',[]))===JSON.stringify(photoIds);
+    const replayMatchesNote=replay=>String(replay.project_id)===String(projectId)&&replay.body===text&&String(replay.visibility||'')===String(visibility||'')&&String(replay.category||'Avancement')===category&&JSON.stringify(parseJson(replay.photo_document_ids_json||'[]',[]))===JSON.stringify(photoIds);
     if(key){
       const replay=await env.DB.prepare('SELECT * FROM field_project_notes WHERE organization_id=? AND created_by=? AND operation_key=?').bind(ctx.organizationId,ctx.uid,key).first();
       if(replay){
@@ -1103,8 +1104,8 @@ async function projectNoteRoute(request,env,ctx,projectId,noteId=null){
     if(!photoName&&photoIds[0]){const photo=await secureDocument(env,ctx,photoIds[0]);photoName=fieldText(photo?.original_name||'',255)}
     const idNote=id('project-note'),stamp=now(),personId=await currentPersonId(env,ctx);
     const statements=[
-      env.DB.prepare('INSERT INTO field_project_notes(id,organization_id,project_id,note_date,visibility,body,photo_name,author_person_id,created_by,created_at,operation_key,photo_document_ids_json,updated_by,updated_at,archived_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL)').bind(idNote,ctx.organizationId,String(projectId),stamp.slice(0,10),visibility,text,photoName||null,personId,ctx.uid,stamp,key,JSON.stringify(photoIds),ctx.uid,stamp),
-      auditStatement(env,ctx,'project_note.created','project_note',idNote,{project_id:String(projectId),visibility,photo_document_ids:photoIds,author_person_id:personId})
+      env.DB.prepare('INSERT INTO field_project_notes(id,organization_id,project_id,note_date,visibility,body,photo_name,author_person_id,created_by,created_at,operation_key,photo_document_ids_json,updated_by,updated_at,archived_at,category) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?)').bind(idNote,ctx.organizationId,String(projectId),stamp.slice(0,10),visibility,text,photoName||null,personId,ctx.uid,stamp,key,JSON.stringify(photoIds),ctx.uid,stamp,category),
+      auditStatement(env,ctx,'project_note.created','project_note',idNote,{project_id:String(projectId),visibility,category,photo_document_ids:photoIds,author_person_id:personId})
     ];
     try{await dbBatch(env,statements)}catch(error){
       if(key){const replay=await env.DB.prepare('SELECT * FROM field_project_notes WHERE organization_id=? AND created_by=? AND operation_key=?').bind(ctx.organizationId,ctx.uid,key).first();if(replay){if(replayMatchesNote(replay))return json({id:replay.id,replayed:true});return json({error:"Cette clé d’opération a déjà servi pour une autre remarque."},409)}}
@@ -1656,8 +1657,13 @@ async function taskRoutes(request,url,env,ctx,projectId=null,taskId=null){
     if(!manages&&!views)throw Object.assign(Error("Vous ne pouvez pas consulter les tâches chantier."),{status:403});
     const candidates=await rows(env.DB.prepare("SELECT * FROM project_tasks WHERE organization_id=? AND archived_at IS NULL ORDER BY CASE priority WHEN 'urgent' THEN 0 WHEN 'high' THEN 1 WHEN 'normal' THEN 2 ELSE 3 END,updated_at DESC").bind(ctx.organizationId)),visible=[];
     for(const task of candidates){if(!manages&&!taskIsParticipant(task,ctx.uid))continue;if(!await hasProjectScope(env,ctx,task.project_id))continue;visible.push(task)}
-    const labels=await profileLabels(env,ctx);
-    return json({tasks:visible.map(task=>({...taskJson(task),assignedToName:task.assigned_to?(labels.get(task.assigned_to)||task.assigned_to):'',createdByName:labels.get(task.created_by)||task.created_by}))});
+    const labels=await profileLabels(env,ctx),fieldJournal=[];
+    if(ctx.roleCode==='OWNER'){
+      const entries=await rows(env.DB.prepare("SELECT n.id,n.project_id,n.category,n.body,n.created_by,n.created_at,p.first_name,p.last_name FROM field_project_notes n LEFT JOIN profiles p ON p.id=n.created_by WHERE n.organization_id=? AND n.archived_at IS NULL AND n.category IN ('Problème','Sécurité') ORDER BY n.created_at DESC,n.id DESC LIMIT 50").bind(ctx.organizationId));
+      const workspace=await organizationWorkspaceState(env,ctx.organizationId,{readOnly:ctx.preview});
+      for(const entry of entries){if(!await hasProjectScope(env,ctx,entry.project_id))continue;const project=workspaceProject(workspace,entry.project_id);fieldJournal.push({id:String(entry.id),projectId:String(entry.project_id),projectName:String(project?.name||project?.reference||entry.project_id),category:String(entry.category),text:String(entry.body||''),author:[entry.first_name,entry.last_name].filter(Boolean).join(' ')||String(entry.created_by),createdAt:String(entry.created_at),source:'field-journal'});}
+    }
+    return json({tasks:visible.map(task=>({...taskJson(task),assignedToName:task.assigned_to?(labels.get(task.assigned_to)||task.assigned_to):'',createdByName:labels.get(task.created_by)||task.created_by})),fieldJournal});
   }
   if(projectId!==null){
     await requireProjectScope(env,ctx,projectId);
@@ -2415,7 +2421,7 @@ async function homeOverviewRoute(request,url,env,actorCtx){
   if(!access)return json({error:'Accès effectif introuvable.'},404);
   const policy=await accessPolicy(env,ctx),role=homeOverviewRole(access),state=await organizationWorkspaceState(env,ctx.organizationId,{readOnly:ctx.preview});
   if(role==='PENDING')return json({error:'Le rôle serveur effectif est indisponible.'},403);
-  if(!state)return json({access:{...access,roleCode:role},preview:effective.preview,from,to,tasks:[],assignments:[],absences:[],obligations:[],messages:[],projects:[],widgetScopes:{tasks:role==='OWNER'?'organization':'person',week:role==='OWNER'?'organization':'person',obligations:role==='OWNER'?'organization':'person',messages:'authorized',quickActions:'rbac'}});
+  if(!state)return json({access:{...access,roleCode:role},preview:effective.preview,from,to,tasks:[],assignments:[],absences:[],obligations:[],messages:[],projects:[],fieldJournal:[],widgetScopes:{tasks:role==='OWNER'?'organization':'person',week:role==='OWNER'?'organization':'person',obligations:role==='OWNER'?'organization':'person',messages:'authorized',quickActions:'rbac'}});
   if(!ctx.preview)await ensureLegacyFieldDataImported(env,ctx,state);
   const linkedPersonId=await currentPersonId(env,ctx),personId=String(linkedPersonId||'');
   if(['TEAM_LEAD','WORKER'].includes(role)&&!personId)return json({error:'Ce profil terrain n’est relié à aucune personne du roster.'},403);
@@ -2477,13 +2483,22 @@ async function homeOverviewRoute(request,url,env,actorCtx){
   const projects=(state.jobs||[]).filter(job=>policy.owner?projectIds.has(String(job.id))||assignments.some(item=>String(item.projectId)===String(job.id)):projectIds.has(String(job.id))).map(job=>({id:String(job.id),reference:String(job.reference||job.ref||''),name:String(job.name||''),town:String(job.town||''),phase:String(job.phase||job.status||'')}));
 
   const labels=await profileLabels(env,ctx);
+  const fieldJournal=[];
+  if(policy.owner){
+    const journalRows=await rows(env.DB.prepare("SELECT n.id,n.project_id,n.category,n.body,n.created_by,n.created_at,p.first_name,p.last_name FROM field_project_notes n LEFT JOIN profiles p ON p.id=n.created_by WHERE n.organization_id=? AND n.archived_at IS NULL AND n.category IN ('Problème','Sécurité') ORDER BY n.created_at DESC,n.id DESC LIMIT 50").bind(ctx.organizationId));
+    for(const row of journalRows){
+      if(!await hasProjectScope(env,ctx,row.project_id))continue;
+      const project=workspaceProject(state,row.project_id);
+      fieldJournal.push({id:String(row.id),projectId:String(row.project_id),projectName:String(project?.name||project?.reference||row.project_id),category:String(row.category),text:String(row.body||''),author:[row.first_name,row.last_name].filter(Boolean).join(' ')||String(row.created_by),createdAt:String(row.created_at)});
+    }
+  }
   return json({
     access:{...access,roleCode:role},
     preview:effective.preview,
     previewedBy:effective.preview?effective.actorUserId:null,
     from,to,
     tasks:tasks.map(task=>({...taskJson(task),assignedToName:task.assigned_to?(labels.get(task.assigned_to)||task.assigned_to):'',createdByName:labels.get(task.created_by)||task.created_by})),
-    assignments,absences,obligations:obligations.slice(0,24),messages,projects,
+    assignments,absences,obligations:obligations.slice(0,24),messages,projects,fieldJournal,
     widgetScopes:{tasks:policy.owner?'organization':'person',week:policy.owner?'organization':'person',obligations:policy.owner?'organization':'person',messages:'authorized',quickActions:'rbac'}
   });
 }
