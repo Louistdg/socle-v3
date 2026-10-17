@@ -51,6 +51,15 @@ async function chooseRole(role,{leave=true}={}){const target=await tab.evaluate(
 }
 try{
   await loginOwner();
+  const selectorAccounts=await tab.evaluate(`accessMembers().map(member=>({key:member.key,role:member.serverRoleCode||'',owner:Boolean(member.owner),linked:member.id!=null,hasAccount:Boolean(member.serverUserId)}))`,'preview-selector-accounts');
+  const selectorEvidence=[];
+  for(const account of selectorAccounts){
+    await tab.evaluate(`chooseAccessMember(${JSON.stringify(account.key)})`,'preview-selector-select-'+account.role);
+    const controls=await tab.evaluate(`({actions:[...document.querySelectorAll('.access-preview-actions button')].map(button=>({label:button.innerText.trim(),disabled:button.disabled})),notice:document.querySelector('.access-preview-unavailable')?.innerText||''})`,'preview-selector-controls-'+account.role);
+    selectorEvidence.push({...account,...controls});
+  }
+  const ownerSelector=selectorEvidence.find(item=>item.owner);assert.ok(ownerSelector&&!ownerSelector.actions.some(action=>/Tester cet accès/.test(action.label)),'Le compte propriétaire n’est pas proposé comme cible.');
+  console.log('PREVIEW_SELECTOR_MEASURE='+JSON.stringify(selectorEvidence));
   await setViewport(1440,false);
   const originalTheme=await tab.evaluate(`document.body.dataset.socleTheme||'moss'`,'preview-original-theme');
   await renderedContrastForThemes();
