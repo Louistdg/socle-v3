@@ -17,6 +17,12 @@ try{
 
   for(const [width,height] of widths){
     await tab.call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<761,screenWidth:width,screenHeight:height});
+    if(width>=900){
+      const pickers=await tab.evaluate(`(()=>Object.fromEntries(['#socleThemeButton','.v3-theme-button'].map(selector=>{const el=document.querySelector(selector);if(!el)return[selector,{present:false}];const style=getComputedStyle(el),rect=el.getBoundingClientRect();return[selector,{present:true,display:style.display,visibility:style.visibility,rect:{x:rect.x,y:rect.y,width:rect.width,height:rect.height},visible:style.display!=='none'&&style.visibility!=='hidden'&&rect.width>0&&rect.height>0}]})))()`,'v3-theme-picker-desktop-'+width);
+      assert.equal(pickers['#socleThemeButton']?.visible,false,'Le sélecteur IA_A_THEMES historique reste absent de l’interface V3 desktop.');
+      assert.equal(pickers['.v3-theme-button']?.visible,true,'Le sélecteur V3 est visible sur desktop.');
+      console.log('V3_THEME_PICKER_DESKTOP='+JSON.stringify({width,pickers}));
+    }
     if(width<761){
       const menu=await tab.evaluate(`(async()=>{
         const button=document.querySelector('.v3-theme-button'),menu=document.querySelector('#v3-theme-menu');

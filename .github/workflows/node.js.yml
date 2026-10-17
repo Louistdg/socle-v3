@@ -16,7 +16,7 @@ concurrency:
 jobs:
   release:
     name: Publish pub socle V3
-    needs: [core]
+    needs: [core, browser]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'pub socle V3')
     runs-on: ubuntu-latest
     permissions:
@@ -29,7 +29,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh release create pub-socle-v3 --target "$GITHUB_SHA" --title "pub socle V3" --notes-file docs/pub-socle-v3.md
+          version=$(node -p "require('./package.json').version")
+          tag="pub-socle-v3-v${version}"
+          gh release create "$tag" --target "$GITHUB_SHA" --title "pub socle V3 ${version}" --notes-file docs/pub-socle-v3.md
 
   core:
     name: Core / Node 22
@@ -69,6 +71,9 @@ jobs:
             echo "No npm manifest on this ref; no external npm dependency install required."
           fi
 
+      - name: Capture generated file bytes
+        run: node scripts/check-build-output.mjs capture "$RUNNER_TEMP/build-output-before.json"
+
       - name: Build frontend + worker
         shell: bash
         run: |
@@ -78,6 +83,9 @@ jobs:
           else
             node scripts/build.mjs
           fi
+
+      - name: Check generated files byte-for-byte
+        run: node scripts/check-build-output.mjs verify "$RUNNER_TEMP/build-output-before.json"
 
       - name: Check BatiNova XL QA syntax
         run: node --check scripts/simulation/batinova-xl/qa-report.mjs
@@ -156,6 +164,9 @@ jobs:
             npm install --ignore-scripts --package-lock=false
           fi
 
+      - name: Capture browser build file bytes
+        run: node scripts/check-build-output.mjs capture "$RUNNER_TEMP/browser-build-before.json"
+
       - name: Build browser candidate
         shell: bash
         run: |
@@ -165,6 +176,9 @@ jobs:
           else
             node scripts/build.mjs
           fi
+
+      - name: Check browser build files byte-for-byte
+        run: node scripts/check-build-output.mjs verify "$RUNNER_TEMP/browser-build-before.json"
 
       - name: Prepare BatiNova data
         shell: bash

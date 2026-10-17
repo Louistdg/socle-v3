@@ -20,7 +20,7 @@ export function backupConfig(env=process.env){
 }
 const h=(key,data,encoding)=>createHmac('sha256',key).update(data).digest(encoding);
 function s3Url(c,key='',query={}){const u=new URL(c.endpoint);if(c.style==='path')u.pathname=`/${c.bucket}${key?'/'+key:''}`;else{u.hostname=`${c.bucket}.${u.hostname}`;u.pathname=key?`/${key}`:'/';}for(const [k,v] of Object.entries(query))u.searchParams.set(k,v);return u;}
-async function s3Request(c,method,key='',body=Buffer.alloc(0),query={}){
+export async function s3Request(c,method,key='',body=Buffer.alloc(0),query={}){
  const u=s3Url(c,key,query);
  const date=new Date().toISOString().replace(/[:-]|\.\d{3}/g,'');
  const day=date.slice(0,8);
@@ -100,7 +100,7 @@ export function selectStaleBackupKeys(objects,newestKey,retention=BACKUP_RETENTI
  for(const object of ordered){if(keep.size>=retention)break;keep.add(object.key);}
  return ordered.filter(object=>!keep.has(object.key)).map(object=>object.key);
 }
-async function listS3Objects(c){
+export async function listS3Objects(c){
  const objects=[];let continuationToken=null;
  do{
   const query={'list-type':'2',prefix:'daily/','encoding-type':'url'};
