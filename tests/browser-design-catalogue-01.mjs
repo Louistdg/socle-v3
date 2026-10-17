@@ -24,8 +24,8 @@ try{
         const required=['.button-primary','.button:not(.button-primary)','.button-danger','.field[type=number]','.field[type=date]','.field[type=search]','.field[aria-invalid=true]','.field:disabled','table thead','tbody tr[aria-selected=true]','.primitive-menu','.primitive-dialog','.notice','.tooltip-demo','.resource-card .card-head','.resource-card .card-meta','.resource-card .card-state','.resource-card .card-foot','.status-ok','.status-warn','.status-danger','.state-block','.spinner','.state-error'];
         const missing=required.filter(selector=>!document.querySelector(selector));
         const control=document.querySelector('.field:not([disabled])'),card=document.querySelector('.resource-card'),primary=document.querySelector('.button-primary');
-        control.focus();const fieldStyle=getComputedStyle(control),cardStyle=getComputedStyle(card),root=getComputedStyle(document.body),accent=root.getPropertyValue('--sx-accent').trim(),hex=/^#([a-f0-9]{6})$/i.exec(accent),accentRGB=hex?'rgb('+[0,2,4].map(i=>parseInt(hex[1].slice(i,i+2),16)).join(', ')+')':'';
-        return{theme:document.body.dataset.v3Theme,viewport:innerWidth,missing,controlHeight:Math.round(control.getBoundingClientRect().height),controlMin:fieldStyle.minHeight,focusVisible:control.matches(':focus-visible'),focusRing:fieldStyle.boxShadow,accentRGB,buttonHeight:Math.round(primary.getBoundingClientRect().height),cardShadow:cardStyle.boxShadow,background:root.backgroundColor,accent,label:${JSON.stringify(label)}};
+        control.focus();const fieldStyle=getComputedStyle(control),cardStyle=getComputedStyle(card),root=getComputedStyle(document.body),accent=root.getPropertyValue('--sx-accent').trim(),hex=/^#([a-f0-9]{6})$/i.exec(accent),accentRGB=hex?'rgb('+[0,2,4].map(i=>parseInt(hex[1].slice(i,i+2),16)).join(', ')+')':'';const ink=root.getPropertyValue('--sx-accent-ink').trim(),hexInk=/^#([a-f0-9]{6})$/i.exec(ink),accentInkRGB=hexInk?'rgb('+[0,2,4].map(i=>parseInt(hexInk[1].slice(i,i+2),16)).join(', ')+')':'';
+        return{theme:document.body.dataset.v3Theme,viewport:innerWidth,missing,controlHeight:Math.round(control.getBoundingClientRect().height),controlMin:fieldStyle.minHeight,focusVisible:control.matches(':focus-visible'),focusRing:fieldStyle.boxShadow,accentRGB,accentInkRGB,buttonHeight:Math.round(primary.getBoundingClientRect().height),cardShadow:cardStyle.boxShadow,background:root.backgroundColor,accent,label:${JSON.stringify(label)}};
       })()`,'catalogue-metrics-'+theme+'-'+width);
       assert.deepEqual(metrics.missing,[],'Toutes les primitives sont visibles dans '+label+' à '+width+' px.');
       assert.equal(metrics.theme,theme,'la palette choisie est réellement appliquée');
@@ -33,7 +33,7 @@ try{
       assert.equal(metrics.buttonHeight,mobile?48:44,'cible primaire tactile à '+width+' px');
       assert.equal(metrics.focusVisible,true,'le champ focalisé expose :focus-visible');
       assert.notEqual(metrics.focusRing,'none','le champ focalisé dessine son anneau visible');
-      assert.ok(metrics.focusRing.includes(metrics.accentRGB),'l’anneau de focus suit la palette courante');
+      assert.ok(metrics.focusRing.includes(metrics.accentInkRGB),'l’anneau de focus suit la palette courante, dans sa variante lisible (--sx-accent-ink) : '+JSON.stringify({ring:metrics.focusRing,ink:metrics.accentInkRGB}));
       assert.equal(metrics.cardShadow,'none','la carte centrale reste sans ombre');
       const screenshot=await tab.call('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:true});
       writeFileSync(resolve(artifacts,`${theme}-${width}.png`),Buffer.from(screenshot.data,'base64'));
