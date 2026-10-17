@@ -1,0 +1,22 @@
+/* SOCLE design scale: shared dimensions plus the default Ciment palette. */
+:root {
+  color-scheme: light;
+  --sx-canvas:#F4F5F4; --sx-surface:#FFFFFF; --sx-raised:#E9ECEA; --sx-overlay:#FFFFFF; --sx-sunken:#F1F3F1;
+  --sx-line:rgba(24,33,30,.12); --sx-line-strong:rgba(24,33,30,.22);
+  --sx-ink:#18211E; --sx-ink-soft:#34413C; --sx-muted:#56635D; --sx-faint:#66736D; --sx-on-accent:#FFFFFF;
+  --sx-accent:#155E4A; --sx-accent-hover:#104B3B; --sx-accent-soft:rgba(21,94,74,.12); --sx-accent-line:#155E4A;
+  --sx-ok:#246B45; --sx-warn:#824900; --sx-danger:#A12E2A; --sx-info:#245A8A;
+  --sx-ok-soft:rgba(36,107,69,.12); --sx-warn-soft:rgba(130,73,0,.12); --sx-danger-soft:rgba(161,46,42,.12);
+  --sx-font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --sx-font-mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;
+  --sx-text-2xs:11px; --sx-text-xs:12px; --sx-text-sm:13px; --sx-text-base:14px; --sx-text-lg:16px; --sx-text-xl:20px; --sx-text-2xl:26px;
+  --sx-leading-tight:1.25; --sx-leading-normal:1.45; --sx-tracking-caps:.06em;
+  --sx-space-1:2px; --sx-space-2:4px; --sx-space-3:8px; --sx-space-4:12px; --sx-space-5:16px; --sx-space-6:24px; --sx-space-7:32px; --sx-space-8:48px;
+  --sx-mobile-masthead-y:6px; --sx-mobile-nav-clearance:94px; --sx-mobile-section-gap:14px;
+  --sx-radius-xs:4px; --sx-radius-sm:6px; --sx-radius-md:8px; --sx-radius-lg:12px; --sx-radius-pill:999px;
+  --sx-shadow-1:0 1px 2px rgba(0,0,0,.16); --sx-shadow-2:0 8px 24px rgba(0,0,0,.20); --sx-shadow-3:0 16px 48px rgba(0,0,0,.24);
+  --sx-ring:0 0 0 2px var(--sx-accent),0 0 0 4px var(--sx-canvas);
+  --sx-row:34px; --sx-control:32px; --sx-tap:44px;
+  --sx-duration-1:120ms; --sx-duration-2:180ms; --sx-ease:cubic-bezier(.2,.7,.3,1);
+}
+@media(max-width:760px){:root{--sx-row:44px;--sx-control:48px;--sx-tap:48px}}
