@@ -152,3 +152,4 @@ body.socle-v3 #nav button[data-nav-route='permissions']::after{content:'Droits d
 body.socle-v3 #nav button[data-nav-route='partners']::after{content:'Partenaires'}
 body.socle-v3 #nav button[data-nav-route='company']::after{content:'Entreprise'}
 @media(max-width:899px){body.socle-v3 #nav{display:none}body.socle-v3 .topbar{height:var(--sx-topbar);min-height:var(--sx-topbar);padding:0 var(--sx-space-3)}body.socle-v3 #main{padding:var(--sx-space-5) var(--sx-space-3) calc(var(--sx-space-8) + var(--sx-space-8))}body.socle-v3 .global-search{display:none}}
+body.socle-v3:has(#main .ia-home-portals) #main{background-image:radial-gradient(circle,var(--sx-dot-grid) 1px,transparent 1px);background-size:28px 28px;background-color:var(--sx-canvas)}

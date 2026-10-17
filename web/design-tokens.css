@@ -5,6 +5,7 @@
   --sx-line:#2A2834; --sx-line-strong:#33313D;
   --sx-ink:#FFFEFF; --sx-ink-soft:#D8D5E0; --sx-muted:#A19FAB; --sx-faint:#6F6C7A; --sx-on-accent:#FFFEFF;
   --sx-accent:#7C25CA; --sx-accent-hover:#8E33DE; --sx-accent-soft:rgba(124,37,202,.16); --sx-accent-line:rgba(124,37,202,.45);
+  --sx-dot-grid:rgba(255,255,255,.045);
   --sx-ok:#22C55E; --sx-warn:#E2A33C; --sx-danger:#E5484D; --sx-info:#4C8DFF;
   --sx-ok-soft:rgba(34,197,94,.16); --sx-warn-soft:rgba(226,163,60,.16); --sx-danger-soft:rgba(229,72,77,.16);
   --sx-font-ui:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;

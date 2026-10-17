@@ -15,6 +15,7 @@ const browserSuites=[
   {name:'browser-ui-frame-audit-01.mjs'},
   {name:'browser-v3-theme-visual-01.mjs'},
   {name:'browser-ui-foundation-01.mjs'},
+  {name:'browser-design-catalogue-01.mjs'},
   {name:'browser-regression-116.mjs'},
   {name:'browser-mobile-navigation-129.mjs'},
   {name:'browser-navigation-convergence-01.mjs'},

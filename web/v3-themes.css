@@ -1,4 +1,5 @@
 /* Thirteen complete role palettes. The original theme ids and labels remain stable. */
+body.socle-v3[data-v3-theme]{--sx-ring:0 0 0 2px var(--sx-accent)}
 body.socle-v3[data-v3-theme="atelier"]{color-scheme:light;
 --sx-canvas:#F4F5F4;
 --sx-surface:#FFFFFF;
@@ -361,7 +362,7 @@ body.socle-v3[data-socle-theme] :is(dialog,#modal,.modal){background:var(--sx-su
 body.socle-v3[data-socle-theme] .ui-primary-action{min-height:44px!important;background:var(--sx-accent)!important;color:var(--sx-on-accent)!important;border-color:var(--sx-accent)!important}body.socle-v3[data-socle-theme] .ui-filter-control :is(input,select,textarea){min-height:44px!important}
 @media(max-width:760px){body.socle-v3[data-socle-theme] .ui-primary-action,body.socle-v3[data-socle-theme] .ui-filter-control :is(input,select,textarea){min-height:48px!important}}
 body.socle-v3[data-socle-theme] :is(#main,dialog,#modal,.modal-inner) .btn.primary,body.socle-v3[data-socle-theme] :is(#main,dialog,#modal,.modal-inner) .ui-primary-action{background:var(--sx-accent)!important;color:var(--sx-on-accent)!important}
-body.socle-v3[data-socle-theme] .socle-mobile-nav button.active{background:var(--sx-accent)!important;color:var(--sx-on-accent)!important}
+body.socle-v3[data-socle-theme] .socle-mobile-nav button.active{background:var(--sx-raised);color:var(--sx-ink)}
 body.socle-v3[data-socle-theme] .ia-home-portals a{background:var(--sx-raised)!important;color:var(--sx-ink)!important;border-color:var(--sx-line)!important}body.socle-v3[data-socle-theme] :is(th,td){border-color:var(--sx-line)!important}body.socle-v3[data-socle-theme] th{background:var(--sx-raised)!important;color:var(--sx-ink)!important}body.socle-v3[data-socle-theme] .badge{color:var(--sx-ink)!important}body.socle-v3[data-socle-theme] .badge.warn{color:var(--sx-warn)!important}body.socle-v3[data-socle-theme] .badge.green{color:var(--sx-ok)!important}
 body.socle-v3[data-socle-theme] :focus-visible{outline:3px solid var(--sx-accent)!important;outline-offset:3px}
 @media(max-width:899px){.v3-theme-button{min-width:42px;min-height:42px;padding:var(--sx-space-2);font-size:20px}.v3-theme-button>span{display:none}.v3-theme-menu{position:fixed;inset:calc(64px + env(safe-area-inset-top,0px)) var(--sx-space-3) auto auto;width:min(285px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:calc(100vh - 80px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));max-height:calc(100dvh - 80px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:thin}.v3-theme-choice{min-height:48px}.header-right{gap:6px!important}}
@@ -382,7 +383,7 @@ body.socle-v3 .v3-context-hidden{display:none!important}
 .v3-layout-options{display:grid;grid-template-columns:1fr 1fr;gap:var(--sx-space-3);margin:var(--sx-space-4) 0 var(--sx-space-3);padding:var(--sx-space-4);border:1px solid var(--v3-line);border-radius:var(--sx-radius-md);background:var(--v3-soft)}
 .v3-layout-options>strong{grid-column:1/-1;font-size:var(--sx-text-xs);color:var(--v3-ink)}
 .v3-layout-choice{display:flex;min-height:52px;flex-direction:column;align-items:flex-start;justify-content:center;gap:var(--sx-space-1);padding:var(--sx-space-3) var(--sx-space-4);border:1px solid var(--v3-line);border-radius:var(--sx-radius-sm);background:var(--v3-paper);color:var(--v3-ink);text-align:left;cursor:pointer}
-.v3-layout-choice[aria-checked=true]{border-color:var(--v3-accent);box-shadow:inset 0 0 0 1px var(--v3-accent)}
+.v3-layout-choice[aria-checked=true]{border-color:var(--v3-accent);box-shadow:none}
 .v3-layout-choice small{color:var(--v3-muted)}
 body.socle-v3[data-mobile-layout=wide] #main{zoom:1;box-sizing:border-box!important}
 @media(min-width:900px){body.socle-v3[data-mobile-layout=wide] #main{width:100%!important;max-width:none!important;margin-inline:0!important;padding:var(--sx-space-6) 30px var(--sx-space-8)!important}}
