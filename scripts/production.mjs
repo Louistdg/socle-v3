@@ -9,6 +9,7 @@ import {productionConfig} from './production-config.mjs';
 import {openProductionDatabase} from './production-db.mjs';
 import {productionAuth} from './production-auth.mjs';
 import {prepareAssetResponse} from './http-assets.mjs';
+import {backupConfig,createProductionBackup} from './production-backup.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const unsafeMethods = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
@@ -113,9 +114,12 @@ async function bodyOf(incoming, limit = MAX_BODY) {
 
 export async function startProduction({env = process.env, logger = console, invitationMailer} = {}) {
   const config = productionConfig(env);
+  const backupDestination = backupConfig(env);
   // Import the source-built worker before creating/modifying the volume database.
   const worker = (await import(pathToFileURL(join(root, 'dist/server/index.js')).href)).default;
   const storage = openProductionDatabase({databasePath: config.databasePath, migrationsDirectory: join(root, 'drizzle')});
+  let backupTimer, backupBusy=false;
+  const runBackup=async()=>{if(!backupDestination||backupBusy)return;backupBusy=true;try{await createProductionBackup({database:storage.database,databasePath:config.databasePath,config:backupDestination,logger});}catch{}finally{backupBusy=false;}};
   const auth = productionAuth(storage.database, config.sessionSecret);
   const mailer = createInvitationMailer(env, invitationMailer);
   const workerEnv = {DB: storage.DB, SOCLE_ALLOW_BOOTSTRAP: '0', SOCLE_INVITATION_TEST_MODE: env.SOCLE_INVITATION_TEST_MODE === '1' ? '1' : '0', SOCLE_V3_MANUAL_INVITATIONS: env.SOCLE_V3_MANUAL_INVITATIONS === '1' ? '1' : '0', SOCLE_V3_MANUAL_ORGANIZATION_ID: env.SOCLE_V3_MANUAL_ORGANIZATION_ID || '', RAILWAY_PROJECT_ID: env.RAILWAY_PROJECT_ID || '', ...(mailer ? {sendInvitationEmail: mailer} : {})};
@@ -313,10 +317,12 @@ export async function startProduction({env = process.env, logger = console, invi
   try {
     await new Promise((done, fail) => { server.once('error', fail); server.listen(config.port, '0.0.0.0', done); });
   } catch (error) { storage.close(); throw error; }
+  if(backupDestination){void runBackup();backupTimer=setInterval(runBackup,24*60*60*1000);backupTimer.unref();}
   let closePromise;
   function close() {
     return closePromise ||= (async () => {
       stopping = true;
+      clearInterval(backupTimer);
       const timer = setTimeout(() => server.closeAllConnections(), 10_000); timer.unref();
       await new Promise(done => server.close(done));
       await Promise.allSettled([...pending]);
