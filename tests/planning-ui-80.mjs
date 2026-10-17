@@ -132,6 +132,7 @@ ok(workerMarkup.includes('Aucune mission prévue'),'journée sans affectation in
 
 const cardStart=planning.indexOf('function iaBAssignmentCard('),cardEnd=planning.indexOf('\nfunction iaBAbsencesFor',cardStart);
 const cardContext={
+  iaBMoveSelection:null,
   iaBPlanningState:{data:{breakMinutes:0}},
   iaBJob:()=>({name:'Réfection toiture'}),iaBTeam:()=>({name:'Équipe toiture'}),iaBLeadForTeam:()=>null,
   iaBAssignmentActual:()=>0,iaBMinutes:time=>Number(time.slice(0,2))*60+Number(time.slice(3)),
