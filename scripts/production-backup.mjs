@@ -15,16 +15,13 @@ export function backupConfig(env=process.env){
   return {kind:'s3',endpoint,region:env.SOCLE_BACKUP_S3_REGION,bucket:env.SOCLE_BACKUP_S3_BUCKET,access:env.SOCLE_BACKUP_S3_ACCESS_KEY_ID,secret:env.SOCLE_BACKUP_S3_SECRET_ACCESS_KEY,style:env.SOCLE_BACKUP_S3_URL_STYLE,retention:30};
 }
 const h=(key,data,encoding)=>createHmac('sha256',key).update(data).digest(encoding);
-function s3Url(c,key='',query={}){const u=new URL(c.endpoint);if(c.style==='path')u.pathname=`/${c.bucket}${key?'/'+key:''}`;else{u.hostname=`${c.bucket}.${u.hostname}`;u.pathname=key?`/${key}`:'/';}for(const [k,v] of Object.entries(query))u.searchParams.set(k,v);return u;}
-async function s3Request(c,method,key='',body=Buffer.alloc(0),query={}){
- const u=s3Url(c,key,query),date=new Date().toISOString().replace(/[:-]|\.\d{3}/g,''),day=date.slice(0,8),payload=createHash('sha256').update(body).digest('hex');
- const headers={'host':u.host,'x-amz-content-sha256':payload,'x-amz-date':date};const signed=Object.keys(headers).sort().join(';'),canonicalQuery=[...u.searchParams.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([k,v])=>`${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');const canonical=`${method}\n${u.pathname}\n${canonicalQuery}\n${Object.keys(headers).sort().map(k=>`${k}:${headers[k]}\n`).join('')}\n${signed}\n${payload}`;
- const scope=`${day}/${c.region}/s3/aws4_request`,toSign=`AWS4-HMAC-SHA256\n${date}\n${scope}\n${createHash('sha256').update(canonical).digest('hex')}`,k=h(h(h(h('AWS4'+c.secret,day),c.region),'s3'),'aws4_request');headers.authorization=`AWS4-HMAC-SHA256 Credential=${c.access}/${scope}, SignedHeaders=${signed}, Signature=${h(k,toSign,'hex')}`;
- const res=await fetch(u,{method,headers,body:method==='GET'||method==='DELETE'?undefined:body,signal:AbortSignal.timeout(30000)});if(!res.ok)throw Error(`Sauvegarde: requête objet refusée (HTTP ${res.status}).`);return res;
-}
+function s3Url(c,key){const u=new URL(c.endpoint);if(c.style==='path')u.pathname=`/${c.bucket}/${key}`;else{u.hostname=`${c.bucket}.${u.hostname}`;u.pathname=`/${key}`;}return u;}
 async function putS3(c,key,bytes){
- await s3Request(c,'PUT',key,bytes);const downloaded=Buffer.from(await (await s3Request(c,'GET',key)).arrayBuffer());if(!downloaded.equals(bytes))throw Error('Sauvegarde: relecture du bucket différente de la copie vérifiée.');
- const list=await (await s3Request(c,'GET','',Buffer.alloc(0),{'list-type':'2',prefix:'daily/'})).text();const keys=[...list.matchAll(/<Key>([^<]+)<\/Key>/g)].map(m=>m[1]).sort().reverse();for(const old of keys.slice(c.retention))await s3Request(c,'DELETE',old);
+ const u=s3Url(c,key),date=new Date().toISOString().replace(/[:-]|\.\d{3}/g,''),day=date.slice(0,8),payload=createHash('sha256').update(bytes).digest('hex');
+ const headers={host:u.host,'x-amz-content-sha256':payload,'x-amz-date':date};const canonical=`PUT\n${u.pathname}\n\n${Object.entries(headers).map(([k,v])=>`${k}:${v}\n`).join('')}\n${Object.keys(headers).join(';')}\n${payload}`;
+ const scope=`${day}/${c.region}/s3/aws4_request`,toSign=`AWS4-HMAC-SHA256\n${date}\n${scope}\n${createHash('sha256').update(canonical).digest('hex')}`,k=h(h(h(h('AWS4'+c.secret,day),c.region), 's3'),'aws4_request');
+ const authorization=`AWS4-HMAC-SHA256 Credential=${c.access}/${scope}, SignedHeaders=${Object.keys(headers).join(';')}, Signature=${h(k,toSign,'hex')}`;
+ const res=await fetch(u,{method:'PUT',headers:{...headers,authorization},body:bytes,signal:AbortSignal.timeout(30000)});if(!res.ok)throw Error(`Sauvegarde: dépôt objet refusé (HTTP ${res.status}).`);
 }
 async function verify(path){const db=new DatabaseSync(path,{readOnly:true});try{const integrity=db.prepare('PRAGMA integrity_check').get()?.integrity_check;if(integrity!=='ok')throw Error('Sauvegarde: integrity_check échoué.');const tables=db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='organizations'").get();if(!tables)throw Error('Sauvegarde: lecture de la table organizations impossible.');const count=db.prepare('SELECT COUNT(*) AS n FROM organizations').get().n;return {integrity,count};}finally{db.close();}}
 export async function createProductionBackup({database,databasePath,config,logger=console,now=()=>new Date()}){
@@ -42,4 +39,3 @@ export async function createProductionBackup({database,databasePath,config,logge
   await putS3(config,key,bytes);logger.log(`Sauvegarde SQLite vérifiée et déposée dans le bucket, objet=${key}, ${bytes.length} octets, organizations=${before.count}.`);return {name,size:bytes.length,...before};
  }catch(error){logger.error('ÉCHEC SAUVEGARDE SQLite — copie non garantie:',error.message);throw error;}finally{if(temp)await rm(temp,{force:true}).catch(()=>{});}
 }
-
