@@ -1,9 +1,11 @@
 import {backup,DatabaseSync} from 'node:sqlite';
 import {createHash,createHmac,randomUUID} from 'node:crypto';
-import {mkdir,readdir,rename,rm,stat,readFile} from 'node:fs/promises';
-import {basename,dirname,join,resolve} from 'node:path';
+import {mkdir,readdir,rename,rm,readFile} from 'node:fs/promises';
+import {dirname,join,resolve} from 'node:path';
 
 const KEYS=['SOCLE_BACKUP_S3_ENDPOINT','SOCLE_BACKUP_S3_REGION','SOCLE_BACKUP_S3_BUCKET','SOCLE_BACKUP_S3_ACCESS_KEY_ID','SOCLE_BACKUP_S3_SECRET_ACCESS_KEY','SOCLE_BACKUP_S3_URL_STYLE'];
+// Les trois écritures réellement en usage; `virtual` et `virtual-host` désignent le même adressage.
+const STYLES={path:'path',virtual:'virtual','virtual-host':'virtual'};
 export function backupConfig(env=process.env){
   const local=env.SOCLE_BACKUP_DIRECTORY;
   if(local)return {kind:'local',directory:resolve(local),retention:30};
@@ -11,9 +13,9 @@ export function backupConfig(env=process.env){
   if(!provided.length)return null;
   if(provided.length!==KEYS.length)throw Error('Sauvegarde: configuration S3 incomplète; vérifier les variables SOCLE_BACKUP_S3_* (valeurs masquées).');
   const endpoint=new URL(env.SOCLE_BACKUP_S3_ENDPOINT);
-  const style=env.SOCLE_BACKUP_S3_URL_STYLE;
-  if(endpoint.protocol!=='https:'||!style||style==='nawak')throw Error('Sauvegarde: endpoint HTTPS ou URL_STYLE invalide.');
-  return {kind:'s3',endpoint,region:env.SOCLE_BACKUP_S3_REGION,bucket:env.SOCLE_BACKUP_S3_BUCKET,access:env.SOCLE_BACKUP_S3_ACCESS_KEY_ID,secret:env.SOCLE_BACKUP_S3_SECRET_ACCESS_KEY,style:style==='path'?'path':'virtual',retention:30};
+  const style=STYLES[String(env.SOCLE_BACKUP_S3_URL_STYLE||'').trim().toLowerCase()];
+  if(endpoint.protocol!=='https:'||!style)throw Error('Sauvegarde: endpoint HTTPS ou URL_STYLE invalide (attendu: path, virtual, virtual-host).');
+  return {kind:'s3',endpoint,region:env.SOCLE_BACKUP_S3_REGION,bucket:env.SOCLE_BACKUP_S3_BUCKET,access:env.SOCLE_BACKUP_S3_ACCESS_KEY_ID,secret:env.SOCLE_BACKUP_S3_SECRET_ACCESS_KEY,style,retention:30};
 }
 const h=(key,data,encoding)=>createHmac('sha256',key).update(data).digest(encoding);
 function s3Url(c,key='',query={}){const u=new URL(c.endpoint);if(c.style==='path')u.pathname=`/${c.bucket}${key?'/'+key:''}`;else{u.hostname=`${c.bucket}.${u.hostname}`;u.pathname=key?`/${key}`:'/';}for(const [k,v] of Object.entries(query))u.searchParams.set(k,v);return u;}

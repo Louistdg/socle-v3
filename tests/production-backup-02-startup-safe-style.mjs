@@ -17,9 +17,16 @@ const s3={SOCLE_BACKUP_S3_ENDPOINT:'https://127.0.0.1:1',SOCLE_BACKUP_S3_REGION:
 const mode=process.argv[2]||'both';
 let runtime;
 try{
- assert.equal(backupConfig(s3).style,'virtual');
+ // Les trois écritures en usage sont acceptées, et deux d'entre elles veulent dire la même chose.
+ for(const style of ['virtual-host','virtual']){
+  assert.equal(backupConfig({...s3,SOCLE_BACKUP_S3_URL_STYLE:style}).style,'virtual',`${style} -> virtual`);
+ }
+ assert.equal(backupConfig({...s3,SOCLE_BACKUP_S3_URL_STYLE:'path'}).style,'path','path -> path');
+ assert.equal(backupConfig({...s3,SOCLE_BACKUP_S3_URL_STYLE:'Virtual-Host'}).style,'virtual','casse ignorée');
+ // Une faute de frappe plausible est refusée: ce contrôle doit attraper une erreur, pas la laisser passer.
+ assert.throws(()=>backupConfig({...s3,SOCLE_BACKUP_S3_URL_STYLE:'virtal-host'}),/URL_STYLE invalide/);
  if(mode==='invalid'||mode==='both'){
-  runtime=await startProduction({env:{...baseEnv,PORT:String(await port()),...s3,SOCLE_BACKUP_S3_URL_STYLE:'nawak'},logger});
+  runtime=await startProduction({env:{...baseEnv,PORT:String(await port()),...s3,SOCLE_BACKUP_S3_URL_STYLE:'virtal-host'},logger});
   const health=(await fetch(`http://127.0.0.1:${runtime.server.address().port}/health`)).status;assert.equal(health,200);
   const failure=logger.lines.find(x=>x.includes('ÉCHEC SAUVEGARDE SQLite')&&x.includes('configuration refusée'));assert.ok(failure);
   console.log('INVALID_CONFIG_LOG='+failure);console.log('INVALID_CONFIG_HEALTH='+health);
