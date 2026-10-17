@@ -520,6 +520,65 @@ function iaAEnhanceMobileTables(){
     wrapper.querySelectorAll('tbody tr').forEach(function(row){Array.from(row.children).forEach(function(cell,index){if(cell.tagName==='TD'&&labels[index])cell.dataset.label=labels[index]})});
   });
 }
+function iaAEnsureScreenPurpose(){
+  var main=document.querySelector('#main'),route=typeof view==='undefined'?'':String(view),entry=globalThis.SOCLE_NAVIGATION&&SOCLE_NAVIGATION.item(route);
+  if(!main||typeof main.setAttribute!=='function'||typeof main.querySelector!=='function')return;
+  if(entry&&entry.type==='INTERNAL_VIEW')entry=SOCLE_NAVIGATION.item(entry.parent)||entry;
+  var purpose=entry&&String(entry.purpose||'').trim();
+  if(!purpose){if(typeof main.removeAttribute==='function')main.removeAttribute('data-screen-purpose');main.querySelector('.ia-screen-purpose')?.remove();return}
+  main.setAttribute('data-screen-purpose',purpose);
+  var line=main.querySelector(':scope > .ia-screen-purpose');
+  if(!line){line=document.createElement('p');line.className='ia-screen-purpose';main.prepend(line)}
+  line.textContent=purpose;
+}
+function iaACommandNormalize(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('fr-BE').trim()}
+var iaACommandState={dialog:null,input:null,list:null,announcement:null,help:null,restore:null,items:[],active:0,query:''};
+function iaACommandEnsure(){
+  var state=iaACommandState;if(state.dialog||typeof document==='undefined'||typeof document.createElement!=='function'||typeof document.querySelector!=='function')return;
+  var trigger=document.createElement('button');trigger.id='ia-command-trigger';trigger.type='button';trigger.className='ia-command-trigger';trigger.textContent='Commandes';trigger.setAttribute('aria-haspopup','dialog');trigger.setAttribute('aria-label','Ouvrir les commandes et les raccourcis');
+  var topbar=document.querySelector('.topbar');if(topbar)topbar.appendChild(trigger);
+  var dialog=document.createElement('dialog');dialog.id='ia-command-dialog';dialog.className='ia-command-dialog';dialog.setAttribute('aria-labelledby','ia-command-title');
+  dialog.innerHTML='<div class="ia-command-panel"><header class="ia-command-head"><h2 id="ia-command-title"></h2><button type="button" class="ia-command-close" aria-label="Fermer">Fermer</button></header><div class="ia-command-content"></div></div>';
+  document.body.appendChild(dialog);state.dialog=dialog;state.input=null;state.list=null;state.announcement=null;state.help=null;
+  trigger.addEventListener('click',function(){iaACommandOpen('commands')});
+  dialog.querySelector('.ia-command-close').addEventListener('click',iaACommandClose);
+  dialog.addEventListener('click',function(event){if(event.target===dialog)iaACommandClose()});
+  dialog.addEventListener('keydown',function(event){if(event.target&&event.target.matches('.ia-command-job-search')&&(event.key==='Enter'||event.key===' ')){event.preventDefault();iaACommandSearchJobs()}});
+  dialog.addEventListener('cancel',function(event){event.preventDefault();iaACommandClose()});
+  document.addEventListener('keydown',function(event){
+    var target=event.target,typing=target&&(/INPUT|TEXTAREA|SELECT/.test(target.tagName)||target.isContentEditable),key=String(event.key||'').toLowerCase();
+    if(state.dialog.open){if(event.key==='Escape'){event.preventDefault();iaACommandClose();return}if(state.help)return;if(target===state.input){if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();iaACommandMove(event.key==='ArrowDown'?1:-1)}else if(event.key==='Enter'){event.preventDefault();iaACommandActivate()}}return}
+    if((event.ctrlKey||event.metaKey)&&key==='k'){event.preventDefault();iaACommandOpen('commands');return}
+    if(event.key==='?'&&!typing&&!event.ctrlKey&&!event.metaKey&&!event.altKey){event.preventDefault();iaACommandOpen('help')}
+  });
+}
+function iaACommandOpen(mode){
+  iaACommandEnsure();var state=iaACommandState,dialog=state.dialog,content=dialog.querySelector('.ia-command-content');state.restore=document.activeElement;
+  dialog.querySelector('#ia-command-title').textContent=mode==='help'?'Raccourcis clavier':'Aller à une rubrique';
+  if(mode==='help'){
+    state.help=true;content.innerHTML='<p class="ia-command-help-intro">Utilisez ces touches depuis les écrans de l’application.</p><ul class="ia-command-help-list"><li><kbd>Ctrl</kbd> ou <kbd>⌘</kbd> + <kbd>K</kbd><span>Ouvrir les commandes</span></li><li><kbd>?</kbd><span>Afficher cette aide</span></li><li><kbd>↑</kbd> / <kbd>↓</kbd>, <kbd>Entrée</kbd>, <kbd>Échap</kbd><span>Parcourir, ouvrir et fermer</span></li></ul><button type="button" class="ia-command-help-close">Fermer l’aide</button>';
+    content.querySelector('.ia-command-help-close').addEventListener('click',iaACommandClose);
+  }else{
+    state.help=false;content.innerHTML='<label class="ia-command-label" for="ia-command-search">Rechercher une rubrique</label><input id="ia-command-search" type="search" autocomplete="off" placeholder="Ex. pointages, equipe…" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="ia-command-results" aria-activedescendant=""><p class="ia-command-count" role="status" aria-live="polite"></p><div id="ia-command-results" class="ia-command-results" role="listbox" aria-label="Rubriques"></div>';
+    state.input=content.querySelector('#ia-command-search');state.list=content.querySelector('#ia-command-results');state.announcement=content.querySelector('.ia-command-count');
+    state.input.addEventListener('input',function(){state.query=state.input.value;iaACommandRender()});state.input.addEventListener('keydown',function(event){if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();iaACommandMove(event.key==='ArrowDown'?1:-1)}else if(event.key==='Enter'){event.preventDefault();iaACommandActivate()}});
+    iaACommandRender();
+  }
+  if(!dialog.open)dialog.showModal();if(mode!=='help')state.input.focus();else dialog.querySelector('.ia-command-help-close').focus();
+}
+function iaACommandRender(){
+  var state=iaACommandState;if(!state.list)return;
+  var needle=iaACommandNormalize(state.query),entries=globalThis.SOCLE_NAVIGATION?SOCLE_NAVIGATION.entries.filter(function(entry){return ['ROOT_MODULE','SUPPORT','SETTINGS'].includes(entry.type)&&(!entry.permission||typeof canViewModule!=='function'||canViewModule(entry.permission))}):[],items=entries.filter(function(entry){return entry.purpose&&(!needle||iaACommandNormalize(entry.label+' '+entry.purpose).includes(needle))}).map(function(entry){return{route:entry.route,label:entry.label,purpose:entry.purpose}});
+  state.items=items;state.active=0;state.list.replaceChildren();
+  items.forEach(function(item,index){var option=document.createElement('div');option.id='ia-command-option-'+index;option.className='ia-command-option';option.setAttribute('role','option');option.setAttribute('aria-selected',index===state.active?'true':'false');option.dataset.route=item.route;var label=document.createElement('strong'),purpose=document.createElement('span');label.textContent=item.label;purpose.textContent=item.purpose;option.append(label,purpose);option.addEventListener('click',function(){iaACommandChoose(item.route)});state.list.appendChild(option)});
+  if(items.length){state.announcement.textContent=items.length+' rubrique'+(items.length>1?'s':'')+' ; '+items[0].label+' sélectionnée';state.input.setAttribute('aria-activedescendant','ia-command-option-0')}
+  else{state.announcement.textContent='Aucune rubrique trouvée. Vous pouvez chercher dans les chantiers.';state.input.removeAttribute('aria-activedescendant');var empty=document.createElement('p');empty.className='ia-command-empty';empty.textContent='Aucune rubrique ne correspond à cette recherche.';var button=document.createElement('button');button.type='button';button.className='ia-command-job-search';button.textContent='Chercher dans les chantiers';button.addEventListener('click',iaACommandSearchJobs);state.list.append(empty,button)}
+}
+function iaACommandMove(delta){var state=iaACommandState;if(!state.items.length)return;state.active=(state.active+delta+state.items.length)%state.items.length;Array.from(state.list.querySelectorAll('[role="option"]')).forEach(function(option,index){var active=index===state.active;option.setAttribute('aria-selected',active?'true':'false');if(active){state.input.setAttribute('aria-activedescendant',option.id);state.announcement.textContent=state.items.length+' rubriques ; '+state.items[index].label+' sélectionnée'}})}
+function iaACommandActivate(){var item=iaACommandState.items[iaACommandState.active];if(item)iaACommandChoose(item.route)}
+function iaACommandChoose(route){iaACommandClose();if(typeof navigate==='function')navigate(route)}
+function iaACommandSearchJobs(){var query=iaACommandState.query;iaACommandClose();if(typeof navigate==='function')navigate('jobs');requestAnimationFrame(function(){var field=document.querySelector('.ia-b-filters input');if(field){field.value=query;field.focus();if(typeof iaBSetJobFilter==='function')iaBSetJobFilter('q',query);else field.dispatchEvent(new Event('input',{bubbles:true}))}})}
+function iaACommandClose(){var state=iaACommandState;if(!state.dialog||!state.dialog.open)return;state.dialog.close();state.help=false;if(state.restore&&state.restore.isConnected)state.restore.focus()}
 function iaAEnhanceShell(){
   var role=iaARoleCode();
   document.body.dataset.iaARole=role;
@@ -527,6 +586,8 @@ function iaAEnhanceShell(){
   iaAEnhanceMobileTables();
   var main=document.querySelector('#main');
   if(main)main.setAttribute('data-view',typeof view==='undefined'?'':String(view));
+  iaAEnsureScreenPurpose();
+  iaACommandEnsure();
   var topbar=document.querySelector('.topbar');
   if(topbar)topbar.setAttribute('data-role-label',IA_A_ROLE_LABELS[role]||role);
   iaAEnsureBackToTop();

@@ -28,6 +28,7 @@ const browserSuites=[
   {name:'browser-identities-15.mjs'},
   {name:'browser-15.mjs',capture:'purchases'},
   {name:'browser-document-triage-20261012.mjs'},
+  {name:'browser-didactic-layer-01.mjs'},
   {name:'browser-planning-drag-step2.mjs'}
 ];
 const interruption=new AbortController();
