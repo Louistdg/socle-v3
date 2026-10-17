@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {resolve} from 'node:path';
-import {connectBrowser} from './helpers/browser-cdp.mjs';
+import {connectBrowser,waitForApp} from './helpers/browser-cdp.mjs';
 
 if(!process.env.SOCLE_CDP_URL){console.log('browser-design-catalogue-01: SKIP hors Browser Gate');process.exit(0)}
 
@@ -39,6 +39,18 @@ try{
       writeFileSync(resolve(artifacts,`${theme}-${width}.png`),Buffer.from(screenshot.data,'base64'));
       results.push(metrics);
     }
+  }
+  await tab.navigate(base+'/');
+  const login=await tab.evaluate("fetch('/__local-test/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'direction@batinova.example'})}).then(response=>response.status)",'catalogue-shell-login');
+  assert.equal(login,204,'La mesure de coque utilise la session OWNER locale de test.');
+  await tab.reload();await waitForApp(tab,'local-owner');
+  for(const width of [1440,900]){
+    await tab.call('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:false,screenWidth:width,screenHeight:1000});
+    const shell=await tab.evaluate(`(async()=>{navigate('permissions');const deadline=Date.now()+6000;while(Date.now()<deadline&&(!document.querySelector('#main h1')||view!=='permissions'))await new Promise(resolve=>setTimeout(resolve,25));const main=document.querySelector('#main'),nav=document.querySelector('#nav'),mainRect=main.getBoundingClientRect(),navRect=nav.getBoundingClientRect(),style=getComputedStyle(main),x=mainRect.left+parseFloat(style.borderLeftWidth)+parseFloat(style.paddingLeft)+1,y=mainRect.top+parseFloat(style.borderTopWidth)+parseFloat(style.paddingTop)+1,hit=document.elementFromPoint(x,y);return{width:innerWidth,mainLeft:mainRect.left,navRight:navRect.right,navWidth:navRect.width,point:{x,y},hit:hit&&{tag:hit.tagName,id:hit.id,insideMain:main.contains(hit)},mainContainsHit:Boolean(hit&&main.contains(hit))}})()`,'desktop-main-hit-'+width);
+    assert.ok(shell.navWidth<=72,'La barre d’icônes reste étroite à '+width+' px: '+JSON.stringify(shell));
+    assert.ok(shell.mainLeft>=shell.navRight,'Le contenu commence après la navigation à '+width+' px: '+JSON.stringify(shell));
+    assert.equal(shell.mainContainsHit,true,'Le premier pixel utile appartient à #main à '+width+' px: '+JSON.stringify(shell));
+    results.push({shell});
   }
   console.log('DESIGN_CATALOGUE_01='+JSON.stringify(results));
 }finally{await browser.close()}
