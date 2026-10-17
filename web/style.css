@@ -155,3 +155,5 @@ body.socle-v3 #nav button[data-nav-route='company']::after{content:'Entreprise'}
 body.socle-v3:has(#main .ia-home-portals) #main{background-image:radial-gradient(circle,var(--sx-dot-grid) 1px,transparent 1px);background-size:28px 28px;background-color:var(--sx-canvas)}
 
 body.socle-v3 #main .v3-job .badge{background:var(--sx-ok-soft);color:var(--sx-ok);border:1px solid transparent;text-transform:none;font-weight:600}
+
+@media(min-width:900px){.socle-masthead{display:none}body.socle-v3 .organization-mobile-trigger{display:none}body.socle-v3 #organizationSwitcher{border-color:var(--sx-line-strong);background:var(--sx-surface);color:var(--sx-ink);border-radius:var(--sx-radius-sm)}body.socle-v3 #organizationSwitcher option{background:var(--sx-surface);color:var(--sx-ink)}}
