@@ -30,6 +30,7 @@ const browserSuites=[
   {name:'browser-15.mjs',capture:'purchases'},
   {name:'browser-document-triage-20261012.mjs'},
   {name:'browser-didactic-layer-01.mjs'},
+  {name:'browser-attention-01.mjs'},
   {name:'browser-planning-board-01.mjs'},
   {name:'browser-planning-drag-step2.mjs'}
 ];
