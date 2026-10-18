@@ -10,7 +10,7 @@ const pepper = (password, secret) => createHmac('sha256', secret).update('passwo
 const tokenHash = (token, secret) => createHmac('sha256', secret).update('session\0').update(token).digest('hex');
 
 export async function hashPassword(password, secret) {
-  if (typeof password !== 'string' || password.length < 15 || Buffer.byteLength(password) > 1024) throw new Error('Password must have 15+ characters and at most 1024 bytes.');
+  if (typeof password !== 'string' || password.length < 8 || Buffer.byteLength(password) > 1024) throw new Error('Password must have 8+ characters and at most 1024 bytes.');
   const salt = randomBytes(16).toString('hex');
   const hash = await derive(pepper(password, secret), salt, 32, COST);
   return `scrypt:32768:8:3:${salt}:${hash.toString('hex')}`;
@@ -166,7 +166,7 @@ export function productionAuth(database, secret) {
     if (!givenName || !familyName) return fail(400, 'Indiquez le prénom et le nom du titulaire du compte.');
     let passwordHash;
     try { passwordHash = await hashPassword(password, secret); }
-    catch { return fail(400, 'Le mot de passe doit contenir au moins 15 caractères et au plus 1024 octets.'); }
+    catch { return fail(400, 'Le mot de passe doit contenir au moins 8 caractères et au plus 1024 octets.'); }
     const userId = randomUUID(), memberId = 'member-' + randomUUID(), stamp = new Date().toISOString(), nowMs = Date.now(), sessionToken = randomBytes(32).toString('base64url');
     let projectIds;
     try { projectIds = invitationProjects(invitation, String(invitation.role_code)); }
