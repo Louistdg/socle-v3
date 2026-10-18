@@ -235,19 +235,20 @@ function iaAOpenTasks(){
   var source=typeof reminders!=='undefined'&&Array.isArray(reminders)?reminders:(typeof tasks!=='undefined'&&Array.isArray(tasks)?tasks:[]);
   return source.filter(function(item){return String(item.state||'todo')!=='done'}).sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''))});
 }
-var iaAOwnerAgendaState={key:'',status:'idle',messages:[],tasks:[],events:[],messageError:'',taskError:''};
+var iaAOwnerAgendaState={key:'',status:'idle',messages:[],tasks:[],fieldJournal:[],events:[],messageError:'',taskError:''};
 function iaAOwnerAgendaKey(){var access=iaACurrentAccess()||{};return String(globalThis.socleCurrentOrganizationId||'')+':'+String(access.userId||'')}
 function iaAEnsureOwnerAgenda(){
   if(iaARoleCode()!=='OWNER'||typeof serverJson!=='function')return;
   var key=iaAOwnerAgendaKey();
-  if(iaAOwnerAgendaState.key!==key)iaAOwnerAgendaState={key:key,status:'idle',messages:[],tasks:[],events:[],messageError:'',taskError:''};
+  if(iaAOwnerAgendaState.key!==key)iaAOwnerAgendaState={key:key,status:'idle',messages:[],tasks:[],fieldJournal:[],events:[],messageError:'',taskError:''};
   if(iaAOwnerAgendaState.status!=='idle')return;
   iaAOwnerAgendaState.status='loading';
-  var canMessages=iaAModuleVisible('messages'),canTasks=iaAModuleVisible('actions');
+  var canMessages=iaAModuleVisible('messages'),canTasks=iaAModuleVisible('actions')||iaARoleCode()==='OWNER';
   Promise.allSettled([canMessages?serverJson('/api/conversations'):Promise.resolve({conversations:[]}),canTasks?serverJson('/api/tasks'):Promise.resolve({tasks:[]})]).then(function(results){
     if(iaAOwnerAgendaState.key!==key)return;
     if(results[0].status==='fulfilled')iaAOwnerAgendaState.messages=iaASafeArray(results[0].value&&results[0].value.conversations).slice(0,3);else iaAOwnerAgendaState.messageError='Messages indisponibles.';
     if(results[1].status==='fulfilled')iaAOwnerAgendaState.tasks=iaASafeArray(results[1].value&&results[1].value.tasks).filter(function(task){return String(task.status||'todo')!=='done'}).slice(0,4);else iaAOwnerAgendaState.taskError='Tâches indisponibles.';
+    if(results[1].status==='fulfilled')iaAOwnerAgendaState.fieldJournal=iaASafeArray(results[1].value&&results[1].value.fieldJournal);
     iaAOwnerAgendaState.status='ready';
     if(typeof view!=='undefined'&&view==='home'&&iaARoleCode()==='OWNER'&&typeof render==='function')render();
   });
@@ -276,14 +277,16 @@ function iaAOwnerMessagesPanel(){
   return '<section class="ia-owner-panel ia-owner-messages"><header><div><p class="eyebrow">ÉQUIPE</p><h2>Messages récents</h2></div><button class="link" type="button" onclick="navigate(\'messages\')">Ouvrir les messages</button></header><div class="ia-owner-panel-body">'+body+'</div></section>';
 }
 function iaAOwnerTasksPanel(){
-  var state=iaAOwnerAgendaState,key=iaAOwnerAgendaKey(),local=iaAOpenTasks(),remote=state.key===key?iaASafeArray(state.tasks):[];
+  var state=iaAOwnerAgendaState,key=iaAOwnerAgendaKey(),local=iaAOpenTasks(),remote=state.key===key?iaASafeArray(state.tasks):[],journal=state.key===key?iaASafeArray(state.fieldJournal):[];
   var rows=[],seen=new Set();
+  journal.forEach(function(item){var id='field-journal:'+String(item.id||'');if(seen.has(id))return;seen.add(id);rows.push({title:String(item.category||'Problème')+' · '+String(item.projectName||'Chantier'),date:String(item.author||'Équipe')+' · '+new Date(item.createdAt).toLocaleString('fr-BE'),status:'À traiter',projectId:String(item.projectId||'')})});
   local.concat(remote).forEach(function(item){var title=String(item.title||item.label||'Tâche à traiter').trim(),id=String(item.id||title+'|'+String(item.date||item.dueDate||''));if(!title||seen.has(id))return;seen.add(id);rows.push({title:title,date:item.date||item.dueDate||item.due_date||'',status:item.state==='waiting'?'En attente':item.priority==='urgent'?'Urgente':'À traiter'})});
-  var content=rows.length?rows.slice(0,4).map(function(item){return '<button class="ia-owner-row" type="button" onclick="navigate(\'actions\')"><span><strong>'+iaAEscape(item.title)+'</strong><small>'+iaAEscape(item.date||'Sans échéance')+'</small></span><span class="ia-owner-task-state">'+iaAEscape(item.status)+'</span></button>'}).join(''):
+  var content=rows.length?rows.slice(0,4).map(function(item){var action=item.projectId?'fieldJournalOpenProject('+JSON.stringify(item.projectId)+')':'navigate(\'actions\')';return '<button class="ia-owner-row" type="button" onclick="'+action+'"><span><strong>'+iaAEscape(item.title)+'</strong><small>'+iaAEscape(item.date||'Sans échéance')+'</small></span><span class="ia-owner-task-state">'+iaAEscape(item.status)+'</span></button>'}).join(''):
     (state.status==='loading'||state.status==='idle'?iaAState('loading','Chargement des tâches','Les demandes et tâches ouvertes seront affichées ici.'):iaAState('empty','Rien à traiter','Aucune tâche ou demande ouverte.'));
   return '<section class="ia-owner-panel ia-owner-tasks"><header><div><p class="eyebrow">PRIORITÉS</p><h2>À traiter</h2></div><button class="link" type="button" onclick="navigate(\'actions\')">Toutes les actions</button></header><div class="ia-owner-panel-body">'+content+'</div></section>';
 }
 function iaARetryOwnerAgenda(){iaAOwnerAgendaState={key:'',status:'idle',messages:[],tasks:[],events:[],messageError:'',taskError:''};if(typeof render==='function')render()}
+globalThis.iaARefreshOwnerAgenda=iaARetryOwnerAgenda;
 function iaAActiveJobs(){
   return typeof jobs!=='undefined'&&Array.isArray(jobs)?jobs.filter(function(job){return['Terminé','Archivé'].indexOf(String(job.phase||job.status||''))<0}):[];
 }

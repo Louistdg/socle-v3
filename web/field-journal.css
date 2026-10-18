@@ -1,0 +1,17 @@
+.sx-journal-launch{position:fixed;z-index:250;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));min-height:48px;padding:0 24px;border:0;border-radius:var(--sx-radius-pill);background:var(--sx-accent);color:var(--sx-on-accent);font:600 var(--sx-text-base)/1 var(--sx-font-ui);box-shadow:var(--sx-shadow-2);cursor:pointer}
+.sx-journal-launch:focus-visible,.sx-journal-chip:focus-visible{outline:2px solid var(--sx-accent-ink);outline-offset:3px}
+.sx-journal-launch:hover{background:var(--sx-accent-hover)}
+.sx-journal-camera input{display:block;width:100%;min-height:48px;padding:var(--sx-space-3);border:1px dashed var(--sx-line-strong);border-radius:var(--sx-radius-md);background:var(--sx-surface);color:var(--sx-ink)}
+.sx-journal-categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sx-space-3);margin:var(--sx-space-4) 0}
+.sx-journal-chip{min-height:48px;border:1px solid var(--sx-line-strong);border-radius:var(--sx-radius-pill);background:var(--sx-surface);color:var(--sx-ink);font:600 var(--sx-text-sm)/1.2 var(--sx-font-ui);cursor:pointer}
+.sx-journal-chip[aria-pressed="true"]{border-color:var(--sx-accent);background:var(--sx-accent);color:var(--sx-on-accent)}
+.sx-journal-panel{margin-block:var(--sx-space-6)}
+.sx-journal-entry{display:grid;grid-template-columns:88px minmax(0,1fr);gap:var(--sx-space-4);padding:var(--sx-space-4) 0;border-top:1px solid var(--sx-line)}
+.sx-journal-entry img{width:88px;height:88px;object-fit:cover;border-radius:var(--sx-radius-md);background:var(--sx-raised)}
+.sx-journal-entry p{margin:var(--sx-space-2) 0;color:var(--sx-ink-soft)}
+.sx-journal-entry small,.sx-journal-empty{color:var(--sx-muted)}
+.sx-journal-empty{line-height:var(--sx-leading-normal)}
+.sx-journal-panel .panel-head{align-items:center}
+.sx-journal-pending{margin-top:var(--sx-space-4);padding:var(--sx-space-4);border:1px solid var(--sx-line-strong);border-radius:var(--sx-radius-md);background:var(--sx-raised);color:var(--sx-ink)}
+.sx-journal-pending p{display:flex;align-items:center;justify-content:space-between;gap:var(--sx-space-3);margin:var(--sx-space-3) 0 0}
+@media(max-width:760px){.sx-journal-launch{right:max(16px,env(safe-area-inset-right));bottom:calc(max(16px,env(safe-area-inset-bottom)) + 72px);min-width:120px}.sx-journal-panel{margin-bottom:96px}}
