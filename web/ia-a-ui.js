@@ -387,7 +387,7 @@ function iaAAttentionRender(model){iaAAttentionCurrentModel=model;var items=mode
   return '<section class="panel ia-attention" aria-labelledby="ia-attention-title"><header class="ia-attention-head"><div><p class="eyebrow">CENTRE DE CONTRÔLE</p><h2 id="ia-attention-title">'+heading+'</h2></div><label class="ia-attention-filter"><span>Type</span><select aria-label="Filtrer les alertes" onchange="iaAAttentionSetFilter(this.value)"><option value="all" '+(iaAAttentionFilter==='all'?'selected':'')+'>Toutes</option>'+categories.map(function(category){return'<option value="'+category.id+'" '+(iaAAttentionFilter===category.id?'selected':'')+'>'+iaAEscape(category.label)+'</option>'}).join('')+'</select></label></header><div class="ia-attention-guides">'+categories.map(function(category){return'<p><strong>'+iaAEscape(category.label)+'.</strong> '+iaAEscape(category.explanation)+(category.id==='reports'&&category.available&&category.count===0?'<small class="ia-attention-category-empty">Aucune relève à consulter.</small>':'')+'</p>'}).join('')+'</div>'+(visible.length?'<ul class="ia-attention-list">'+visible.map(function(item,index){return'<li class="ia-attention-row tone-'+iaAEscape(item.tone)+'"><span class="ia-attention-mark" aria-hidden="true"></span><span class="ia-attention-copy"><strong>'+iaAEscape(item.title)+'</strong><small>'+iaAEscape(item.detail)+(item.age!==null?' · depuis '+item.age+' jour'+(item.age===1?'':'s'):'')+'</small></span><button type="button" class="ia-attention-action" data-attention-index="'+index+'" onclick="navigate(\''+iaAEscape(item.route)+'\')">Ouvrir <span aria-hidden="true">→</span></button></li>'}).join('')+'</ul>':'<p class="ia-attention-empty">Rien à traiter selon les données disponibles.<small>Dernier contrôle : '+iaAEscape(model.checkedAt)+'</small></p>')+'</section>';
 }
 var iaAAttentionPositionObserver=null;
-function iaAAttentionEnsurePosition(){var main=document.querySelector('#main');if(!main||typeof main.querySelector!=='function')return;var card=main.querySelector('.ia-attention'),intro=main.querySelector('.v3-intro');if(card&&intro&&intro.nextElementSibling!==card)intro.after(card)}
+function iaAAttentionEnsurePosition(){var main=document.querySelector('#main');if(!main||typeof main.querySelector!=='function')return;var card=main.querySelector('.ia-attention'),intro=main.querySelector('.v3-intro')||main.querySelector('.ia-role-head');if(card&&intro&&intro.nextElementSibling!==card)intro.after(card)}
 function iaAPersonalPortalsForOverview(){
   if(!iaAModuleVisible('personal')||typeof personalPortalLinks==='undefined'||!Array.isArray(personalPortalLinks))return '';
   var sources=personalPortalLinks.slice();
@@ -443,6 +443,7 @@ function iaAWorkerWeatherSection(){
 function iaAOwnerDashboard(){
   iaAEnsureOwnerAgenda();
   return iaARoleHeading('OWNER','Votre journée','Messages, demandes, rendez-vous et calendrier de la semaine.')+
+    (typeof globalThis.iaACanvasSectionMarkup==='function'?globalThis.iaACanvasSectionMarkup():'')+
     iaAAttentionRender(iaAAttentionBuild(iaAAttentionWorkspaceData()))+
     iaAOwnerWeatherSection()+
     '<div class="ia-owner-dashboard">'+iaAOwnerMessagesPanel()+iaAOwnerTasksPanel()+iaAOwnerWeekView()+'</div>'+
@@ -868,6 +869,7 @@ function iaAOpenRoleHome(role){
   var main=document.querySelector('#main');
   if(main){main.innerHTML=iaADashboardForRole(role||iaARoleCode());if(typeof globalThis.applyAccessPreviewBanner==='function')globalThis.applyAccessPreviewBanner()}
   iaAEnhanceShell();
+  if(typeof globalThis.iaACanvasMount==='function')globalThis.iaACanvasMount();
 }
 if(typeof tabs2!=='undefined'&&!tabs2.some(function(tab){return tab[0]==='home'}))tabs2.unshift(['home','Accueil']);
 var iaAOriginalCanViewModule=typeof canViewModule==='function'?canViewModule:function(){return false};
