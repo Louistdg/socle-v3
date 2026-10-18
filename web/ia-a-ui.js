@@ -235,6 +235,8 @@ function iaAOpenTasks(){
   var source=typeof reminders!=='undefined'&&Array.isArray(reminders)?reminders:(typeof tasks!=='undefined'&&Array.isArray(tasks)?tasks:[]);
   return source.filter(function(item){return String(item.state||'todo')!=='done'}).sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''))});
 }
+var fieldReports=[];
+function iaAFieldReportsPublish(entries){var map={avancement:'progress','problème':'issue',probleme:'issue',livraison:'delivery','sécurité':'safety',securite:'safety'};fieldReports=iaASafeArray(entries).map(function(entry){var category=String(entry.category||'').trim().toLocaleLowerCase('fr');return{id:String(entry.id||''),jobId:String(entry.projectId||''),jobName:String(entry.projectName||''),type:map[category]||'progress',text:String(entry.text||''),author:String(entry.author||''),createdAt:String(entry.createdAt||'')}}).filter(function(report){return report.jobId});}
 var iaAOwnerAgendaState={key:'',status:'idle',messages:[],tasks:[],fieldJournal:[],events:[],messageError:'',taskError:''};
 function iaAOwnerAgendaKey(){var access=iaACurrentAccess()||{};return String(globalThis.socleCurrentOrganizationId||'')+':'+String(access.userId||'')}
 function iaAEnsureOwnerAgenda(){
@@ -248,7 +250,7 @@ function iaAEnsureOwnerAgenda(){
     if(iaAOwnerAgendaState.key!==key)return;
     if(results[0].status==='fulfilled')iaAOwnerAgendaState.messages=iaASafeArray(results[0].value&&results[0].value.conversations).slice(0,3);else iaAOwnerAgendaState.messageError='Messages indisponibles.';
     if(results[1].status==='fulfilled')iaAOwnerAgendaState.tasks=iaASafeArray(results[1].value&&results[1].value.tasks).filter(function(task){return String(task.status||'todo')!=='done'}).slice(0,4);else iaAOwnerAgendaState.taskError='Tâches indisponibles.';
-    if(results[1].status==='fulfilled')iaAOwnerAgendaState.fieldJournal=iaASafeArray(results[1].value&&results[1].value.fieldJournal);
+    if(results[1].status==='fulfilled')iaAOwnerAgendaState.fieldJournal=iaASafeArray(results[1].value&&results[1].value.fieldJournal);iaAFieldReportsPublish(iaAOwnerAgendaState.fieldJournal);
     iaAOwnerAgendaState.status='ready';
     if(typeof view!=='undefined'&&view==='home'&&iaARoleCode()==='OWNER'&&typeof render==='function')render();
   });
@@ -346,6 +348,46 @@ function iaAKpis(items){
 function iaARoleHeading(role,title,subtitle){
   return '<header class="ia-role-head"><div><p class="eyebrow">'+iaAEscape(IA_A_ROLE_LABELS[role]||role)+'</p><h1>'+iaAEscape(title)+'</h1><p>'+iaAEscape(subtitle)+'</p></div><span class="ia-role-chip">'+iaAEscape(IA_A_ROLE_LABELS[role]||role)+'</span></header>';
 }
+var IA_A_ATTENTION_CATEGORIES=[
+  {id:'hours',label:'Heures à valider',explanation:'Une demande de correction attend depuis plus de deux jours.',route:'timeEntries'},
+  {id:'orders',label:'Commandes en retard',explanation:'La date prévue est passée et la commande n’est pas entièrement reçue.',route:'purchases'},
+  {id:'invoices',label:'Factures fournisseurs',explanation:'Une facture liée à une commande attend son bon de livraison.',route:'accounting'},
+  {id:'documents',label:'Documents de sous-traitance',explanation:'Les pièces attendues doivent être définies pour vérifier leur présence.',route:'documents'},
+  {id:'silent',label:'Chantiers silencieux',explanation:'Aucun pointage ni relève depuis au moins huit jours.',route:'jobs'},
+  {id:'reports',label:'Relèves de terrain',explanation:'Les problèmes et situations de sécurité signalés restent à consulter.',route:'jobs'}
+];
+function iaAAttentionDate(value){var date=new Date(value);return Number.isNaN(date.getTime())?null:date}
+function iaAAttentionAge(value,now){var date=iaAAttentionDate(value);return date?Math.floor((now.getTime()-date.getTime())/86400000):null}
+function iaAAttentionBuild(data){
+  data=data||{};var now=iaAAttentionDate(data.checkedAt)||new Date(),today=String(data.today||now.toISOString().slice(0,10)),items=[],categories=[];
+  function add(category,title,detail,age,tone,route){items.push({category:category,title:title,detail:detail,age:age,tone:tone,route:route||'home'})}
+  var jobs=iaASafeArray(data.jobs),orders=iaASafeArray(data.purchaseOrders),invoices=iaASafeArray(data.invoices),entries=iaASafeArray(data.timeEntries);
+  entries.forEach(function(entry){var correction=entry.correction||entry,age=iaAAttentionAge(correction.requestedAt||correction.createdAt,now);if(String(correction.status||'').toLowerCase()==='pending'&&age!==null&&age>2)add('hours','Une correction de pointage attend depuis '+age+' jours.',String(entry.projectName||entry.projectId||'Chantier à identifier'),age,'danger','timeEntries')});
+  orders.forEach(function(order){var status=String(order.status||'').toLocaleLowerCase('fr'),active=['commandée','partiellement reçue','ordered','partially_received'].includes(status);if(!active)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(String(order.expectedDate||''))){add('orders','Je ne sais pas si cette commande est en retard.','Date de livraison prévue absente · '+String(order.number||order.id||'Commande'),null,'muted','purchases');return}if(String(order.expectedDate)>=today)return;var lines=iaASafeArray(order.lines),fullyReceived=lines.length>0&&lines.every(function(line){return Number(line.received||0)>=Number(line.quantity||0)});if(fullyReceived)return;var age=iaAAttentionAge(order.expectedDate+'T12:00:00',now),days=Math.max(1,age||1);add('orders','La commande '+String(order.number||order.id||'')+' est en retard depuis '+days+' jour'+(days===1?'':'s')+'.',String(order.supplierName||order.supplierId||'Fournisseur non précisé'),age,'danger','purchases')});
+  if(data.invoicesReady===false)add('invoices','Je ne sais pas quelles factures nécessitent un bon de livraison.','Données des factures fournisseurs indisponibles',null,'muted','accounting');
+  invoices.forEach(function(invoice){if(invoice.delivery_note_id||invoice.deliveryNoteId)return;var supplier=String(invoice.supplier_id||invoice.supplierId||invoice.supplier_name||invoice.supplier||'').trim(),matching=orders.find(function(order){return supplier&&String(order.supplierId||order.supplier_id||order.supplierName||'').trim()===supplier});var ref=String(invoice.supplier_reference||invoice.supplierReference||invoice.description||invoice.id||'Facture fournisseur');if(!matching)add('invoices','Facture à vérifier : aucune commande fournisseur associée.',ref,null,'muted','accounting');else add('invoices','Facture à rapprocher : bon de livraison manquant.',ref+' · '+String(matching.number||matching.id||''),null,'warn','accounting')});
+  var subcontractors=iaASafeArray(data.subcontractors);if(subcontractors.length&&!data.subcontractorRequirementsAvailable) add('documents','Je ne sais pas quelles pièces manquent.','Liste des documents attendus par sous-traitant absente',null,'muted','documents');
+  var silentUnknownJobs=[];jobs.forEach(function(job){var phase=String(job.phase||job.status||'').trim().toLocaleLowerCase('fr');if(job.archivedAt||['terminé','terminée','archivé','archivée','completed','archived'].includes(phase))return;var last='';iaASafeArray(job.timeEntries).forEach(function(entry){var value=String(entry.date||entry.workDate||'');if(value>last)last=value});if(data.fieldReportsAvailable)iaASafeArray(data.fieldReports).filter(function(report){return String(report.jobId)===String(job.id)}).forEach(function(report){var value=String(report.createdAt||'').slice(0,10);if(value>last)last=value});if(last&&last>=new Date(now.getTime()-8*86400000).toISOString().slice(0,10))return;if(!data.fieldReportsAvailable){silentUnknownJobs.push(String(job.name||job.reference||job.id||'Chantier'));return}if(!last){add('silent','Je ne sais pas si ce chantier est silencieux.',String(job.name||job.reference||'Chantier')+' · date du dernier pointage absente',null,'muted','jobs');return}var age=iaAAttentionAge(last+'T12:00:00',now);if(age!==null&&age>=8)add('silent','Le chantier '+String(job.name||job.reference||job.id)+' est silencieux depuis '+age+' jours.',last,age,'warn','jobs')});if(silentUnknownJobs.length)add('silent','Je ne sais pas si '+(silentUnknownJobs.length===1?'ce chantier est silencieux.':'ces '+silentUnknownJobs.length+' chantiers sont silencieux.'),'Relèves de terrain indisponibles · '+silentUnknownJobs.join(', '),null,'muted','jobs');
+  if(data.fieldReportsAvailable)iaASafeArray(data.fieldReports).filter(function(report){return ['issue','safety'].includes(String(report.type||''))}).forEach(function(report){var job=jobs.find(function(candidate){return String(candidate.id)===String(report.jobId)}),label=report.type==='safety'?'Sécurité':'Problème';add('reports',label+' signalé'+(report.type==='safety'?'e':'')+' · '+String(job&&job.name||report.jobId||'Chantier'),String(report.text||'Observation sans détail'),null,'danger','jobs')});
+  IA_A_ATTENTION_CATEGORIES.forEach(function(category){var categoryItems=items.filter(function(item){return item.category===category.id});categories.push({id:category.id,label:category.label,explanation:category.explanation,count:categoryItems.length,available:category.id!=='reports'||Boolean(data.fieldReportsAvailable)})});
+  return{items:items,categories:categories,checkedAt:now.toLocaleString('fr-BE',{dateStyle:'short',timeStyle:'short'}),today:today};
+}
+function iaAAttentionWorkspaceData(){
+  var reportsPresent=typeof fieldReports!=='undefined'&&Array.isArray(fieldReports),pending=[];
+  if(typeof jobs!=='undefined')iaASafeArray(jobs).forEach(function(job){iaASafeArray(job.timeEntries).forEach(function(entry){iaASafeArray(entry.corrections).filter(function(correction){return String(correction.status||'').toLowerCase()==='pending'}).forEach(function(correction){pending.push({correction:correction,projectId:job.id,projectName:job.name})})})});
+  var finance=typeof serverFinanceState!=='undefined'&&serverFinanceState==='ready';
+  var financeAllowed=iaAModuleVisible('accounting');if(financeAllowed&&!finance&&typeof serverFinanceState!=='undefined'&&serverFinanceState==='idle'&&typeof loadServerFinance==='function')queueMicrotask(function(){if(typeof view!=='undefined'&&view==='home')loadServerFinance()});
+  var subcontracts=typeof subcontractors!=='undefined'?iaASafeArray(subcontractors).slice():[];if(typeof contacts!=='undefined')iaASafeArray(contacts).filter(function(contact){return iaASafeArray(contact.roles).includes('Sous-traitant')}).forEach(function(contact){if(!subcontracts.some(function(item){return String(item.id)===String(contact.id)}))subcontracts.push(contact)});
+  return{today:String(typeof reference!=='undefined'&&reference||new Date().toISOString().slice(0,10)),checkedAt:new Date(),jobs:typeof jobs!=='undefined'?jobs:[],timeEntries:pending,purchaseOrders:typeof purchaseOrders!=='undefined'?purchaseOrders:[],invoices:finance?iaASafeArray(typeof serverExpenses!=='undefined'?serverExpenses:[]):[],invoicesReady:finance,fieldReportsAvailable:reportsPresent,fieldReports:reportsPresent?fieldReports:[],subcontractors:subcontracts,subcontractorRequirementsAvailable:false};
+}
+var iaAAttentionFilter='all';
+var iaAAttentionCurrentModel=null;
+function iaAAttentionSetFilter(value){iaAAttentionFilter=value;var host=document.querySelector('.ia-attention');if(host&&iaAAttentionCurrentModel)host.outerHTML=iaAAttentionRender(iaAAttentionCurrentModel)}
+function iaAAttentionRender(model){iaAAttentionCurrentModel=model;var items=model.items,visible=iaAAttentionFilter==='all'?items:items.filter(function(item){return item.category===iaAAttentionFilter}),categories=model.categories.filter(function(category){return category.available}),count=visible.length,heading=count===1?'1 chose à traiter':count+' choses à traiter';
+  return '<section class="panel ia-attention" aria-labelledby="ia-attention-title"><header class="ia-attention-head"><div><p class="eyebrow">CENTRE DE CONTRÔLE</p><h2 id="ia-attention-title">'+heading+'</h2></div><label class="ia-attention-filter"><span>Type</span><select aria-label="Filtrer les alertes" onchange="iaAAttentionSetFilter(this.value)"><option value="all" '+(iaAAttentionFilter==='all'?'selected':'')+'>Toutes</option>'+categories.map(function(category){return'<option value="'+category.id+'" '+(iaAAttentionFilter===category.id?'selected':'')+'>'+iaAEscape(category.label)+'</option>'}).join('')+'</select></label></header><div class="ia-attention-guides">'+categories.map(function(category){return'<p><strong>'+iaAEscape(category.label)+'.</strong> '+iaAEscape(category.explanation)+(category.id==='reports'&&category.available&&category.count===0?'<small class="ia-attention-category-empty">Aucune relève à consulter.</small>':'')+'</p>'}).join('')+'</div>'+(visible.length?'<ul class="ia-attention-list">'+visible.map(function(item,index){return'<li class="ia-attention-row tone-'+iaAEscape(item.tone)+'"><span class="ia-attention-mark" aria-hidden="true"></span><span class="ia-attention-copy"><strong>'+iaAEscape(item.title)+'</strong><small>'+iaAEscape(item.detail)+(item.age!==null?' · depuis '+item.age+' jour'+(item.age===1?'':'s'):'')+'</small></span><button type="button" class="ia-attention-action" data-attention-index="'+index+'" onclick="navigate(\''+iaAEscape(item.route)+'\')">Ouvrir <span aria-hidden="true">→</span></button></li>'}).join('')+'</ul>':'<p class="ia-attention-empty">Rien à traiter selon les données disponibles.<small>Dernier contrôle : '+iaAEscape(model.checkedAt)+'</small></p>')+'</section>';
+}
+var iaAAttentionPositionObserver=null;
+function iaAAttentionEnsurePosition(){var main=document.querySelector('#main');if(!main||typeof main.querySelector!=='function')return;var card=main.querySelector('.ia-attention'),intro=main.querySelector('.v3-intro');if(card&&intro&&intro.nextElementSibling!==card)intro.after(card)}
 function iaAPersonalPortalsForOverview(){
   if(!iaAModuleVisible('personal')||typeof personalPortalLinks==='undefined'||!Array.isArray(personalPortalLinks))return '';
   var sources=personalPortalLinks.slice();
@@ -401,6 +443,7 @@ function iaAWorkerWeatherSection(){
 function iaAOwnerDashboard(){
   iaAEnsureOwnerAgenda();
   return iaARoleHeading('OWNER','Votre journée','Messages, demandes, rendez-vous et calendrier de la semaine.')+
+    iaAAttentionRender(iaAAttentionBuild(iaAAttentionWorkspaceData()))+
     iaAOwnerWeatherSection()+
     '<div class="ia-owner-dashboard">'+iaAOwnerMessagesPanel()+iaAOwnerTasksPanel()+iaAOwnerWeekView()+'</div>'+
     '<section class="ia-quick-actions" aria-label="Actions rapides">'+(typeof canModuleAction==='function'&&canModuleAction('jobs','add')?'<button class="btn primary" type="button" onclick="navigate(\'jobs\')">Nouveau chantier</button>':'')+(typeof canModuleAction==='function'&&canModuleAction('quotes','add')?'<button class="btn" type="button" onclick="navigate(\'quotes\')">Nouveau devis</button>':'')+(iaAModuleVisible('people')?'<button class="btn" type="button" onclick="navigate(\'people\')">Personnel & équipes</button>':'')+'</section>'+iaAPersonalPortalsForOverview('OWNER');
@@ -591,6 +634,8 @@ function iaAEnhanceShell(){
   iaAEnhanceMobileTables();
   var main=document.querySelector('#main');
   if(main)main.setAttribute('data-view',typeof view==='undefined'?'':String(view));
+  if(main&&typeof MutationObserver==='function'&&!iaAAttentionPositionObserver){iaAAttentionPositionObserver=new MutationObserver(iaAAttentionEnsurePosition);iaAAttentionPositionObserver.observe(main,{childList:true,subtree:true})}
+  iaAAttentionEnsurePosition();
   iaAEnsureScreenPurpose();
   iaACommandEnsure();
   var topbar=document.querySelector('.topbar');
@@ -872,6 +917,10 @@ globalThis.iaARoleCode=iaARoleCode;
 globalThis.iaARetryWorkerWeatherPlanning=iaARetryWorkerWeatherPlanning;
 globalThis.iaADashboardForRole=iaADashboardForRole;
 globalThis.iaAFinanceModel=iaAFinanceModel;
+globalThis.iaAAttentionBuild=iaAAttentionBuild;
+globalThis.iaAAttentionRender=iaAAttentionRender;
+globalThis.iaAAttentionSetFilter=iaAAttentionSetFilter;
+globalThis.iaAAttentionHomeReady=function(){return iaAOwnerAgendaState.status==='ready'&&(typeof serverFinanceState==='undefined'||!['idle','loading'].includes(serverFinanceState))&&!(typeof weatherLoading!=='undefined'&&weatherLoading)};
 globalThis.iaAApplyTheme=iaAApplyTheme;
 globalThis.iaAThemeId=iaAThemeId;
 globalThis.SOCLE_THEME_CATALOG=IA_A_THEMES;
