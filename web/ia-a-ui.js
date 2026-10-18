@@ -920,7 +920,8 @@ globalThis.iaAFinanceModel=iaAFinanceModel;
 globalThis.iaAAttentionBuild=iaAAttentionBuild;
 globalThis.iaAAttentionRender=iaAAttentionRender;
 globalThis.iaAAttentionSetFilter=iaAAttentionSetFilter;
-globalThis.iaAAttentionHomeReady=function(){return iaAOwnerAgendaState.status==='ready'&&(typeof serverFinanceState==='undefined'||!['idle','loading'].includes(serverFinanceState))&&!(typeof weatherLoading!=='undefined'&&weatherLoading)};
+/* La carte ne depend ni de la meteo ni d'un service externe : l'attente ne doit inclure que ce qu'elle affiche, sinon elle pend en integration continue ou le reseau est ferme. */
+globalThis.iaAAttentionHomeReady=function(){return iaAOwnerAgendaState.status==='ready'&&(typeof serverFinanceState==='undefined'||!['idle','loading'].includes(serverFinanceState))};
 globalThis.iaAApplyTheme=iaAApplyTheme;
 globalThis.iaAThemeId=iaAThemeId;
 globalThis.SOCLE_THEME_CATALOG=IA_A_THEMES;
