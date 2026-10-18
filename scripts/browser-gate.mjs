@@ -33,6 +33,7 @@ const browserSuites=[
   {name:'browser-search-01.mjs'},
   {name:'browser-didactic-layer-01.mjs'},
   {name:'browser-attention-01.mjs'},
+  {name:'browser-job-canvas-01.mjs'},
   {name:'browser-planning-board-01.mjs'},
   {name:'browser-planning-drag-step2.mjs'}
 ];

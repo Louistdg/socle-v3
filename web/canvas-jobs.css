@@ -1,0 +1,37 @@
+.ia-job-canvas-shell{margin:var(--sx-space-6) 0 var(--sx-space-8);min-width:0}
+.ia-job-canvas-head{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sx-space-5);margin-bottom:var(--sx-space-3)}
+.ia-job-canvas-head h2{margin:0;color:var(--sx-ink);font-size:20px}
+.ia-job-canvas-head p:not(.eyebrow){margin:var(--sx-space-2) 0 0;color:var(--sx-muted);font-size:13px}
+.ia-job-canvas-feedback{min-height:20px;margin:0 0 var(--sx-space-2);color:var(--sx-muted);font-size:12px}
+.ia-job-canvas-feedback:empty{display:none}
+.ia-job-canvas{position:relative;box-sizing:border-box;min-height:240px;max-height:calc(100vh - var(--sx-topbar));overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;border:1px solid var(--sx-line);border-radius:var(--sx-radius-md);background-color:var(--sx-canvas);background-image:radial-gradient(circle,var(--sx-dot-grid) 1px,transparent 1px),radial-gradient(circle,color-mix(in srgb,var(--sx-muted) 16%,transparent) 1px,transparent 1px);background-size:28px 28px}
+.ia-job-canvas[aria-busy="true"]{cursor:progress}.ia-job-canvas:after{content:"";position:absolute;top:var(--ia-canvas-content-height,240px);left:0;width:1px;height:1px;pointer-events:none}
+.ia-job-canvas-mobile{display:none}
+.ia-job-card{position:absolute;z-index:1;box-sizing:border-box;width:248px;min-height:120px;padding:var(--sx-space-5);border:1px solid var(--sx-line);border-radius:var(--sx-radius-md);background:var(--sx-surface);color:var(--sx-ink);box-shadow:none;cursor:grab;touch-action:pan-y;user-select:none;transition:box-shadow var(--sx-duration-1) var(--sx-ease),border-color var(--sx-duration-1) var(--sx-ease),transform var(--sx-duration-1) var(--sx-ease)}
+.ia-job-card:focus-visible{outline:0;box-shadow:var(--sx-ring);z-index:5}
+.ia-job-card:hover .ia-job-card-menu-button,.ia-job-card:focus .ia-job-card-menu-button,.ia-job-card:focus-within .ia-job-card-menu-button{opacity:1;visibility:visible}
+.ia-job-card.is-lifted{cursor:grabbing;z-index:100!important;border-color:var(--sx-accent-line);box-shadow:var(--sx-shadow-2),var(--sx-ring);transition:none}
+.ia-job-card.is-saving{border-color:var(--sx-accent-line)}
+.ia-job-card.is-saved{border-color:var(--sx-ok)}
+.ia-job-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sx-space-3)}
+.ia-job-card-title{display:flex;min-width:0;flex-direction:column;align-items:flex-start;gap:var(--sx-space-3)}
+.ia-job-card-title>strong{max-width:100%;overflow:hidden;color:var(--sx-ink);font-size:14px;line-height:1.35;text-overflow:ellipsis;white-space:nowrap}
+.ia-job-card-menu-button{display:inline-flex;align-items:center;justify-content:center;flex:0 0 32px;width:32px;height:32px;margin:-6px -6px 0 0;border:1px solid var(--sx-line);border-radius:var(--sx-radius-sm);background:var(--sx-raised);color:var(--sx-muted);font-size:20px;line-height:1;opacity:0;visibility:hidden;cursor:pointer}
+.ia-job-card-menu-button:focus-visible,.ia-job-card-menu [role="menuitem"]:focus-visible,.ia-job-canvas-undo:focus-visible{outline:0;box-shadow:var(--sx-ring)}
+.ia-job-card-menu{position:absolute;top:42px;right:10px;z-index:120;width:176px;padding:var(--sx-space-2);border:1px solid var(--sx-line-strong);border-radius:var(--sx-radius-md);background:var(--sx-overlay);box-shadow:var(--sx-shadow-2)}
+.ia-job-card-menu[hidden]{display:none}
+.ia-job-card-menu [role="menuitem"]{display:block;width:100%;min-height:36px;padding:0 var(--sx-space-4);border:0;border-radius:var(--sx-radius-sm);background:transparent;color:var(--sx-ink);text-align:left;cursor:pointer}
+.ia-job-card-menu [role="menuitem"]:hover{background:var(--sx-raised)}
+.ia-job-card-meta{margin:var(--sx-space-3) 0 0;color:var(--sx-muted);font-size:12px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ia-job-status{display:inline-flex;align-items:center;gap:var(--sx-space-3);min-height:20px;padding:0 var(--sx-space-3);border:1px solid var(--sx-line);border-radius:var(--sx-radius-pill);color:var(--sx-muted);font-size:11px;line-height:1.2}
+.ia-job-status i{width:6px;height:6px;border-radius:50%;background:var(--sx-muted)}
+.ia-job-status.is-ok i{background:var(--sx-ok)}
+.ia-job-status.is-warn i{background:var(--sx-warn)}
+.ia-job-card-blocker{margin:var(--sx-space-3) 0 0;overflow:hidden;color:var(--sx-danger);font-size:12px;text-overflow:ellipsis;white-space:nowrap}
+.ia-job-card-counts{display:flex;flex-wrap:wrap;gap:var(--sx-space-3) var(--sx-space-4);margin-top:var(--sx-space-4);color:var(--sx-muted);font-size:11px}
+.ia-job-canvas-large[hidden]{display:none}
+.ia-job-canvas-undo{padding:0;border:0;background:transparent;color:var(--sx-accent-ink);font:inherit;text-decoration:underline;cursor:pointer}
+.ia-job-canvas.is-list-mode{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(248px,100%),248px));align-content:start;gap:var(--sx-space-4);padding:var(--sx-space-5)}
+.ia-job-canvas.is-list-mode .ia-job-card{position:relative!important;inset:auto!important}
+@media(max-width:899px){.ia-job-canvas{display:none!important}.ia-job-canvas-mobile{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(248px,100%),1fr));gap:var(--sx-space-4)}.ia-job-card-mobile{position:relative;width:auto;min-height:120px;display:flex;flex-direction:column;align-items:stretch;text-align:left;cursor:pointer}.ia-job-card-menu-button{display:none}.ia-job-canvas-head{align-items:flex-start}.ia-job-canvas-head h2{font-size:18px}}
+@media(min-width:900px){.ia-job-canvas-mobile{display:none!important}}
