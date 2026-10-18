@@ -231,4 +231,39 @@
 .job-workspace-tabs .job-tab-move button:focus-visible { outline: 2px solid var(--sx-accent); outline-offset: 1px; }
 @media (max-width: 899px) {
   .job-workspace-tabs .job-tab-move button { min-width: 36px; min-height: 44px; font-size: 12px; }
+
+  /* 20. La page Devis empilait quatre blocs avant la premiere ligne : le
+        panneau « Pre-devis terrain », un premier jeu d'onglets, le titre, un
+        second jeu d'onglets. Sur telephone le panneau se reduit a son bouton :
+        on garde l'acces, pas le discours. */
+  body.socle-v3 #main .field-action-strip { padding: 10px 12px; }
+  body.socle-v3 #main .field-action-strip .eyebrow,
+  body.socle-v3 #main .field-action-strip h2,
+  body.socle-v3 #main .field-action-strip span { display: none; }
+  body.socle-v3 #main .field-action-strip .btn { width: 100%; }
+
+  /* 21. Les titres de page etaient centres par le style de base, alors que tout
+        le reste est aligne a gauche. */
+  body.socle-v3 #main h1 { text-align: left; }
+
+  /* 22. Pres d'un texte sur deux passait sous 12 px : illisible au soleil.
+        Les mentions secondaires remontent a 12 px minimum, sans toucher aux
+        titres ni aux libelles compacts des tableaux. */
+  body.socle-v3 #main small,
+  body.socle-v3 #main .help-line,
+  body.socle-v3 #main .muted { font-size: 12px; line-height: 1.35; }
+
+  /* 23. Les textes les plus petits mesures sur l'accueil et les listes :
+        etats de chantier, actions du centre de controle, mentions vides.
+        Tous remontent a 12 px, sauf les marques de portail qui restent des
+        logos. */
+  body.socle-v3 #main .ia-job-status,
+  body.socle-v3 #main .ia-job-card-counts,
+  body.socle-v3 #main .ia-attention-action,
+  body.socle-v3 #main .is-empty { font-size: 12px; }
+
+  /* 24. Les cellules de tableau et les pastilles restaient a 11 px. */
+  body.socle-v3 #main td,
+  body.socle-v3 #main th,
+  body.socle-v3 #main .badge { font-size: 12px; }
 }
