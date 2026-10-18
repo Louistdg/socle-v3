@@ -112,9 +112,22 @@
   body.socle-v3 #main .toolbar.ia-b-filters input { min-height: var(--sx-tap); font-size: var(--sx-text-sm); }
   body.socle-v3 #main .toolbar.ia-b-filters label { font-size: var(--sx-text-2xs); }
 
-  /* 10. La puce d'entreprise vide dans l'en-tete : une case grise avec un
-        chevron, sans texte. Sur telephone le nom est deja affiche a cote. */
-  body.socle-v3 .topbar .organization-mobile-trigger { display: none; }
+  /* 10. La puce d'entreprise n'est plus une case grise vide : le chevron
+        reste un vrai bouton tactile de 44 px, sans fond ni bordure. */
+  body.socle-v3 .topbar .workspace .organization-mobile-trigger {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    min-width: 32px;
+    min-height: 44px;
+    padding: 0;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--sx-ink) !important;
+    font-size: 16px !important;
+  }
 
   /* 11. Le nom de l'entreprise tenait sur deux lignes. Il est coupe a une
         ligne, avec des points de suspension. */
@@ -135,7 +148,7 @@
   body.socle-v3 #main .ia-job-canvas { display: none; }
 
   /* 14. Le nom de l'entreprise, seconde tentative : c'est le strong qui portait
-        les deux lignes, pas son parent. Et la puce au chevron vide disparait. */
+        les deux lignes, pas son parent. */
   body.socle-v3 .topbar .workspace .organization-current {
     display: block;
     white-space: nowrap;
@@ -144,7 +157,6 @@
     max-height: 20px;
     line-height: 20px;
   }
-  body.socle-v3 .topbar .workspace .organization-mobile-trigger { display: none !important; }
 
   /* 15. L'en-tete de page prenait les trois quarts de l'ecran : titre, phrase,
         recherche, quatre filtres. Sur telephone il ne reste que le titre, sur
