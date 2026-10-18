@@ -1,0 +1,76 @@
+/* Dossiers de tâches — barre compacte au-dessus de la liste.
+   Les dossiers sont des cibles de dépôt ; la poignée déplace le dossier.
+   Le bouton Déplacer de chaque ligne donne le même résultat sans glisser. */
+.task-folders-bar{
+  margin:0 0 var(--sx-space-4);
+  padding:var(--sx-space-4);
+  border:1px solid var(--sx-line);
+  border-radius:12px;
+  background:var(--sx-surface);
+}
+.task-folders-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sx-space-4);margin-bottom:var(--sx-space-3)}
+.task-folders-head>div{min-width:0}
+.task-folders-head .eyebrow{margin:0 0 3px}
+.task-folders-head strong{display:block;font-size:15px;line-height:1.25;color:var(--sx-ink)}
+.task-folders-head span{display:block;margin-top:3px;font-size:12px;line-height:1.4;color:var(--sx-muted)}
+.task-folders-mobile-hint{display:none!important}
+.task-folders-head .link{flex:0 0 auto;font-size:12px;white-space:nowrap}
+.task-folders-list{display:flex;align-items:stretch;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;padding:2px 1px 4px;scrollbar-width:thin}
+.task-folder-chip{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:stretch;
+  min-height:44px;
+  border:1px solid var(--sx-line);
+  border-radius:10px;
+  background:var(--sx-raised);
+  overflow:hidden;
+}
+.task-folder-chip.is-active{border-color:var(--sx-accent-line);box-shadow:inset 0 -3px 0 var(--sx-accent)}
+.task-folder-chip.is-drop-target{outline:2px solid var(--sx-accent);outline-offset:1px;background:var(--sx-surface)}
+.task-folder-chip.is-dragging{opacity:.55}
+.task-folder-grip{display:inline-flex;align-items:center;justify-content:center;width:28px;border-right:1px solid var(--sx-line);color:var(--sx-muted);font-size:15px;cursor:grab;touch-action:none}
+.task-folder-grip:active{cursor:grabbing}
+.task-folder-select{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 10px;border:0;background:transparent;color:var(--sx-ink);font-size:13px;font-weight:650;white-space:nowrap;cursor:pointer}
+.task-folder-select b{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--sx-surface);color:var(--sx-muted);font-size:11px;font-weight:700}
+.task-folder-chip.is-active .task-folder-select b{background:var(--sx-accent);color:var(--sx-on-accent)}
+.task-folder-menu{width:34px;border:0;border-left:1px solid var(--sx-line);background:transparent;color:var(--sx-muted);font-size:18px;line-height:1;cursor:pointer}
+.task-folder-menu:hover,.task-folder-grip:hover{background:var(--sx-surface);color:var(--sx-ink)}
+.task-folder-add{flex:0 0 auto;min-height:44px;padding:0 14px;white-space:nowrap;font-size:12px}
+.task-board-undo{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px;padding:8px 10px;border:1px solid var(--sx-line);border-radius:8px;background:var(--sx-raised);font-size:12px;color:var(--sx-ink)}
+.task-board-undo .link{font-size:12px}
+.task-board-error{margin:8px 0 0;font-size:12px;color:var(--sx-danger)}
+.task-board-move-list,.task-folder-menu-list{display:grid;gap:8px;margin:10px 0}
+.task-board-move-list .btn,.task-folder-menu-list .btn{justify-content:flex-start;min-height:44px;text-align:left}
+.task-folder-tag{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--sx-raised);color:var(--sx-ink);font-size:10px;font-weight:650;white-space:nowrap}
+.task-move{flex:0 0 auto;align-self:center;display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:44px;min-height:36px;margin:0 8px 0 4px;padding:0 10px;border:1px solid var(--sx-line);border-radius:8px;background:var(--sx-surface);color:var(--sx-muted);font-size:12px;font-weight:650;white-space:nowrap}
+.task-move:hover{background:var(--sx-raised);color:var(--sx-ink)}
+.task-move-icon{display:none;font-size:17px}
+.batch-task.is-dragging{opacity:.55}
+.task-drag-handle{display:inline-flex;align-items:center;justify-content:center;flex:0 0 24px;width:24px;min-height:44px;color:var(--sx-muted);font-size:15px;cursor:grab;touch-action:none}
+.task-drag-handle:active{cursor:grabbing}
+.task-drag-handle:focus-visible{outline:2px solid var(--sx-accent);outline-offset:-2px;border-radius:6px}
+.batch-task[hidden]{display:none!important}
+.task-board-filter-empty{margin:0}
+
+@media(max-width:899px){
+  .task-folders-bar{padding:9px 10px;border-radius:10px;margin-bottom:10px}
+  .task-folders-head{flex-direction:row;align-items:center;gap:6px;margin-bottom:5px}
+  .task-folders-head .eyebrow{display:none}
+  .task-folders-head strong{font-size:14px}
+  .task-folders-head>div>span:not(.task-folders-mobile-hint){display:none}
+  .task-folders-mobile-hint{display:block!important;margin:2px 0 0;font-size:11px;line-height:1.3;color:var(--sx-muted)}
+  .task-folders-head .link{display:none}
+  .task-folder-chip{min-height:40px;border-radius:8px}
+  .task-folder-grip{display:none}
+  .task-folder-select{min-height:40px;font-size:12px;padding:0 8px}
+  .task-folder-select b{min-width:20px;height:20px;font-size:10px}
+  .task-folder-menu{width:38px;font-size:17px}
+  .task-folder-add{min-height:40px;padding:0 12px}
+  .task-drag-handle{display:none}
+  .task-board-undo{margin-top:6px;padding:6px 8px}
+  .task-move{align-self:center;width:44px;height:44px;min-height:44px;margin:0 4px 0 2px;padding:0;border:0;background:transparent}
+  .task-move-label{display:none}
+  .task-move-icon{display:inline}
+  .task-folder-tag{margin-left:0;margin-top:3px;font-size:10px}
+}
