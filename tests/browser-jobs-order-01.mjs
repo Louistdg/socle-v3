@@ -24,10 +24,13 @@ try{
 
   await tab.evaluate("serverJson('/api/me/preferences/dashboard/jobs-order',{method:'PUT',body:JSON.stringify({schemaVersion:1,value:{order:[]}})}).catch(()=>{})",'reset-preference');
 
+  await tab.call('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false,screenWidth:1440,screenHeight:900});
   await tab.evaluate("navigate('jobs')",'go-jobs');
   await waitFor(()=>tab.evaluate("document.querySelectorAll('#main .ia-jobs-table tbody tr').length>3",'rows-present'),'lignes de chantier',15000);
   await waitFor(()=>tab.evaluate("Boolean(document.querySelector('[data-job-move]'))",'arrows-present'),'fleches de tri',10000);
 
+  const visibles=await tab.evaluate("[...document.querySelectorAll('[data-job-move]')].filter(n=>n.getBoundingClientRect().width>0&&n.getBoundingClientRect().height>0).length",'arrows-visible');
+  assert.ok(visibles>=8,'Les fleches sont visibles et prenables : '+visibles);
   const initial=await ids();
   assert.ok(initial.filter(Boolean).length>=3,'Au moins trois chantiers identifies : '+JSON.stringify(initial.slice(0,5)));
   await screenshot('01-tri-chantiers');

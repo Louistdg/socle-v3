@@ -73,13 +73,15 @@
       var action = row.querySelector('.ia-job-action');
       if (action) action.style.display = 'none';
       if (row.querySelector('[data-job-move]')) return;
-      var cell = document.createElement('td');
-      cell.className = 'ia-job-cell ia-job-order';
-      cell.innerHTML = '<span class="ia-job-order-buttons">' +
-        '<span role="button" tabindex="0" data-job-move="up" aria-label="Monter ce chantier">▲</span>' +
-        '<span role="button" tabindex="0" data-job-move="down" aria-label="Descendre ce chantier">▼</span>' +
-        '</span>';
-      row.append(cell);
+      /* Les fleches vivent DANS la cellule d'identite, pas dans une cellule de
+         plus : une cellule ajoutee a un tableau deja compresse se placait mal
+         sous 900 px. */
+      var cible = row.querySelector('.ia-job-identity') || row;
+      var wrap = document.createElement('span');
+      wrap.className = 'ia-job-order-inline';
+      wrap.innerHTML = '<span role="button" tabindex="0" data-job-move="up" aria-label="Monter ce chantier">▲</span>' +
+        '<span role="button" tabindex="0" data-job-move="down" aria-label="Descendre ce chantier">▼</span>';
+      cible.append(wrap);
     });
     refresh();
   }

@@ -317,9 +317,49 @@ body.socle-v3 #main .ia-jobs-table-wrap { overflow-x: visible; }
 @media (max-width: 899px) {
   body.socle-v3 #main .ia-jobs-table td.ia-job-action { display: none !important; }
 }
-/* Le tri des chantiers est un geste de poste de travail : au telephone les
-   fleches se posaient sur le titre du chantier. Elles sont donc reservees au
-   bureau, et le telephone garde l'ordre enregistre sans les afficher. */
+
+/* Le tri au telephone : les fleches occupent leur propre colonne, empilees,
+   large de 44 px, et ne touchent jamais le titre du chantier. */
 @media (max-width: 899px) {
-  body.socle-v3 #main .ia-jobs-table .ia-job-order { display: none; }
+  body.socle-v3 #main .ia-jobs-table .ia-job-order {
+    display: table-cell;
+    width: 48px;
+    vertical-align: middle;
+    text-align: right;
+    padding: 0 2px;
+  }
+  body.socle-v3 #main .ia-job-order-buttons { flex-direction: column; gap: 4px; }
+  body.socle-v3 #main .ia-job-order-buttons [data-job-move] { width: 44px; height: 30px; }
+}
+/* Tri des chantiers : les fleches sont DANS la cellule d'identite, alignees a
+   droite, empilees. Aucune cellule de tableau ajoutee, donc aucune surprise de
+   mise en page, ni au bureau ni au telephone. */
+#main .ia-jobs-table .ia-job-identity { position: relative; padding-right: 44px; }
+#main .ia-job-order-inline {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#main .ia-job-order-inline [data-job-move] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 22px;
+  border: 1px solid var(--sx-line);
+  border-radius: 6px;
+  background: var(--sx-raised);
+  color: var(--sx-ink-soft);
+  font-size: 9px;
+  cursor: pointer;
+}
+#main .ia-job-order-inline [data-job-move][aria-disabled="true"] { opacity: 0.3; cursor: default; }
+#main .ia-job-order-inline [data-job-move]:focus-visible { outline: 2px solid var(--sx-accent); outline-offset: 1px; }
+@media (max-width: 899px) {
+  #main .ia-jobs-table .ia-job-identity { padding-right: 52px; }
+  #main .ia-job-order-inline [data-job-move] { width: 44px; height: 30px; font-size: 11px; }
 }
