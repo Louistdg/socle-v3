@@ -148,4 +148,52 @@
     line-height: 20px;
   }
   body.socle-v3 .topbar button.organization-mobile-trigger { display: none; }
+
+  /* 15. L'en-tete de page prenait les trois quarts de l'ecran : titre, phrase,
+        recherche, quatre filtres. Sur telephone il ne reste que le titre, sur
+        une ligne, et les actions passent a droite. */
+  body.socle-v3 #main .heading { align-items: center; gap: 6px; }
+  body.socle-v3 #main .heading h1 { font-size: var(--sx-text-lg); }
+  body.socle-v3 #main .heading p { display: none; }
+
+  /* 16. Les filtres tiennent sur une seule ligne qui defile horizontalement.
+        La hauteur reste a 48 px : c'est la regle du terrain. */
+  body.socle-v3 #main .toolbar.ia-b-filters {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding: 6px 8px;
+    gap: 8px;
+    scrollbar-width: none;
+  }
+  body.socle-v3 #main .toolbar.ia-b-filters::-webkit-scrollbar { display: none; }
+  body.socle-v3 #main .toolbar.ia-b-filters > * { flex: 0 0 auto; }
+  body.socle-v3 #main .toolbar.ia-b-filters input { flex: 0 0 62%; }
+  body.socle-v3 #main .toolbar.ia-b-filters select { min-width: 168px; }
+
+  /* 17. La liste des chantiers est un tableau de sept colonnes. Sur telephone,
+        on ne garde que ce qui se lit : l'identite du chantier. Les autres
+        colonnes sont accessibles en ouvrant la fiche. L'entete du tableau
+        disparait, et le bouton « Afficher plus » ne flotte plus sur les lignes. */
+  body.socle-v3 #main .ia-jobs-table thead { display: none; }
+  body.socle-v3 #main .ia-jobs-table .ia-job-client,
+  body.socle-v3 #main .ia-jobs-table .ia-job-town,
+  body.socle-v3 #main .ia-jobs-table .ia-job-team,
+  body.socle-v3 #main .ia-jobs-table .ia-job-progress-cell,
+  body.socle-v3 #main .ia-jobs-table .ia-job-action { display: none; }
+  body.socle-v3 #main .ia-jobs-table tr { height: auto; }
+  body.socle-v3 #main .ia-jobs-list { position: relative; }
+  body.socle-v3 #main .ia-jobs-more,
+  body.socle-v3 #main .ia-jobs-table + .btn { position: static; margin: 8px 0; }
+  /* 18. Le titre etait centre par le style de base : il repasse a gauche, comme
+        partout ailleurs. La colonne « statut » disparait aussi de la liste : le
+        statut se lit dans la fiche, pas dans une ligne de 44 px. */
+  body.socle-v3 #main .heading { text-align: left; }
+  body.socle-v3 #main .ia-jobs-table .ia-job-status { display: none; }
+
+  /* 19. « Afficher plus » flottait au-dessus de la derniere ligne. Il reprend sa
+        place dans le flux, sous la liste. */
+  body.socle-v3 #main .ia-b-more { position: static; margin: 8px 0; }
+  body.socle-v3 #main .ia-b-more .btn { width: 100%; }
 }
