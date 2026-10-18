@@ -35,7 +35,7 @@ try{
   assert.deepEqual(api,['CompactFilterBar','ContentSection','ContentStage','ContextLine','DetailDrilldown','KpiStrip','PageHeader','PageShell','PrimaryAction','fromLegacyMarkup','renderHTML']);
 
   // Independent cascade contract: changing build order or omitting a source must fail.
-const cssSources=['design-tokens.css','style.css','organization.css','planning.css','ia-a-ui.css','ui-foundation.css','stock-catalog-v2.css','stock-barcode.css','profile-avatar.css','mobile-nav.css','v3.css','v3-themes.css','quote-roofing-metre.css','document-triage.css','field-journal.css','audit-release.css'];
+const cssSources=['offline.css','design-tokens.css','style.css','organization.css','planning.css','ia-a-ui.css','ui-foundation.css','stock-catalog-v2.css','stock-barcode.css','profile-avatar.css','mobile-nav.css','v3.css','v3-themes.css','quote-roofing-metre.css','document-triage.css','field-journal.css','audit-release.css','mobile-audit.css'];
 const cssSourceBodies=await Promise.all(cssSources.map(name=>readFile(new URL('../web/'+name,import.meta.url),'utf8').then(text=>text.replace(/\r\n/g,'\n'))));
 const expectedCSS=(await esbuild.transform(cssSourceBodies.join('\n'),{loader:'css',minify:true,legalComments:'inline'})).code;
   const snapshots=new Map();

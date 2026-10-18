@@ -1,4 +1,5 @@
-.sx-journal-launch{position:fixed;z-index:250;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));min-height:48px;padding:0 24px;border:0;border-radius:var(--sx-radius-pill);background:var(--sx-accent);color:var(--sx-on-accent);font:600 var(--sx-text-base)/1 var(--sx-font-ui);box-shadow:var(--sx-shadow-2);cursor:pointer}
+.sx-journal-launch{position:static;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-height:44px;padding:0;border:1px solid var(--sx-line);border-radius:10px;background:var(--sx-surface);color:var(--sx-ink);font-size:0;white-space:nowrap;cursor:pointer}
+.sx-journal-launch::before{content:"";width:19px;height:19px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 7h3l2-2h6l2 2h3v12H4z'/%3E%3Ccircle cx='12' cy='13' r='3.5'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 7h3l2-2h6l2 2h3v12H4z'/%3E%3Ccircle cx='12' cy='13' r='3.5'/%3E%3C/svg%3E") center/contain no-repeat}
 .sx-journal-launch:focus-visible,.sx-journal-chip:focus-visible{outline:2px solid var(--sx-accent-ink);outline-offset:3px}
 .sx-journal-launch:hover{background:var(--sx-accent-hover)}
 .sx-journal-camera input{display:block;width:100%;min-height:48px;padding:var(--sx-space-3);border:1px dashed var(--sx-line-strong);border-radius:var(--sx-radius-md);background:var(--sx-surface);color:var(--sx-ink)}
@@ -14,4 +15,4 @@
 .sx-journal-panel .panel-head{align-items:center}
 .sx-journal-pending{margin-top:var(--sx-space-4);padding:var(--sx-space-4);border:1px solid var(--sx-line-strong);border-radius:var(--sx-radius-md);background:var(--sx-raised);color:var(--sx-ink)}
 .sx-journal-pending p{display:flex;align-items:center;justify-content:space-between;gap:var(--sx-space-3);margin:var(--sx-space-3) 0 0}
-@media(max-width:760px){.sx-journal-launch{right:max(16px,env(safe-area-inset-right));bottom:calc(max(16px,env(safe-area-inset-bottom)) + 72px);min-width:120px}.sx-journal-panel{margin-bottom:96px}}
+@media(max-width:899px){.sx-journal-launch{width:44px;min-width:44px;height:44px;min-height:44px;padding:0;border-radius:10px;font-size:0;gap:0}.sx-journal-panel{margin-bottom:24px}}

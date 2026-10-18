@@ -77,14 +77,11 @@
   }
   body.socle-v3 #main .heading { gap: 2px; }
 
-  /* 4. Le bouton « Relever » flottait au-dessus des dernieres lignes.
-        Il remonte au-dessus de la barre du bas, et la page lui reserve la
-        place : plus rien ne passe dessous. */
-  body.socle-v3 #main { padding-bottom: calc(64px + 76px); }
-  body.socle-v3 .sx-journal-launch {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
-    right: 12px;
-  }
+  /* 4. Le bouton « Relever » a quitté le coin flottant : il vit désormais
+        dans la barre d'en-tête (voir field-journal.css), donc plus aucun
+        contenu ne passe dessous. La page garde seulement la place de la
+        barre de navigation du bas. */
+  body.socle-v3 #main { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
 
   /* 5. Les explications du centre de controle etaient sur deux colonnes de
         180 px : illisibles au telephone. Une colonne, et le texte respire. */
@@ -147,12 +144,12 @@
     max-height: 20px;
     line-height: 20px;
   }
-  body.socle-v3 .topbar button.organization-mobile-trigger { display: none; }
+  body.socle-v3 .topbar .workspace .organization-mobile-trigger { display: none !important; }
 
   /* 15. L'en-tete de page prenait les trois quarts de l'ecran : titre, phrase,
         recherche, quatre filtres. Sur telephone il ne reste que le titre, sur
         une ligne, et les actions passent a droite. */
-  body.socle-v3 #main .heading { align-items: center; gap: 6px; }
+  body.socle-v3 #main .heading { align-items: stretch; gap: 6px; }
   body.socle-v3 #main .heading h1 { font-size: var(--sx-text-lg); }
   body.socle-v3 #main .heading p { display: none; }
 
@@ -334,22 +331,23 @@ body.socle-v3 #main .ia-jobs-table-wrap { overflow-x: visible; }
 /* Tri des chantiers : les fleches sont DANS la cellule d'identite, alignees a
    droite, empilees. Aucune cellule de tableau ajoutee, donc aucune surprise de
    mise en page, ni au bureau ni au telephone. */
-#main .ia-jobs-table .ia-job-identity { position: relative; padding-right: 44px; }
+#main .ia-jobs-table .ia-job-row { position: relative; }
+#main .ia-jobs-table .ia-job-identity { padding-right: 0; }
 #main .ia-job-order-inline {
   position: absolute;
-  right: 2px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 2px;
 }
 #main .ia-job-order-inline [data-job-move] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   border: 1px solid var(--sx-line);
   border-radius: 6px;
   background: var(--sx-raised);
@@ -360,6 +358,77 @@ body.socle-v3 #main .ia-jobs-table-wrap { overflow-x: visible; }
 #main .ia-job-order-inline [data-job-move][aria-disabled="true"] { opacity: 0.3; cursor: default; }
 #main .ia-job-order-inline [data-job-move]:focus-visible { outline: 2px solid var(--sx-accent); outline-offset: 1px; }
 @media (max-width: 899px) {
-  #main .ia-jobs-table .ia-job-identity { padding-right: 52px; }
-  #main .ia-job-order-inline [data-job-move] { width: 44px; height: 30px; font-size: 11px; }
+  #main .ia-jobs-table .ia-job-identity { padding-right: 0; padding-bottom: 40px; }
+  #main .ia-job-order-inline { right: 4px; bottom: 2px; top: auto; transform: none; }
+  #main .ia-job-order-inline [data-job-move] { width: 42px; height: 34px; font-size: 11px; }
 }
+
+/* 25. Derniers textes mesures sous 12 px au telephone : références, méta de
+   chantier, pastilles, légendes de cartes et filtres. Le plancher de lecture
+   au soleil est 12 px. */
+@media (max-width: 899px) {
+  body.socle-v3 #main small,
+  body.socle-v3 #main .ia-job-mobile-meta,
+  body.socle-v3 #main .ia-job-reference,
+  body.socle-v3 #main .ia-job-status,
+  body.socle-v3 #main .ia-job-card-counts,
+  body.socle-v3 #main .ia-attention-copy small,
+  body.socle-v3 #main .ia-attention-category-empty,
+  body.socle-v3 #main .ia-attention-action,
+  body.socle-v3 #main .personal-head span,
+  body.socle-v3 #main .finance-box small,
+  body.socle-v3 #main .server-finance-grid small,
+  body.socle-v3 #main .asset-categories span,
+  body.socle-v3 #main .quote-list-row small,
+  body.socle-v3 #main .badge,
+  body.socle-v3 #main .link,
+  body.socle-v3 #main .ia-owner-task-state,
+  body.socle-v3 #main .ia-attention-guides-wrap > summary,
+  body.socle-v3 #main .ia-b-planning-head button,
+  body.socle-v3 #main .ia-b-planning-head .btn,
+  body.socle-v3 #main .ia-b-filters button,
+  body.socle-v3 #main .ia-b-filters input,
+  body.socle-v3 #main .ia-b-filters select { font-size: 12px; line-height: 1.35; }
+
+  body.socle-v3 #main .ia-job-mobile-meta { margin-top: 2px; }
+
+  /* 26. Les indicateurs Stock passent en deux colonnes : la valeur HTVA
+     « 357 951,74 € » ne se coupe plus au milieu d'un nombre. Le troisième
+     indicateur occupe la largeur restante. */
+  body.socle-v3 #main .finance-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body.socle-v3 #main .finance-grid > .finance-box:last-child { grid-column: 1 / -1; }
+  body.socle-v3 #main .finance-box strong {
+    font-size: clamp(17px, 4.6vw, 19px);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  /* 27. Devis : le résumé comptait une seconde fois ce que les pastilles
+     « En cours / Archives » disent déjà. Il disparaît au téléphone, et
+     l'en-tête repasse sous un quart de l'écran. */
+  body.socle-v3 #main .quote-summary { display: none; }
+  body.socle-v3 #main .quote-area-tabs { margin-bottom: 10px; }
+  body.socle-v3 #main .quote-toolbar { margin: 0 0 10px; align-items: stretch; }
+  body.socle-v3 #main .quote-toolbar .btn { min-height: 44px; }
+
+  /* 28. Le raccourci de tri documentaire est une carte, pas un bouton nu. */
+  body.socle-v3 #main .document-triage-shortcut { margin-bottom: 10px; }
+}
+
+/* 29. Lisibilité au bureau : les tableaux denses restaient sous 10 px.
+   On ne change ni la hauteur des lignes ni le nombre de colonnes. */
+body.socle-v3 #main .ia-jobs-table th { font-size: 11px; }
+body.socle-v3 #main .ia-job-reference { font-size: 10.5px; flex: 0 0 auto; max-width: 100%; }
+body.socle-v3 #main .ia-attention-more .link { font-size: 12px; }
+body.socle-v3 #main .ia-job-client strong,
+body.socle-v3 #main .ia-job-team strong { font-size: 12px; }
+body.socle-v3 #main .ia-job-town span { font-size: 11.5px; }
+body.socle-v3 #main .ia-attention-copy strong { font-size: 12.5px; }
+body.socle-v3 #main .ia-attention-copy small { font-size: 11px; }
+body.socle-v3 #main .asset-table small { font-size: 11.5px; }
+
+/* 30. L'en-tête ne se comprime plus : les libellés d'action restent sur une
+   seule ligne, et « Relever » y occupe une icône de 44 px. */
+body.socle-v3 .header-right { flex-wrap: nowrap; white-space: nowrap; }
+body.socle-v3 .header-right form,
+body.socle-v3 .header-right button { white-space: nowrap; }

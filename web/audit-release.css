@@ -51,10 +51,10 @@ body.socle-v3 :is(button,.btn):active:not(:disabled){filter:brightness(.90)!impo
  body.socle-v3 .topbar .brand{width:34px!important;min-width:34px!important;flex:0 0 34px!important;font-size:0!important;margin:0!important}
  body.socle-v3 .topbar .brandmark{font-size:22px}
  body.socle-v3 .topbar :is(.branddot,.v3-version,.avatar,.socle-theme-picker,.workspace>small){display:none!important}
- body.socle-v3 .topbar .header-right{margin-left:0!important;gap:0!important;flex:0 0 44px!important}
+ body.socle-v3 .topbar .header-right{margin-left:0!important;gap:4px!important;flex:0 0 auto!important;align-items:center!important;min-width:0}
  body.socle-v3 .topbar :is(.quick-create,.v3-theme-button){width:44px!important;min-width:44px!important;min-height:44px!important;padding:4px!important}
  body.socle-v3 .topbar .v3-theme-button span{display:none}
- body.socle-v3 .organization-current{max-width:none!important;width:100%!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;font-size:12px!important;line-height:1.3}
+ body.socle-v3 .organization-current{max-width:100%!important;width:100%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;font-size:12px!important;line-height:1.3}
  body.socle-v3 .v3-section-tabs{top:58px}
  body.socle-v3 dialog:not(.socle-mobile-sheet){width:100vw!important;max-width:100vw!important}
  body.socle-v3 dialog :is(form,.form-two,.professional-fields,.v3-essential,.modal-inner){min-width:0!important;max-width:100%!important}

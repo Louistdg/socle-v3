@@ -147,6 +147,8 @@
 
   function enhance() {
     if (!table()) return;
+    var actionHead = table().querySelector('th.ia-job-col-actions');
+    if (actionHead) actionHead.textContent = 'Ordre';
     rows().forEach(idOf);
     ensureArrows();
     readOrder().then(applyOrder);
