@@ -104,7 +104,7 @@ async function dbBatch(env,statements,{strict=true}={}){if(typeof env.DB.batch==
 function operationKey(data){const value=String(data?.operationKey||'').trim();if(!/^[A-Za-z0-9._:-]{8,160}$/.test(value))throw Object.assign(Error('Clé d’opération invalide ou manquante.'),{status:400});return value}
 const USER_PREFERENCE_BODY_LIMIT=20*1024,USER_PREFERENCE_VALUE_LIMIT=16*1024;
 const USER_PREFERENCE_SCHEMAS=Object.freeze({
-  dashboard:Object.freeze({version:1,keys:new Set(['layout','widgets','density'])}),
+  dashboard:Object.freeze({version:1,keys:new Set(['layout','widgets','density','canvas'])}),
   'quick-actions':Object.freeze({version:1,keys:new Set(['items'])}),
   'saved-views':Object.freeze({version:1,keys:new Set(['definitions'])}),
   resume:Object.freeze({version:1,keys:new Set(['context'])}),
