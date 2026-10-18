@@ -1,0 +1,151 @@
+/* Audit de la vue telephone — 18 octobre 2026.
+   Chaque regle corrige un defaut constate sur une capture en 390 x 844.
+   Rien n'est decoratif ici : si une regle ne se voit pas, elle n'a pas lieu
+   d'etre. Specificite volontairement plus forte que le style de base, sans
+   !important. */
+
+@media (max-width: 899px) {
+
+  /* 1. L'en-tete. Le nom de l'entreprise passait sur deux lignes : la barre
+        faisait 62 px de haut et repoussait tout le reste. Il tient maintenant
+        sur une ligne, tronque proprement. */
+  body.socle-v3 .topbar {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    min-height: 56px;
+  }
+  body.socle-v3 .topbar .brand { flex: 0 0 auto; }
+  body.socle-v3 .topbar .workspace {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: auto;
+    display: block;
+  }
+  body.socle-v3 .topbar .workspace #organizationLabel {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--sx-text-sm);
+    line-height: 1.2;
+  }
+  body.socle-v3 .topbar .workspace small { display: none; }
+
+  /* Le bouton de commandes portait son libelle entier : 97 px a lui seul.
+     Sur telephone il redevient une icone de 44 px. */
+  body.socle-v3 .topbar .ia-command-trigger {
+    flex: 0 0 auto;
+    width: 44px;
+    min-width: 44px;
+    padding: 0;
+    font-size: 0;
+  }
+  body.socle-v3 .topbar .ia-command-trigger::before { font-size: 18px; }
+  body.socle-v3 .topbar .theme-button { min-width: 44px; }
+
+  /* 2. La ligne d'etat de sauvegarde prenait une bande pleine largeur sous la
+        barre. Elle reste lisible, mais discrete et d'une seule ligne. */
+  body.socle-v3 #saveStatus {
+    min-height: 18px;
+    padding: 1px 10px;
+    font-size: var(--sx-text-2xs);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 3. L'en-tete de page empilait quatre blocs de texte avant le premier
+        controle : surtitre, titre, phrase d'introduction, puis le titre de la
+        rubrique. On garde le titre et une phrase courte. */
+  body.socle-v3 #main .heading .eyebrow { display: none; }
+  body.socle-v3 #main .heading h1 {
+    font-size: var(--sx-text-xl);
+    line-height: 1.15;
+    margin: 0 0 2px;
+  }
+  body.socle-v3 #main .heading p {
+    margin: 0;
+    font-size: var(--sx-text-sm);
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  body.socle-v3 #main .heading { gap: 2px; }
+
+  /* 4. Le bouton « Relever » flottait au-dessus des dernieres lignes.
+        Il remonte au-dessus de la barre du bas, et la page lui reserve la
+        place : plus rien ne passe dessous. */
+  body.socle-v3 #main { padding-bottom: calc(64px + 76px); }
+  body.socle-v3 .sx-journal-launch {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+    right: 12px;
+  }
+
+  /* 5. Les explications du centre de controle etaient sur deux colonnes de
+        180 px : illisibles au telephone. Une colonne, et le texte respire. */
+  body.socle-v3 .ia-attention-guides {
+    grid-template-columns: 1fr;
+    gap: var(--sx-space-2);
+  }
+
+  /* 6. Les phrases qui expliquent comment faire defiler un tableau remplacent
+        une interface qui ne tient pas. On les retire, et on garde le defilement
+        horizontal la ou il est inevitable. */
+  body.socle-v3 .v3-table-scroll-hint,
+  body.socle-v3 .audit-scroll-hint { display: none; }
+
+  /* 7. La phrase d'introduction pleine largeur, au-dessus du titre, redisait
+        ce que le titre dit deja. Elle disparait au telephone. */
+  body.socle-v3 #main .ia-screen-purpose { display: none; }
+
+  /* 8. Le bouton « Commandes » gardait son libelle : il ne restait qu'une case
+        vide. Sur telephone, la recherche suffit : il disparait. */
+  body.socle-v3 .topbar .ia-command-trigger { display: none; }
+
+  /* 9. Les quatre filtres empiles prenaient 172 px avant le premier chantier.
+        Deux par ligne, plus bas, et le champ de recherche compact. */
+  body.socle-v3 #main .toolbar.ia-b-filters { gap: 6px; padding: 8px; }
+  body.socle-v3 #main .toolbar.ia-b-filters > * { min-height: var(--sx-tap); }
+  body.socle-v3 #main .toolbar.ia-b-filters select,
+  body.socle-v3 #main .toolbar.ia-b-filters input { min-height: var(--sx-tap); font-size: var(--sx-text-sm); }
+  body.socle-v3 #main .toolbar.ia-b-filters label { font-size: var(--sx-text-2xs); }
+
+  /* 10. La puce d'entreprise vide dans l'en-tete : une case grise avec un
+        chevron, sans texte. Sur telephone le nom est deja affiche a cote. */
+  body.socle-v3 .topbar .organization-mobile-trigger { display: none; }
+
+  /* 11. Le nom de l'entreprise tenait sur deux lignes. Il est coupe a une
+        ligne, avec des points de suspension. */
+  body.socle-v3 .topbar .workspace #organizationLabel {
+    display: block;
+    max-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 20px;
+  }
+
+  /* 12. La phrase sous le titre passait sur deux lignes : une seule suffit. */
+  body.socle-v3 #main .heading p { -webkit-line-clamp: 1; }
+
+  /* 13. Le canevas des chantiers est un ecran de bureau. Au telephone il
+        affichait ses cartes EN PLUS du tableau : la meme liste deux fois. */
+  body.socle-v3 #main .ia-job-canvas { display: none; }
+
+  /* 14. Le nom de l'entreprise, seconde tentative : c'est le strong qui portait
+        les deux lignes, pas son parent. Et la puce au chevron vide disparait. */
+  body.socle-v3 .topbar .workspace .organization-current {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 20px;
+    line-height: 20px;
+  }
+  body.socle-v3 .topbar button.organization-mobile-trigger { display: none; }
+}

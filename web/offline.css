@@ -1,0 +1,60 @@
+/* Hors connexion — bandeau d'etat, formulaire de note, et rien qui deborde.
+   Les jetons d'interface viennent de design-tokens.css : aucune couleur en dur. */
+
+.sx-offline-banner {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  max-width: min(680px, calc(100vw - 24px));
+  padding: 8px 14px;
+  border: 1px solid var(--sx-warn);
+  border-radius: var(--sx-radius);
+  background: var(--sx-overlay);
+  color: var(--sx-ink);
+  font-size: var(--sx-text-sm);
+  line-height: 1.35;
+  box-shadow: var(--sx-shadow-2);
+}
+
+.sx-offline-banner[hidden] { display: none; }
+.sx-offline-banner strong { font-weight: 600; }
+.sx-offline-banner .btn { min-height: var(--sx-tap); }
+
+.sx-offline-note { margin-top: var(--sx-space-4); }
+.sx-offline-note textarea {
+  width: 100%;
+  min-height: 84px;
+  padding: 10px 12px;
+  border: 1px solid var(--sx-line);
+  border-radius: var(--sx-radius);
+  background: var(--sx-sunken);
+  color: var(--sx-ink);
+  font: inherit;
+  resize: vertical;
+}
+.sx-offline-note textarea:focus-visible {
+  outline: 2px solid var(--sx-accent);
+  outline-offset: 1px;
+}
+.sx-offline-note-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: var(--sx-space-3);
+}
+
+@media (max-width: 899px) {
+  .sx-offline-banner {
+    left: 12px;
+    right: 12px;
+    transform: none;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+    max-width: none;
+  }
+}
