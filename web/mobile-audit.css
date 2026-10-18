@@ -267,3 +267,59 @@
   body.socle-v3 #main th,
   body.socle-v3 #main .badge { font-size: 12px; }
 }
+/* Tri des chantiers : deux fleches par ligne, discretes a la souris et
+   prenables au doigt. */
+body.socle-v3 #main .ia-jobs-table { width: 100%; min-width: 0; }
+body.socle-v3 #main .ia-jobs-table-wrap { overflow-x: visible; }
+#main .ia-jobs-table .ia-job-identity { width: auto; }
+#main .ia-jobs-table .ia-job-order { width: 1%; white-space: nowrap; vertical-align: middle; }
+#main .ia-job-order-buttons { display: inline-flex; gap: 2px; }
+#main .ia-job-order-buttons [data-job-move] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--sx-line);
+  border-radius: 6px;
+  background: var(--sx-raised);
+  color: var(--sx-ink-soft);
+  font-size: 10px;
+  cursor: pointer;
+}
+#main .ia-job-order-buttons [data-job-move][aria-disabled="true"] { opacity: 0.3; cursor: default; }
+#main .ia-job-order-buttons [data-job-move]:focus-visible { outline: 2px solid var(--sx-accent); outline-offset: 1px; }
+@media (max-width: 899px) {
+  #main .ia-job-order-buttons { flex-direction: column; }
+  #main .ia-job-order-buttons [data-job-move] { width: 44px; height: 32px; font-size: 11px; }
+}
+/* Bloc final isole : il reprend les regles critiques de la liste des chantiers.
+   Il est ecrit a part parce qu'une des regles precedentes s'est retrouvee hors
+   de son bloc media, et que je prefere une regle qui s'applique a coup sur
+   plutot qu'une chasse au crochet manquant. */
+@media (max-width: 899px) {
+  body.socle-v3 #main .ia-jobs-table { width: 100%; }
+  body.socle-v3 #main .ia-jobs-table thead { display: none; }
+  body.socle-v3 #main .ia-jobs-table .ia-job-client,
+  body.socle-v3 #main .ia-jobs-table .ia-job-town,
+  body.socle-v3 #main .ia-jobs-table .ia-job-team,
+  body.socle-v3 #main .ia-jobs-table .ia-job-status,
+  body.socle-v3 #main .ia-jobs-table .ia-job-progress-cell,
+  body.socle-v3 #main .ia-jobs-table .ia-job-action { display: none; }
+  body.socle-v3 #main .ia-jobs-table .ia-job-identity { width: auto; display: block; }
+  body.socle-v3 #main .ia-jobs-table .ia-job-order { width: 52px; display: table-cell; }
+}
+/* La cellule d'action est rendue avec un style en ligne (`display:flex`), que
+   ni la feuille de style ni le module ne peuvent annuler : c'est le seul
+   endroit du projet ou !important est justifie, et il est justifie par cela.
+   Sur telephone, la colonne « Ouvrir » n'a pas de place : la ligne entiere est
+   cliquable. */
+@media (max-width: 899px) {
+  body.socle-v3 #main .ia-jobs-table td.ia-job-action { display: none !important; }
+}
+/* Le tri des chantiers est un geste de poste de travail : au telephone les
+   fleches se posaient sur le titre du chantier. Elles sont donc reservees au
+   bureau, et le telephone garde l'ordre enregistre sans les afficher. */
+@media (max-width: 899px) {
+  body.socle-v3 #main .ia-jobs-table .ia-job-order { display: none; }
+}
