@@ -9,7 +9,7 @@ if(nodeMajor<22){
   console.error('SOCLE CI: Node 22+ est requis. Les suites SQLite ne sont pas exécutées sur Node '+process.versions.node+'.');
   process.exit(1);
 }
-const excluded=new Set(['browser-15.mjs','browser-identities-15.mjs','browser-regression-116.mjs','browser-mobile-navigation-129.mjs','browser-navigation-convergence-01.mjs','browser-ui-frame-audit-01.mjs','browser-home-person-scope-01.mjs','browser-multi-org-isolation-01.mjs','browser-ui-foundation-01.mjs','browser-stock-catalog-v2-01.mjs','browser-stock-barcode-01.mjs','browser-e2e-02-quote-preproject.mjs','browser-bl-scan-01ab.mjs','browser-access-preview-theme-contrast-01.mjs','browser-document-triage-20261012.mjs','browser-planning-drag-step2.mjs','browser-design-catalogue-01.mjs','data-15.mjs','browser-didactic-layer-01.mjs','browser-field-journal-01.mjs','browser-planning-board-01.mjs','browser-attention-01.mjs']);
+const excluded=new Set(['browser-15.mjs','browser-identities-15.mjs','browser-regression-116.mjs','browser-mobile-navigation-129.mjs','browser-navigation-convergence-01.mjs','browser-ui-frame-audit-01.mjs','browser-home-person-scope-01.mjs','browser-multi-org-isolation-01.mjs','browser-ui-foundation-01.mjs','browser-stock-catalog-v2-01.mjs','browser-stock-barcode-01.mjs','browser-e2e-02-quote-preproject.mjs','browser-bl-scan-01ab.mjs','browser-access-preview-theme-contrast-01.mjs','browser-document-triage-20261012.mjs','browser-planning-drag-step2.mjs','browser-design-catalogue-01.mjs','data-15.mjs','browser-didactic-layer-01.mjs','browser-field-journal-01.mjs','browser-search-01.mjs','browser-planning-board-01.mjs','browser-attention-01.mjs']);
 const tests=readdirSync(join(root,'tests'))
   .filter(name=>name.endsWith('.mjs')&&!excluded.has(name))
   .sort();
