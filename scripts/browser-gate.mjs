@@ -35,6 +35,7 @@ const browserSuites=[
   {name:'browser-attention-01.mjs'},
   {name:'browser-job-canvas-01.mjs'},
   {name:'browser-offline-01.mjs'},
+  {name:'browser-job-tabs-01.mjs'},
   {name:'browser-planning-board-01.mjs'},
   {name:'browser-planning-drag-step2.mjs'}
 ];

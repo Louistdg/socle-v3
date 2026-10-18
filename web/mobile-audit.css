@@ -197,3 +197,38 @@
   body.socle-v3 #main .ia-b-more { position: static; margin: 8px 0; }
   body.socle-v3 #main .ia-b-more .btn { width: 100%; }
 }
+/* Onglets du chantier deplacables. L'onglet saisi se souleve, l'ordre se voit
+   pendant le geste, et rien d'autre ne bouge. */
+.job-workspace-tabs button.is-dragging {
+  opacity: 0.85;
+  box-shadow: var(--sx-shadow-2);
+  outline: 2px solid var(--sx-accent);
+  outline-offset: 1px;
+  cursor: grabbing;
+}
+.job-workspace-tabs button { cursor: grab; touch-action: pan-y; }
+/* Fleches de deplacement des onglets. Discretes a la souris, toujours visibles
+   au doigt : 32 px de large, 44 px de haut pour rester prenables. */
+.job-workspace-tabs .job-tab-move {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.job-workspace-tabs .job-tab-move button {
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0;
+  border: 1px solid var(--sx-line);
+  border-radius: 6px;
+  background: var(--sx-raised);
+  color: var(--sx-ink-soft);
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+}
+.job-workspace-tabs .job-tab-move button:disabled { opacity: 0.35; cursor: default; }
+.job-workspace-tabs .job-tab-move button:focus-visible { outline: 2px solid var(--sx-accent); outline-offset: 1px; }
+@media (max-width: 899px) {
+  .job-workspace-tabs .job-tab-move button { min-width: 36px; min-height: 44px; font-size: 12px; }
+}
