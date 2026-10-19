@@ -53,6 +53,24 @@ function ensureGrid(main){
   if(portals&&portals.parentElement!==grid)grid.append(portals);
   if(attention&&attention.nextElementSibling!==grid)attention.after(grid);
 }
+function stylePortals(main){
+  var links=main.querySelector('.ia-home-portals .ia-home-portal-links');
+  if(!links)return;
+  var mobile=window.matchMedia('(max-width:899px)').matches;
+  links.style.gridTemplateColumns=mobile?'repeat(3,minmax(0,1fr))':'';
+  Array.prototype.forEach.call(links.querySelectorAll('a'),function(link){
+    link.style.gridTemplateColumns=mobile?'24px minmax(0,1fr) 10px':'';
+    link.style.minHeight=mobile?'48px':'';
+    link.style.padding=mobile?'6px':'';
+    link.style.fontSize=mobile?'10px':'';
+  });
+  Array.prototype.forEach.call(links.querySelectorAll('.ia-home-portal-mark'),function(mark){
+    mark.style.width=mobile?'24px':'';
+    mark.style.height=mobile?'24px':'';
+    mark.style.fontSize=mobile?'8px':'';
+    mark.style.borderRadius=mobile?'7px':'';
+  });
+}
 function hideNoise(main){
   ['.ia-job-canvas-shell','.ia-quick-actions','.ia-screen-purpose'].forEach(function(selector){
     var node=main.querySelector(selector);
@@ -70,6 +88,7 @@ function enhance(){
   var intro=main.querySelector('.v3-intro');
   if(intro)compactIntro(intro);
   ensureGrid(main);
+  stylePortals(main);
   hideNoise(main);
 }
 var pending=false;
@@ -83,4 +102,5 @@ else schedule();
 var main=document.querySelector('#main');
 if(main)new MutationObserver(schedule).observe(main,{childList:true});
 if(document.body)new MutationObserver(schedule).observe(document.body,{childList:true});
+window.addEventListener('resize',schedule,{passive:true});
 })();
