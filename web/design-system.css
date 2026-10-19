@@ -187,11 +187,11 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
 .ia-jobs-table tr.is-job-dragging{opacity:.45}
 .ia-jobs-table tr.is-job-drop-target td{box-shadow:inset 0 2px 0 var(--sx-accent);background:var(--sx-accent-soft)}
 @media(max-width:899px){.ia-job-order-grip{display:none}}
-.ia-jobs-phase-drops{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
-.ia-jobs-phase-drops button{border:1px solid var(--sx-line);border-radius:999px;background:var(--sx-surface);color:var(--sx-muted);font-size:var(--sx-text-xs);font-weight:650;padding:6px 10px;cursor:pointer}
-.ia-jobs-phase-drops button:hover,.ia-jobs-phase-drops button:focus-visible{color:var(--sx-ink);border-color:var(--sx-line-strong);outline:none}
-.ia-jobs-phase-drops button.is-job-phase-target{border-color:var(--sx-accent);background:var(--sx-accent-soft);color:var(--sx-accent-ink);box-shadow:0 0 0 2px var(--sx-accent-soft)}
-@media(max-width:899px){.ia-jobs-phase-drops{display:none}}
+.ia-jobs-phase-targets{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.ia-jobs-phase-targets button{border:1px solid var(--sx-line);border-radius:999px;background:var(--sx-surface);color:var(--sx-muted);font-size:var(--sx-text-xs);font-weight:650;padding:6px 10px;cursor:pointer}
+.ia-jobs-phase-targets button:hover,.ia-jobs-phase-targets button:focus-visible{color:var(--sx-ink);border-color:var(--sx-line-strong);outline:none}
+.ia-jobs-phase-targets button.is-job-phase-target{border-color:var(--sx-accent);background:var(--sx-accent-soft);color:var(--sx-accent-ink);box-shadow:0 0 0 2px var(--sx-accent-soft)}
+@media(max-width:899px){.ia-jobs-phase-targets{display:none}}
 .ia-job-context{position:fixed;z-index:5000;min-width:250px;max-width:300px;padding:6px;border:1px solid var(--sx-line-strong);border-radius:12px;background:color-mix(in srgb,var(--sx-overlay) 94%,transparent);color:var(--sx-ink);box-shadow:0 18px 50px rgba(0,0,0,.34),0 2px 8px rgba(0,0,0,.24);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .ia-job-context-title{display:grid;gap:2px;padding:8px 10px 9px;border-bottom:1px solid var(--sx-line);margin-bottom:4px;font-weight:700;font-size:var(--sx-text-sm);line-height:1.25}
 .ia-job-context-title small{color:var(--sx-muted);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}

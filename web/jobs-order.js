@@ -166,7 +166,7 @@
   function clearJobDrag() {
     draggedJobRow = null;
     draggedJobId = null;
-    Array.prototype.forEach.call(document.querySelectorAll('.ia-jobs-table tr.is-job-dragging,.ia-jobs-table tr.is-job-drop-target,.ia-jobs-phase-drops .is-job-phase-target'), function (row) {
+    Array.prototype.forEach.call(document.querySelectorAll('.ia-jobs-table tr.is-job-dragging,.ia-jobs-table tr.is-job-drop-target,.ia-jobs-phase-targets .is-job-phase-target'), function (row) {
       row.classList.remove('is-job-dragging', 'is-job-drop-target', 'is-job-phase-target');
     });
   }
@@ -185,11 +185,11 @@
   });
   document.addEventListener('dragover', function (event) {
     if (!draggedJobRow) return;
-    var phaseTarget = event.target.closest ? event.target.closest('[data-job-phase-drop]') : null;
+    var phaseTarget = event.target.closest ? event.target.closest('[data-job-phase-target]') : null;
     if (phaseTarget) {
       event.preventDefault();
       if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
-      Array.prototype.forEach.call(document.querySelectorAll('.ia-jobs-phase-drops .is-job-phase-target'), function (item) {
+      Array.prototype.forEach.call(document.querySelectorAll('.ia-jobs-phase-targets .is-job-phase-target'), function (item) {
         item.classList.remove('is-job-phase-target');
       });
       phaseTarget.classList.add('is-job-phase-target');
@@ -206,11 +206,11 @@
   });
   document.addEventListener('drop', function (event) {
     if (!draggedJobRow) return;
-    var phaseTarget = event.target.closest ? event.target.closest('[data-job-phase-drop]') : null;
+    var phaseTarget = event.target.closest ? event.target.closest('[data-job-phase-target]') : null;
     if (phaseTarget) {
       event.preventDefault();
       var jobId = draggedJobId;
-      var phase = phaseTarget.dataset.jobPhaseDrop;
+      var phase = phaseTarget.dataset.jobPhaseTarget;
       clearJobDrag();
       globalThis.iaBSetJobPhase(jobId, phase);
       return;
