@@ -243,10 +243,14 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
 .job-contact-linked{position:absolute;right:8px;top:8px;padding:2px 6px;border-radius:999px;background:var(--sx-ok-soft);color:var(--sx-ok);font-size:10px;font-weight:700}
 @media(max-width:899px){.job-contacts-button{position:static}.job-contact-drawer{width:100%;border-left:0}}
 @media(min-width:900px){
+  @keyframes sx-view-in{from{opacity:.001;transform:translateY(4px)}to{opacity:1;transform:none}}
   body.socle-v3 #nav{background:color-mix(in srgb,var(--sx-canvas) 82%,transparent);backdrop-filter:blur(20px) saturate(135%);-webkit-backdrop-filter:blur(20px) saturate(135%)}
+  body.socle-v3 #main{animation:sx-view-in .2s ease both}
+  body.socle-v3 #main>.panel,body.socle-v3 #main>.ia-b-planning-head,body.socle-v3 #main>.task-folders-bar{animation:sx-view-in .22s ease both}
   body.socle-v3 .panel,body.socle-v3 .task-folders-bar,body.socle-v3 .team-overview-card,body.socle-v3 .ia-b-planning-head{box-shadow:0 1px 0 rgba(255,255,255,.03),0 10px 30px rgba(0,0,0,.07);transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease}
   body.socle-v3 .panel:hover,body.socle-v3 .team-overview-card:hover{box-shadow:0 1px 0 rgba(255,255,255,.04),0 14px 38px rgba(0,0,0,.10)}
   body.socle-v3 .data-table tbody tr{transition:background-color .14s ease}
   body.socle-v3 ::selection{background:var(--sx-accent-soft);color:var(--sx-ink)}
   body.socle-v3 *{scrollbar-width:thin;scrollbar-color:var(--sx-line-strong) transparent}
 }
+@media(prefers-reduced-motion:reduce){body.socle-v3 #main,body.socle-v3 #main>*{animation:none!important}}
