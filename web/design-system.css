@@ -222,6 +222,9 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
 .ia-home-weather-card.is-loading{position:relative;overflow:hidden;background:linear-gradient(90deg,var(--sx-raised) 25%,var(--sx-line) 37%,var(--sx-raised) 63%);background-size:400% 100%;animation:sx-skeleton 1.35s ease infinite;color:var(--sx-muted)}
 .ia-home-weather-card.is-loading::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.05));pointer-events:none}
 @media(prefers-reduced-motion:reduce){.ia-home-weather-card.is-loading{animation:none}}
+.shortcut-list{display:grid;gap:2px;margin:8px 0}
+.shortcut-list .detail-row{align-items:center}
+kbd{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 5px;border:1px solid var(--sx-line-strong);border-bottom-width:2px;border-radius:5px;background:var(--sx-raised);color:var(--sx-ink);font:600 11px/1 var(--sx-font-ui)}
 .sx-form-summary{margin:10px 0 12px;border:1px solid var(--sx-line);border-radius:var(--sx-radius-sm);background:var(--sx-raised);color:var(--sx-ink);overflow:hidden}
 .sx-form-summary>summary{cursor:pointer;list-style:none;padding:9px 11px;font-size:var(--sx-text-xs);font-weight:700;color:var(--sx-muted)}
 .sx-form-summary>summary::-webkit-details-marker{display:none}
