@@ -68,7 +68,9 @@
 .saved-view-bar .filter-pills{flex:1;min-width:0;padding-right:8px}
 
 @media(max-width:899px){
+  body[data-mobile-nav="true"] .saved-view-bar .filter-pills,
   .saved-view-bar .filter-pills{width:100%;flex-wrap:wrap;overflow:visible}
+  .task-folders-list{padding-right:18px;-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 18px),transparent)}
   .task-folders-bar{padding:9px 10px;border-radius:10px;margin-bottom:10px}
   .task-folders-head{flex-direction:row;align-items:center;gap:6px;margin-bottom:5px}
   .task-folders-head .eyebrow{display:none}
