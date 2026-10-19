@@ -76,6 +76,16 @@ body.socle-v3 .data-table table thead th{position:sticky;top:0;z-index:2;backgro
 .sx-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sx-space-4);padding:var(--sx-space-4);border-bottom:1px solid var(--sx-line)}
 .sx-dialog-body{padding:var(--sx-space-4)}
 .sx-dialog-foot{display:flex;justify-content:flex-end;gap:var(--sx-space-2);padding:var(--sx-space-4);border-top:1px solid var(--sx-line)}
+.sx-trust-links{display:flex;justify-content:flex-end;align-items:center;gap:var(--sx-space-3);flex-wrap:wrap;padding:var(--sx-space-3) 0}
+.sx-trust-links button{border:0;background:transparent;color:var(--sx-muted);font:inherit;font-size:var(--sx-text-xs);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.sx-trust-links button:hover{color:var(--sx-ink)}
+body.socle-v3 #main .ia-home-portal-mark{background:var(--portal-color,var(--sx-accent-soft))!important;color:var(--portal-on-color,var(--sx-accent-ink))!important}
+body.socle-v3 #main .ia-home-portal-links a[data-portal="fgtb"]{--portal-color:#b5122b!important;--portal-on-color:#fff!important}
+body.socle-v3 #main .ia-home-portal-links a[data-portal="career"]{--portal-color:#0b5cab!important;--portal-on-color:#fff!important}
+body.socle-v3 #main .ia-home-portal-links a[data-portal="forem"]{--portal-color:#08733d!important;--portal-on-color:#fff!important}
+body.socle-v3 #main .ia-home-portal-links a[data-portal="minfin"]{--portal-color:#1f4e79!important;--portal-on-color:#fff!important}
+body.socle-v3 #main .ia-home-portal-links a[data-portal="pension"]{--portal-color:#9a4f08!important;--portal-on-color:#fff!important}
+body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#006b3f!important;--portal-on-color:#fff!important}
 .sx-sheet{border:1px solid var(--sx-line-strong);border-radius:var(--sx-radius-lg) var(--sx-radius-lg) 0 0;background:var(--sx-surface);color:var(--sx-ink);padding:0;width:100%;max-width:none;margin:auto 0 0;max-height:92dvh}
 .sx-sheet::backdrop{background:rgba(0,0,0,.55)}
 
