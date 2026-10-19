@@ -16,7 +16,7 @@ vm.runInNewContext(source.slice(start,end),sandbox);
 
 for(const person of [{id:1790270195166,name:'David Leclercq'},{id:'P-07',name:'Anthony Simon'}]){
   const html=sandbox.personnelTable([{...person,category:'CP 124',qualification:'Niveau spécialisé',contract:'CDI',hourlyRate:29.5}]);
-  assert.match(html,/class="personnel-row" role="button" tabindex="0"/,'La ligne est cliquable et accessible au clavier.');
+  assert.match(html,/class="personnel-row"[^>]*role="button"[^>]*tabindex="0"/,'La ligne est cliquable et accessible au clavier.');
   assert.ok(!/<tr class="personnel-row"[^>]*\saria-label=/.test(html),'La ligne utilise le nom accessible calculé depuis son contenu.');
   assert.ok(html.includes('<strong>'+person.name+'</strong>'),'Le nom de la personne reste présent dans le contenu visible.');
   assert.ok(html.includes('showPersonDossier('),'Le clic et le clavier ouvrent le détail métier.');
