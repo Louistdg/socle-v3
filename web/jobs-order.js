@@ -256,6 +256,106 @@
   document.addEventListener('DOMContentLoaded', enhance);
   enhance();
 
+  var jobContextMenu = null;
+  function closeJobContext() {
+    if (jobContextMenu) { jobContextMenu.remove(); jobContextMenu = null; }
+  }
+  function jobForId(jobId) {
+    var list = (typeof jobs !== 'undefined' && Array.isArray(jobs)) ? jobs : [];
+    return list.find(function (item) { return String(item.id) === String(jobId); }) || null;
+  }
+  function contextItem(label, action, phase) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.setAttribute('role', 'menuitem');
+    button.textContent = label;
+    button.dataset.jobContextAction = action;
+    if (phase) button.dataset.jobContextPhase = phase;
+    return button;
+  }
+  function openJobContext(row, x, y) {
+    closeJobContext();
+    if (!row || !row.dataset.jobId) return;
+    var job = jobForId(row.dataset.jobId);
+    if (!job) return;
+    var menu = document.createElement('div');
+    menu.className = 'ia-job-context';
+    menu.setAttribute('role', 'menu');
+    menu.setAttribute('aria-label', 'Actions du chantier');
+    var title = document.createElement('div');
+    title.className = 'ia-job-context-title';
+    title.textContent = job.name || 'Chantier';
+    var reference = document.createElement('small');
+    reference.textContent = job.reference || job.ref || String(job.id);
+    title.append(reference);
+    menu.append(title, contextItem('Ouvrir le dossier', 'open'));
+    var phaseLabel = document.createElement('div');
+    phaseLabel.className = 'ia-job-context-label';
+    phaseLabel.textContent = 'Déplacer vers';
+    menu.append(phaseLabel);
+    var phases = document.createElement('div');
+    phases.className = 'ia-job-context-phases';
+    [['preparation', 'Préparation'], ['planned', 'Planifié'], ['in_progress', 'En cours'], ['blocked', 'Bloqué'], ['completed', 'Terminé']].forEach(function (item) {
+      phases.append(contextItem(item[1], 'phase', item[0]));
+    });
+    menu.append(phases);
+    menu.append(contextItem('Archiver', 'archive'), contextItem('Copier la référence', 'copy'));
+    menu.style.visibility = 'hidden';
+    document.body.append(menu);
+    var left = Math.max(8, Math.min(x, window.innerWidth - menu.offsetWidth - 8));
+    var top = Math.max(8, Math.min(y, window.innerHeight - menu.offsetHeight - 8));
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
+    menu.style.visibility = 'visible';
+    jobContextMenu = menu;
+    menu.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-job-context-action]');
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      var action = button.dataset.jobContextAction;
+      closeJobContext();
+      if (action === 'open' && typeof globalThis.iaBOpenJobDetails === 'function') globalThis.iaBOpenJobDetails(job.id);
+      if (action === 'phase') globalThis.iaBSetJobPhase(job.id, button.dataset.jobContextPhase);
+      if (action === 'copy') {
+        var value = String(job.reference || job.ref || job.id);
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(value).then(function () { if (typeof toast === 'function') toast('Référence copiée.'); }).catch(function () {});
+      }
+      if (action === 'archive') {
+        var previous = job.phase;
+        job.phase = 'Archivé';
+        if (typeof scheduleSave === 'function') scheduleSave();
+        if (typeof render === 'function') render();
+        if (typeof toast === 'function') toast('Chantier archivé.', 'Annuler', function () {
+          job.phase = previous;
+          if (typeof scheduleSave === 'function') scheduleSave();
+          if (typeof render === 'function') render();
+        });
+      }
+    });
+  }
+  document.addEventListener('contextmenu', function (event) {
+    if (window.matchMedia && window.matchMedia('(pointer:coarse)').matches) return;
+    var row = event.target.closest ? event.target.closest('#main .ia-jobs-table tbody tr[data-job-id]') : null;
+    if (!row) return;
+    event.preventDefault();
+    openJobContext(row, event.clientX, event.clientY);
+  });
+  document.addEventListener('pointerdown', function (event) {
+    if (jobContextMenu && !jobContextMenu.contains(event.target)) closeJobContext();
+  }, true);
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeJobContext();
+    if ((event.key === 'F10' && event.shiftKey) || event.key === 'ContextMenu') {
+      var row = event.target.closest ? event.target.closest('#main .ia-jobs-table tbody tr[data-job-id]') : null;
+      if (!row) return;
+      event.preventDefault();
+      var box = row.getBoundingClientRect();
+      openJobContext(row, box.left + 40, box.top + 24);
+    }
+  });
+  window.addEventListener('scroll', closeJobContext, true);
+
   globalThis.socleJobsOrder = {
     order: function () { return order ? order.slice() : null; },
     ids: ids,
