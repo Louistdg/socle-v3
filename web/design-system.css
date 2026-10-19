@@ -182,6 +182,8 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
 .ia-job-order-grip{cursor:grab;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;color:var(--sx-muted);font-size:14px;line-height:1;user-select:none}
 .ia-job-order-grip:hover,.ia-job-order-grip:focus-visible{background:var(--sx-raised);color:var(--sx-ink);outline:none}
 .ia-job-order-grip:active{cursor:grabbing}
+.ia-job-order-icon{display:block;width:13px;height:13px;fill:currentColor}
+.ia-job-order-inline [data-job-move]{display:inline-flex;align-items:center;justify-content:center;min-width:20px;min-height:20px}
 .ia-jobs-table tr.is-job-dragging{opacity:.45}
 .ia-jobs-table tr.is-job-drop-target td{box-shadow:inset 0 2px 0 var(--sx-accent);background:var(--sx-accent-soft)}
 @media(max-width:899px){.ia-job-order-grip{display:none}}

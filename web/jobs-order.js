@@ -80,9 +80,9 @@
       var wrap = document.createElement('span');
       wrap.className = 'ia-job-order-inline';
       var jobId = idOf(row) || '';
-      wrap.innerHTML = '<span class="ia-job-order-grip" draggable="true" data-job-drag="' + jobId + '" role="button" tabindex="0" aria-label="Glisser pour déplacer ce chantier" title="Glisser pour déplacer">⠿</span>' +
-        '<span role="button" tabindex="0" data-job-move="up" aria-label="Monter ce chantier">▲</span>' +
-        '<span role="button" tabindex="0" data-job-move="down" aria-label="Descendre ce chantier">▼</span>';
+      wrap.innerHTML = '<span class="ia-job-order-grip" draggable="true" data-job-drag="' + jobId + '" role="button" tabindex="0" aria-label="Glisser pour déplacer ce chantier" title="Glisser pour déplacer"><svg class="ia-job-order-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="5" cy="3.5" r="1.3"/><circle cx="11" cy="3.5" r="1.3"/><circle cx="5" cy="8" r="1.3"/><circle cx="11" cy="8" r="1.3"/><circle cx="5" cy="12.5" r="1.3"/><circle cx="11" cy="12.5" r="1.3"/></svg></span>' +
+        '<span role="button" tabindex="0" data-job-move="up" aria-label="Monter ce chantier"><svg class="ia-job-order-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 3 13 9H3z"/></svg></span>' +
+        '<span role="button" tabindex="0" data-job-move="down" aria-label="Descendre ce chantier"><svg class="ia-job-order-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 13 3 7h10z"/></svg></span>';
       cible.append(wrap);
     });
     refresh();
