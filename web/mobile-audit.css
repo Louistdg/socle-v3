@@ -489,3 +489,30 @@ body.socle-v3 .header-right button { white-space: nowrap; }
   body.socle-v3 #main .panel-head{padding:16px}
   body.socle-v3 #main .section-heading{margin:12px 0 10px}
 }
+
+/* 33. Accueil : les données d'abord, la météo et les portails juste après. */
+body.socle-v3[data-audit-route="home"] #main{display:flex;flex-direction:column}
+body.socle-v3[data-audit-route="home"] .v3-intro{order:1;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:start;margin-bottom:12px}
+body.socle-v3[data-audit-route="home"] .v3-intro>div:first-child{grid-column:1;min-width:0}
+body.socle-v3[data-audit-route="home"] .v3-intro h1{font-size:24px;line-height:1.15;margin:0}
+body.socle-v3[data-audit-route="home"] .home-sub{margin:2px 0 0;color:var(--sx-muted);font-size:12px}
+body.socle-v3[data-audit-route="home"] .v3-intro .v3-shortcuts{grid-column:2;grid-row:1;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;margin:0}
+body.socle-v3[data-audit-route="home"] .home-kpis{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:4px}
+body.socle-v3[data-audit-route="home"] .home-kpi{background:var(--sx-surface);border:1px solid var(--sx-line);border-radius:10px;padding:10px 12px;min-width:0}
+body.socle-v3[data-audit-route="home"] .home-kpi small{display:block;color:var(--sx-muted);font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+body.socle-v3[data-audit-route="home"] .home-kpi strong{display:block;font-size:22px;line-height:1.1;margin-top:3px}
+body.socle-v3[data-audit-route="home"] .home-kpi em{display:block;font-style:normal;color:var(--sx-muted);font-size:10px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.socle-v3[data-audit-route="home"] .ia-role-head{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;margin:-1px;padding:0;border:0}
+body.socle-v3[data-audit-route="home"] .ia-attention{order:2;margin-bottom:12px}
+body.socle-v3[data-audit-route="home"] .home-top-grid{order:3;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:12px;margin-bottom:12px}
+body.socle-v3[data-audit-route="home"] .home-top-grid>:is(.ia-home-weather,.ia-home-portals){margin:0;height:100%}
+body.socle-v3[data-audit-route="home"] .ia-owner-dashboard{order:4;margin-bottom:12px}
+body.socle-v3[data-audit-route="home"] .v3-jobs{order:5;margin-bottom:12px}
+body.socle-v3[data-audit-route="home"] :is(.ia-job-canvas-shell,.ia-quick-actions,.ia-screen-purpose){display:none!important}
+@media(max-width:899px){
+  body.socle-v3[data-audit-route="home"] .v3-intro{display:block}
+  body.socle-v3[data-audit-route="home"] .v3-intro .v3-shortcuts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+  body.socle-v3[data-audit-route="home"] .home-kpis{grid-template-columns:1fr 1fr;margin-top:8px}
+  body.socle-v3[data-audit-route="home"] .home-top-grid{grid-template-columns:1fr;gap:8px}
+  body.socle-v3[data-audit-route="home"] .v3-jobs{grid-template-columns:1fr 1fr;gap:8px}
+}
