@@ -15,10 +15,11 @@ const names=['design-tokens.css','audit-release.css','audit-release.js','v3-them
 const files={};
 for(const name of names){
   const extension=name.slice(name.lastIndexOf('.'));
-  const type=extension==='.html'?'text/html;charset=utf-8':extension==='.css'?'text/css;charset=utf-8':'application/javascript;charset=utf-8';
-  let body=(await fs.readFile('web/'+name,'utf8')).replace(/\r\n/g,'\n');
+  const binary=['.png','.ico','.woff2','.gz'].includes(extension);
+  const type=extension==='.html'?'text/html;charset=utf-8':extension==='.css'?'text/css;charset=utf-8':extension==='.webmanifest'?'application/manifest+json;charset=utf-8':extension==='.png'?'image/png':'application/javascript;charset=utf-8';
+  let body=binary?(await fs.readFile('web/'+name)).toString('base64'):(await fs.readFile('web/'+name,'utf8')).replace(/\r\n/g,'\n');
   if(extension==='.js')body=(await esbuild.transform(body,{loader:'js',minifyWhitespace:true,minifySyntax:true,minifyIdentifiers:false,target:'es2020',legalComments:'inline'})).code;
-  files['/'+name]={body,type};
+  files['/'+name]={body,type,...(binary?{encoding:'base64'}:{})};
 }
 files['/catalogue']={...files['/catalogue.html']};
 // A single stylesheet preserves the original cascade and avoids thirteen round trips.

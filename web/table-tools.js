@@ -1,7 +1,7 @@
-/* Outils de tableau : filtre, colonnes, sélection, compteur et export CSV. */
+/* Outils de tableau : filtre, colonnes, sélection, compteur et export CSV/PDF. */
 (function(){
 'use strict';
-var pending=false;
+var pending=false, columnMemory=new Map(), filterMemory=new Map();
 function tableName(container){
   var heading=container.closest('section,article')?.querySelector('h2,h3');
   return (heading&&heading.textContent.trim())||'export-socle';
@@ -9,16 +9,27 @@ function tableName(container){
 function columnKey(container){return 'sx-table-cols:'+tableName(container).toLocaleLowerCase('fr');}
 function filterKey(container){return 'sx-table-filter:'+tableName(container).toLocaleLowerCase('fr');}
 function readHidden(container){
-  try{return JSON.parse(sessionStorage.getItem(columnKey(container))||'[]').filter(function(value){return Number.isInteger(value);});}catch(error){return [];}
+  var value=columnMemory.get(columnKey(container));
+  return Array.isArray(value)?value.filter(function(item){return Number.isInteger(item);}):[];
 }
-function readFilter(container){try{return sessionStorage.getItem(filterKey(container))||'';}catch(error){return '';}}
-function saveFilter(container,value){try{sessionStorage.setItem(filterKey(container),value);}catch(error){}}
+function readFilter(container){return filterMemory.get(filterKey(container))||'';}
+function saveFilter(container,value){filterMemory.set(filterKey(container),value);}
 function bodyRows(table){return Array.prototype.slice.call(table.tBodies[0].rows);}
 function selectedRows(table){return bodyRows(table).filter(function(row){return row.querySelector('.sx-select-cell input')?.checked;});}
 function applyHidden(table,hidden){
   Array.prototype.forEach.call(table.rows,function(row){
     Array.prototype.forEach.call(row.cells,function(cell,index){cell.hidden=hidden.includes(index);});
   });
+}
+function exportPdf(container,table,hidden){
+  var win=window.open('','_blank');
+  if(!win)return;
+  win.opener=null;
+  var clone=table.cloneNode(true);
+  clone.querySelectorAll('.sx-select-head,.sx-select-cell').forEach(function(cell){cell.remove();});
+  Array.prototype.forEach.call(clone.rows,function(row){Array.prototype.forEach.call(row.cells,function(cell,index){if(hidden.includes(index))cell.remove();});});
+  win.document.write('<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>'+String(tableName(container)).replace(/[<>&]/g,'')+'</title><style>body{font:12px/1.4 system-ui,sans-serif;color:#1b1b1b;padding:18px}h1{font-size:18px;margin:0 0 4px}p{color:#666;margin:0 0 14px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:7px 8px;text-align:left;vertical-align:top}th{background:#f1f1ed;font-size:10px;text-transform:uppercase;letter-spacing:.04em}@media print{body{padding:0}}</style></head><body><h1>'+String(tableName(container)).replace(/[<>&]/g,'')+'</h1><p>Export du '+new Date().toLocaleDateString('fr-BE')+'</p>'+clone.outerHTML+'</body></html>');
+  win.document.close();win.focus();setTimeout(function(){win.print();},250);
 }
 function buildCsv(container,table,hidden,rows){
   var lines=[],header=table.rows[0];
@@ -36,16 +47,6 @@ function buildCsv(container,table,hidden,rows){
   var url=URL.createObjectURL(blob),link=document.createElement('a');
   link.href=url;link.download=tableName(container).toLocaleLowerCase('fr').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.csv';
   document.body.append(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);
-}
-function exportPdf(container,table,hidden){
-  var win=window.open('','_blank');
-  if(!win)return;
-  win.opener=null;
-  var clone=table.cloneNode(true);
-  clone.querySelectorAll('.sx-select-head,.sx-select-cell').forEach(function(cell){cell.remove();});
-  Array.prototype.forEach.call(clone.rows,function(row){Array.prototype.forEach.call(row.cells,function(cell,index){if(hidden.includes(index))cell.remove();});});
-  win.document.write('<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>'+String(tableName(container)).replace(/[<>&]/g,'')+'</title><style>body{font:12px/1.4 system-ui,sans-serif;color:#1b1b1b;padding:18px}h1{font-size:18px;margin:0 0 4px}p{color:#666;margin:0 0 14px}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #ddd;padding:7px 8px;text-align:left;vertical-align:top}th{background:#f1f1ed;font-size:10px;text-transform:uppercase;letter-spacing:.04em}@media print{body{padding:0}}</style></head><body><h1>'+String(tableName(container)).replace(/[<>&]/g,'')+'</h1><p>Export du '+new Date().toLocaleDateString('fr-BE')+'</p>'+clone.outerHTML+'</body></html>');
-  win.document.close();win.focus();setTimeout(function(){win.print();},250);
 }
 function ensure(container){
   if(container.dataset.sxTools==='1')return;
@@ -71,10 +72,10 @@ function ensure(container){
       var previous=readHidden(container),next=previous.slice();
       if(input.checked)next=next.filter(function(value){return value!==index;});
       else if(next.indexOf(index)<0)next.push(index);
-      try{sessionStorage.setItem(columnKey(container),JSON.stringify(next));}catch(error){}
+      columnMemory.set(columnKey(container),next);
       applyHidden(table,next);
       if(typeof globalThis.sxToast==='function')globalThis.sxToast('Colonnes mises à jour','Annuler',function(){
-        try{sessionStorage.setItem(columnKey(container),JSON.stringify(previous));}catch(error){}
+        columnMemory.set(columnKey(container),previous);
         applyHidden(table,previous);
       });
     });
@@ -82,8 +83,8 @@ function ensure(container){
   });
   columns.append(menu);
   var select=document.createElement('button');select.type='button';select.className='sx-table-export';select.textContent='Sélectionner';
-  var exportButton=document.createElement('button');exportButton.type='button';exportButton.className='sx-table-export';exportButton.textContent='Exporter CSV';
   var pdfButton=document.createElement('button');pdfButton.type='button';pdfButton.className='sx-table-export';pdfButton.textContent='PDF';
+  var exportButton=document.createElement('button');exportButton.type='button';exportButton.className='sx-table-export';exportButton.textContent='Exporter CSV';
   var bulk=document.createElement('div');bulk.className='sx-table-bulk';bulk.hidden=true;
   bulk.innerHTML='<span class="sx-table-bulk-count">0 sélectionnée</span><button type="button" class="sx-table-bulk-export">Exporter la sélection</button><button type="button" class="sx-table-bulk-clear">Tout désélectionner</button>';
   tools.append(filter,count,columns,select,pdfButton,exportButton);

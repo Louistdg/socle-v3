@@ -1,7 +1,7 @@
 /* Formulaires : validation immédiate, Entrée contrôlée, garde-fou de sortie. */
 (function(){
 'use strict';
-var pending=false, dirtyForms=new Set(), sequence=0;
+var pending=false, dirtyForms=new Set(), drafts=new Map(), sequence=0;
 function fieldLabel(field){
   var label=field.closest('label');
   if(label&&String(label.textContent||'').trim())return String(label.textContent).replace(field.value||'','').trim();
@@ -71,16 +71,13 @@ function saveDraft(form){
     else if(field.multiple)values[field.name]=Array.from(field.selectedOptions).map(function(option){return option.value;});
     else values[field.name]=field.value;
   });
-  try{sessionStorage.setItem(draftKey(form),JSON.stringify({at:Date.now(),values:values}));}catch(error){}
+  drafts.set(draftKey(form),{at:Date.now(),values:values});
 }
 function restoreDraft(form){
   if(!form.closest('#modal,dialog'))return false;
-  var raw='';
-  try{raw=sessionStorage.getItem(draftKey(form))||'';}catch(error){return false;}
-  if(!raw)return false;
-  var draft;
-  try{draft=JSON.parse(raw);}catch(error){return false;}
-  if(!draft||!draft.values||Date.now()-Number(draft.at||0)>86400000){try{sessionStorage.removeItem(draftKey(form));}catch(error){};return false;}
+  var draft=drafts.get(draftKey(form));
+  if(!draft)return false;
+  if(!draft.values||Date.now()-Number(draft.at||0)>86400000){drafts.delete(draftKey(form));return false;}
   draftFields(form).forEach(function(field){
     var value=draft.values[field.name];
     if(value===undefined)return;
@@ -92,7 +89,7 @@ function restoreDraft(form){
   var state=stateNode(form);if(state){state.hidden=false;state.textContent='Brouillon restauré';}
   return true;
 }
-function clearDraft(form){try{sessionStorage.removeItem(draftKey(form));}catch(error){}}
+function clearDraft(form){drafts.delete(draftKey(form));}
 var draftTimers=new WeakMap();
 function scheduleDraft(form){
   clearTimeout(draftTimers.get(form));

@@ -1,13 +1,11 @@
 /* Surveillance légère des erreurs, visible dans le statut. */
 (function(){
 'use strict';
-var key='socle:error-log',max=20;
-function read(){
-  try{return JSON.parse(sessionStorage.getItem(key)||'[]');}catch(error){return [];}
-}
+var entries=[],max=20;
+function read(){return entries.slice();}
 function write(list){
-  try{sessionStorage.setItem(key,JSON.stringify(list.slice(-max)));}catch(error){}
-  globalThis.socleRecentErrors=list.slice(-max);
+  entries=list.slice(-max);
+  globalThis.socleRecentErrors=entries.slice();
 }
 function record(kind,message,source){
   var list=read();
@@ -22,6 +20,6 @@ window.addEventListener('unhandledrejection',function(event){
   record('promise',reason&&reason.message?reason.message:String(reason||'Promesse rejetée'),'');
 });
 globalThis.socleErrorLog=read;
-globalThis.socleClearErrorLog=function(){try{sessionStorage.removeItem(key);}catch(error){}globalThis.socleRecentErrors=[];};
+globalThis.socleClearErrorLog=function(){entries=[];globalThis.socleRecentErrors=[];};
 write(read());
 })();
