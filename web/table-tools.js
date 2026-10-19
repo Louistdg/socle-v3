@@ -1,26 +1,34 @@
-/* Outils de tableau communs : compteur, en-têtes collants et export CSV. */
+/* Outils de tableau : filtre, colonnes, sélection, compteur et export CSV. */
 (function(){
 'use strict';
 var pending=false;
-function esc(value){return String(value==null?'':value).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function tableName(container){
   var heading=container.closest('section,article')?.querySelector('h2,h3');
   return (heading&&heading.textContent.trim())||'export-socle';
 }
 function columnKey(container){return 'sx-table-cols:'+tableName(container).toLocaleLowerCase('fr');}
+function filterKey(container){return 'sx-table-filter:'+tableName(container).toLocaleLowerCase('fr');}
 function readHidden(container){
   try{return JSON.parse(sessionStorage.getItem(columnKey(container))||'[]').filter(function(value){return Number.isInteger(value);});}catch(error){return [];}
 }
+function readFilter(container){try{return sessionStorage.getItem(filterKey(container))||'';}catch(error){return '';}}
+function saveFilter(container,value){try{sessionStorage.setItem(filterKey(container),value);}catch(error){}}
+function bodyRows(table){return Array.prototype.slice.call(table.tBodies[0].rows);}
+function selectedRows(table){return bodyRows(table).filter(function(row){return row.querySelector('.sx-select-cell input')?.checked;});}
 function applyHidden(table,hidden){
-  table.querySelectorAll('tr').forEach(function(row){
+  Array.prototype.forEach.call(table.rows,function(row){
     Array.prototype.forEach.call(row.cells,function(cell,index){cell.hidden=hidden.includes(index);});
   });
 }
-function exportCsv(container,table,hidden){
-  var lines=[];
-  Array.prototype.forEach.call(table.rows,function(row){
+function buildCsv(container,table,hidden,rows){
+  var lines=[],header=table.rows[0];
+  if(header)lines.push(Array.prototype.map.call(header.cells,function(cell,index){
+    if(hidden.includes(index)||cell.classList.contains('sx-select-head'))return null;
+    return '"'+String(cell.innerText||'').replace(/\s+/g,' ').trim().replace(/"/g,'""')+'"';
+  }).filter(function(value){return value!==null;}).join(';'));
+  rows.forEach(function(row){
     lines.push(Array.prototype.map.call(row.cells,function(cell,index){
-      if(hidden.includes(index))return null;
+      if(hidden.includes(index)||cell.classList.contains('sx-select-cell'))return null;
       return '"'+String(cell.innerText||'').replace(/\s+/g,' ').trim().replace(/"/g,'""')+'"';
     }).filter(function(value){return value!==null;}).join(';'));
   });
@@ -33,18 +41,16 @@ function ensure(container){
   if(container.dataset.sxTools==='1')return;
   var table=container.querySelector('table');
   if(!table||!table.tBodies.length)return;
-  var rows=table.tBodies[0].rows;
+  var rows=bodyRows(table);
   if(!rows.length)return;
   container.dataset.sxTools='1';
   container.classList.add('sx-data-table');
   var hidden=readHidden(container);
   applyHidden(table,hidden);
-  var tools=document.createElement('div');
-  tools.className='sx-table-tools';
-  tools.innerHTML='<span class="sx-table-count">'+rows.length+' ligne'+(rows.length===1?'':'s')+'</span>';
-  var columns=document.createElement('details');
-  columns.className='sx-table-columns';
-  columns.innerHTML='<summary>Colonnes</summary>';
+  var tools=document.createElement('div');tools.className='sx-table-tools';
+  var filter=document.createElement('input');filter.type='search';filter.className='sx-table-filter';filter.placeholder='Filtrer les lignes…';filter.setAttribute('aria-label','Filtrer les lignes du tableau');filter.value=readFilter(container);
+  var count=document.createElement('span');count.className='sx-table-count';
+  var columns=document.createElement('details');columns.className='sx-table-columns';columns.innerHTML='<summary>Colonnes</summary>';
   var menu=document.createElement('div');menu.className='sx-table-columns-menu';
   var headers=table.rows[0]?Array.prototype.slice.call(table.rows[0].cells):[];
   headers.forEach(function(cell,index){
@@ -58,19 +64,52 @@ function ensure(container){
       try{sessionStorage.setItem(columnKey(container),JSON.stringify(next));}catch(error){}
       applyHidden(table,next);
     });
-    label.append(input,document.createTextNode(String(cell.innerText).trim()));
-    menu.append(label);
+    label.append(input,document.createTextNode(String(cell.innerText).trim()));menu.append(label);
   });
   columns.append(menu);
-  var exportButton=document.createElement('button');
-  exportButton.type='button';exportButton.className='sx-table-export';exportButton.textContent='Exporter CSV';
-  exportButton.addEventListener('click',function(){exportCsv(container,table,readHidden(container));});
-  tools.append(columns,exportButton);
-  container.prepend(tools);
+  var select=document.createElement('button');select.type='button';select.className='sx-table-export';select.textContent='Sélectionner';
+  var exportButton=document.createElement('button');exportButton.type='button';exportButton.className='sx-table-export';exportButton.textContent='Exporter CSV';
+  var bulk=document.createElement('div');bulk.className='sx-table-bulk';bulk.hidden=true;
+  bulk.innerHTML='<span class="sx-table-bulk-count">0 sélectionnée</span><button type="button" class="sx-table-bulk-export">Exporter la sélection</button><button type="button" class="sx-table-bulk-clear">Tout désélectionner</button>';
+  tools.append(filter,count,columns,select,exportButton);
+  container.prepend(tools,bulk);
+
+  function visibleRows(){var q=String(filter.value||'').trim().toLocaleLowerCase('fr');return rows.filter(function(row){return !q||String(row.innerText||'').toLocaleLowerCase('fr').includes(q);});}
+  function updateCount(){
+    var shown=visibleRows(),countValue=shown.length,visibleSet=new Set(shown);
+    count.textContent=countValue===rows.length?rows.length+' ligne'+(rows.length===1?'':'s'):countValue+' / '+rows.length+' lignes';
+    rows.forEach(function(row){row.hidden=!visibleSet.has(row);});
+  }
+  function updateBulk(){
+    var selected=selectedRows(table);
+    bulk.hidden=!table.classList.contains('sx-selecting');
+    bulk.querySelector('.sx-table-bulk-count').textContent=selected.length+' sélectionnée'+(selected.length===1?'':'s');
+  }
+  function enableSelection(){
+    if(table.classList.contains('sx-selecting'))return;
+    table.classList.add('sx-selecting');
+    var headRow=table.tHead?.rows[0]||table.rows[0];
+    var th=document.createElement('th');th.className='sx-select-head';th.innerHTML='<input type="checkbox" aria-label="Tout sélectionner">';headRow.append(th);
+    th.querySelector('input').addEventListener('change',function(event){bodyRows(table).forEach(function(row){var box=row.querySelector('.sx-select-cell input');if(box)box.checked=event.target.checked;});updateBulk();});
+    rows.forEach(function(row){
+      var td=document.createElement('td');td.className='sx-select-cell';td.innerHTML='<input type="checkbox" aria-label="Sélectionner la ligne">';row.append(td);
+      td.querySelector('input').addEventListener('change',updateBulk);
+    });
+    select.textContent='Terminer';updateBulk();
+  }
+  function disableSelection(){
+    table.classList.remove('sx-selecting');
+    table.querySelectorAll('.sx-select-head,.sx-select-cell').forEach(function(cell){cell.remove();});
+    select.textContent='Sélectionner';bulk.hidden=true;
+  }
+  filter.addEventListener('input',function(){saveFilter(container,filter.value);updateCount();});
+  select.addEventListener('click',function(){if(table.classList.contains('sx-selecting'))disableSelection();else enableSelection();});
+  exportButton.addEventListener('click',function(){buildCsv(container,table,readHidden(container),visibleRows());});
+  bulk.querySelector('.sx-table-bulk-export').addEventListener('click',function(){var chosen=selectedRows(table);if(chosen.length)buildCsv(container,table,readHidden(container),chosen);});
+  bulk.querySelector('.sx-table-bulk-clear').addEventListener('click',function(){bodyRows(table).forEach(function(row){var box=row.querySelector('.sx-select-cell input');if(box)box.checked=false;});updateBulk();});
+  updateCount();
 }
-function run(){
-  document.querySelectorAll('#main .data-table').forEach(ensure);
-}
+function run(){document.querySelectorAll('#main .data-table').forEach(ensure);}
 function schedule(){if(pending)return;pending=true;requestAnimationFrame(function(){pending=false;run();});}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',schedule,{once:true});else schedule();
 var main=document.querySelector('#main');
