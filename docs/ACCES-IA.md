@@ -5,7 +5,7 @@ Dernière vérification : 19 octobre 2026.
 ## GitHub — source commune
 
 - Dépôt : [Louistdg/socle-v3](https://github.com/Louistdg/socle-v3), branche `main`.
-- Visibilité vérifiée : **public**. Toute personne peut lire les documents publics; aucun accès Write n’est nécessaire.
+- Visibilité vérifiée : **public**. Toute IA peut lire les documents publics; aucun accès Write n’est nécessaire.
 - Point d’entrée unique : [docs/PROJETS-IA.md](https://github.com/Louistdg/socle-v3/blob/main/docs/PROJETS-IA.md).
 - Aucun secret ou identifiant n’est stocké dans ce dépôt.
 
@@ -36,7 +36,9 @@ Comptes et racines demandés :
 | `berceau-deploy` | `public_html/berceau` |
 | `ptshield-deploy` | `public_html/ptshield` |
 
-Blocage : aucun connecteur ou outil cPanel/FTP O2switch n’est disponible dans cette session. Les comptes ne sont donc ni créés ni testés en FTPS; aucun secret n’a été généré ou partagé. L’interface cPanel/support devra créer les comptes restreints, puis chaque compte devra être testé en FTPS explicite sur le port 21. Ne jamais communiquer le compte FTP racine.
+- UAC Windows : demande d’élévation acceptée; un test dans un processus élevé a confirmé les droits administrateur. Le terminal Codex courant reste non élevé.
+- cPanel est joignable et le FTPS explicite (port 21, TLS) est documenté dans la procédure locale existante. L’API cPanel sans authentification renvoie la page de connexion.
+- **Blocage : identifiant/mot de passe cPanel ou session authentifiée manquant.** Aucun fichier local d’identifiants n’existe; rien n’a été créé ou testé. L’élévation Windows ne donne pas de session cPanel. Ne pas mettre de mot de passe dans Git ou le chat; utiliser la connexion cPanel authentifiée ou le support pour créer les comptes restreints, puis tester chaque racine en FTPS. Ne jamais communiquer le compte FTP racine.
 
 ## Message unique à transmettre aux autres IA
 
