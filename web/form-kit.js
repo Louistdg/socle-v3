@@ -37,6 +37,38 @@ function validateField(field,show){
   return !message;
 }
 function fields(form){return Array.from(form.querySelectorAll('input,select,textarea')).filter(function(field){return field.willValidate&&field.type!=='hidden'&&field.type!=='submit'&&field.type!=='button'});}
+function summaryValue(field){
+  if(field.type==='checkbox')return field.checked?'Oui':'Non';
+  if(field.type==='radio')return field.checked?field.value:'';
+  if(field.multiple)return Array.from(field.selectedOptions).map(function(option){return option.textContent||option.value}).join(', ');
+  if(field.tagName==='SELECT')return field.selectedOptions&&field.selectedOptions[0]?String(field.selectedOptions[0].textContent||field.value):field.value;
+  return String(field.value||'').trim();
+}
+function updateFormSummary(form){
+  var details=form.querySelector('.sx-form-summary');
+  if(!details)return;
+  var list=details.querySelector('dl');
+  if(!list)return;
+  list.replaceChildren();
+  fields(form).slice(0,14).forEach(function(field){
+    var value=summaryValue(field);
+    if(!value||field.type==='password'||field.type==='file')return;
+    var row=document.createElement('div');
+    var term=document.createElement('dt');term.textContent=fieldLabel(field);
+    var description=document.createElement('dd');description.textContent=value.length>90?value.slice(0,87)+'…':value;
+    row.append(term,description);list.append(row);
+  });
+  if(!list.children.length){var empty=document.createElement('p');empty.className='sx-form-summary-empty';empty.textContent='Renseignez les champs pour voir le résumé.';list.append(empty);}
+}
+function setupFormSummary(form){
+  if(fields(form).length<4||form.querySelector('.sx-form-summary'))return;
+  var details=document.createElement('details');
+  details.className='sx-form-summary';
+  details.innerHTML='<summary>Résumé avant validation</summary><dl></dl>';
+  var actions=form.querySelector('.modal-actions');
+  if(actions)form.insertBefore(details,actions);else form.append(details);
+  updateFormSummary(form);
+}
 function stateNode(form){
   var host=form.closest('dialog,#modal');
   if(!host)return null;
@@ -103,8 +135,8 @@ function enhanceForm(form){
   if(form.dataset.sxForm==='1')return;
   form.dataset.sxForm='1';
   form.addEventListener('focusout',function(event){var field=event.target;if(field.matches&&field.matches('input,select,textarea')){field.dataset.sxTouched='1';validateField(field,true)}},true);
-  form.addEventListener('input',function(event){var field=event.target;if(field.matches&&field.matches('input,select,textarea')){trackDirty(form);scheduleDraft(form);if(field.dataset.sxTouched==='1'||field.getAttribute('aria-invalid')==='true')validateField(field,true)}},true);
-  form.addEventListener('change',function(){trackDirty(form);scheduleDraft(form)},true);
+  form.addEventListener('input',function(event){var field=event.target;if(field.matches&&field.matches('input,select,textarea')){trackDirty(form);scheduleDraft(form);updateFormSummary(form);if(field.dataset.sxTouched==='1'||field.getAttribute('aria-invalid')==='true')validateField(field,true)}},true);
+  form.addEventListener('change',function(){trackDirty(form);scheduleDraft(form);updateFormSummary(form)},true);
   form.addEventListener('keydown',function(event){if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();if(typeof form.requestSubmit==='function')form.requestSubmit();else form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));}},true);
   form.addEventListener('submit',function(event){
     var invalid=fields(form).filter(function(field){field.dataset.sxTouched='1';return !validateField(field,true)});
@@ -112,6 +144,7 @@ function enhanceForm(form){
     else{form.dataset.sxDirty='';dirtyForms.delete(form);clearDraft(form);var state=stateNode(form);if(state){state.hidden=true;state.textContent='';}}
   },true);
   fields(form).forEach(function(field){if(field.required)field.setAttribute('aria-required','true')});
+  setupFormSummary(form);
   restoreDraft(form);
 }
 function enhance(root){
