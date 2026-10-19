@@ -13,7 +13,7 @@ function ensure(){
   var footer=document.querySelector('footer');
   if(footer&&!footer.querySelector('.sx-trust-links')){
     var nav=document.createElement('nav');nav.className='sx-trust-links';nav.setAttribute('aria-label','Informations légales');
-    nav.innerHTML='<button type="button" data-trust="status">Statut</button><button type="button" data-trust="privacy">Confidentialité</button><button type="button" data-trust="terms">Conditions</button>';
+    nav.innerHTML='<button type="button" data-trust="status">Statut</button><button type="button" data-trust="journal">Journal</button><button type="button" data-trust="privacy">Confidentialité</button><button type="button" data-trust="terms">Conditions</button>';
     footer.append(nav);
     nav.addEventListener('click',function(event){var button=event.target.closest('[data-trust]');if(button)open(button.dataset.trust);});
   }
@@ -27,10 +27,26 @@ function status(){
     body.innerHTML='<p><span class="sx-badge danger">Service indisponible</span></p><p class="sx-muted">Impossible de joindre /health pour le moment. Vos modifications restent dans cette page.</p>';
   });
 }
+function journal(){
+  body.innerHTML='<p class="sx-muted">Chargement du journal…</p>';
+  fetch('/api/audit-log?limit=40',{cache:'no-store',credentials:'same-origin'}).then(function(response){
+    if(!response.ok)throw new Error(response.status===403?'Journal réservé aux personnes autorisées.':'Journal indisponible.');
+    return response.json();
+  }).then(function(data){
+    var events=data.events||[];
+    body.innerHTML=events.length?events.map(function(event){
+      var label=String(event.action||'action').replace(/[._]/g,' ');
+      return '<div class="detail-row"><span><strong>'+esc(label)+'</strong><small>'+esc(event.entityType||'')+' · '+esc(String(event.entityId||''))+'</small></span><span><b>'+esc(event.actorName||'Utilisateur')+'</b><small>'+esc(new Date(event.createdAt).toLocaleString('fr-BE'))+'</small></span></div>';
+    }).join(''):'<div class="empty">Aucune action enregistrée pour le moment.</div>';
+  }).catch(function(error){
+    body.innerHTML='<p class="sx-badge danger">'+esc(error.message)+'</p><p class="sx-muted">Le journal est accessible aux personnes qui ont le droit de consultation.</p>';
+  });
+}
 function open(kind){
   ensure();
   var title=dialog.querySelector('#sx-trust-title');
   if(kind==='status'){title.textContent='Statut du service';status();}
+  else if(kind==='journal'){title.textContent='Journal des actions';journal();}
   else if(kind==='privacy'){title.textContent='Confidentialité';body.innerHTML='<p>Vos données restent dans l’entreprise active. Les documents privés passent par une autorisation serveur.</p><p>Les préférences d’affichage (thème, filtres de tableau, brouillons de formulaire) sont stockées dans votre navigateur pour cette session. Les brouillons ne contiennent jamais de mots de passe ni de fichiers.</p><p>Pour toute demande d’accès ou de suppression, contactez l’administrateur de votre entreprise.</p>';}
   else{title.textContent='Conditions d’utilisation';body.innerHTML='<p>SOCLE est un outil de gestion interne. Les données affichées doivent être vérifiées avant toute décision administrative, comptable ou juridique.</p><p>L’aperçu de démonstration contient des données fictives. Ne pas y saisir de données personnelles réelles.</p><p>Les sauvegardes et les droits d’accès sont gérés par l’administrateur de l’entreprise.</p>';}
   if(!dialog.open)dialog.showModal();
