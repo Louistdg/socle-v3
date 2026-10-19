@@ -491,6 +491,8 @@ body.socle-v3 .header-right button { white-space: nowrap; }
 }
 
 /* 33. Accueil : les données d'abord, la météo et les portails juste après. */
+body.socle-v3 #socleMasthead{display:none!important}
+body.socle-v3[data-audit-route="home"] #saveStatus{display:none!important}
 body.socle-v3[data-audit-route="home"] #main{display:flex;flex-direction:column}
 body.socle-v3[data-audit-route="home"] .v3-intro{order:1;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:start;margin-bottom:12px}
 body.socle-v3[data-audit-route="home"] .v3-intro>div:first-child{grid-column:1;min-width:0}

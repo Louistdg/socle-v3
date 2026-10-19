@@ -15,6 +15,7 @@ function firstName(){
 function counts(){
   var tasks=0,jobsCount=0,documentsCount=0;
   try{if(typeof reminders!=='undefined'&&Array.isArray(reminders))tasks=reminders.filter(function(item){return item.state!=='done';}).length;}catch(error){}
+  try{var title=document.querySelector('.ia-attention h2');var match=title&&String(title.textContent).match(/\d+/);if(match)tasks=Number(match[0]);}catch(error){}
   try{if(typeof jobs!=='undefined'&&Array.isArray(jobs))jobsCount=jobs.filter(function(job){return !['Archivé','Terminé'].includes(job.phase);}).length;}catch(error){}
   try{if(typeof documents!=='undefined'&&Array.isArray(documents))documentsCount=documents.length;}catch(error){}
   return {tasks:tasks,jobs:jobsCount,documents:documentsCount};
@@ -22,18 +23,21 @@ function counts(){
 function kpi(label,value,note){
   return '<div class="home-kpi"><small>'+esc(label)+'</small><strong>'+esc(value)+'</strong><em>'+esc(note||'')+'</em></div>';
 }
-function compactIntro(intro){
-  var role=intro.dataset.v3Role||'';
-  if(intro.dataset.homeCompact===role)return;
-  var copy=intro.firstElementChild;
-  if(!copy)return;
+function updateKpis(intro,copy){
   var data=counts();
   var date='';
   try{date=new Intl.DateTimeFormat('fr-BE',{weekday:'long',day:'numeric',month:'long'}).format(new Date());}catch(error){}
-  copy.innerHTML='<h1>Bonjour '+esc(firstName())+'</h1><p class="home-sub">'+esc(date)+' · '+data.tasks+' chose'+(data.tasks===1?'':'s')+' à traiter</p>';
+  if(copy)copy.innerHTML='<h1>Bonjour '+esc(firstName())+'</h1><p class="home-sub">'+esc(date)+' · '+data.tasks+' chose'+(data.tasks===1?'':'s')+' à traiter</p>';
   var kpis=intro.querySelector('.home-kpis');
   if(!kpis){kpis=document.createElement('div');kpis.className='home-kpis';intro.append(kpis);}
   kpis.innerHTML=kpi('À traiter',data.tasks,data.tasks===1?'1 action':'actions en cours')+kpi('Chantiers',data.jobs,'actifs')+kpi('Documents',data.documents,'ce mois')+kpi('Alertes',0,'rien d’urgent');
+}
+function compactIntro(intro){
+  var role=intro.dataset.v3Role||'';
+  var copy=intro.firstElementChild;
+  if(!copy)return;
+  if(intro.dataset.homeCompact===role){updateKpis(intro,null);return;}
+  updateKpis(intro,copy);
   var quick=intro.querySelector('.v3-shortcuts');
   if(quick)Array.prototype.slice.call(quick.children,2).forEach(function(node){node.remove();});
   intro.dataset.homeCompact=role;
