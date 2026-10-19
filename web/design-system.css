@@ -33,8 +33,8 @@ body.socle-v3 #main .eyebrow{font-size:var(--sx-label);letter-spacing:.12em;font
 
 .sx-field{display:block;width:100%;min-height:var(--sx-control);padding:0 var(--sx-space-3);border:1px solid var(--sx-line-strong);border-radius:var(--sx-radius-sm);background:var(--sx-surface);color:var(--sx-ink);font:inherit}
 .sx-field::placeholder{color:var(--sx-muted)}
-.sx-field[aria-invalid="true"],body.socle-v3 [aria-invalid="true"]{border-color:var(--sx-danger)}
-.sx-field-error{margin:4px 0 0;color:var(--sx-danger);font-size:var(--sx-text-xs);line-height:1.35}
+.sx-field[aria-invalid="true"],body.socle-v3 [aria-invalid="true"]{border-color:var(--sx-danger)!important;box-shadow:0 0 0 1px var(--sx-danger)}
+.sx-field-error{margin:4px 0 0;color:var(--sx-danger)!important;font-size:var(--sx-text-xs);line-height:1.35}
 .sx-field-error[hidden]{display:none}
 
 .sx-badge{display:inline-flex;align-items:center;gap:4px;min-height:22px;padding:0 7px;border:1px solid var(--sx-line);border-radius:var(--sx-radius-pill);background:var(--sx-raised);color:var(--sx-ink-soft);font-size:var(--sx-text-2xs);font-weight:700;white-space:nowrap}
