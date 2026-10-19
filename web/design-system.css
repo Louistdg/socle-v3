@@ -166,7 +166,9 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
   #ia-command-dialog .ia-command-option{grid-template-columns:minmax(0,1fr);gap:2px}
   body.socle-v3 dialog:not(.socle-mobile-sheet){inset:auto 0 0 0!important;margin:0!important;width:100%!important;max-width:100%!important;height:auto!important;max-height:92dvh!important;border-radius:18px 18px 0 0!important;padding-bottom:env(safe-area-inset-bottom,0px)}
   body.socle-v3 dialog:not(.socle-mobile-sheet) .modal-inner{max-height:92dvh;overflow:auto}
-  .sx-table-tools{flex-wrap:wrap}
+  .sx-table-tools{flex-wrap:wrap;align-items:stretch}
   .sx-table-filter{width:100%}
   .sx-table-bulk{flex-wrap:wrap}
+  .v3-section-tabs{display:grid;grid-template-columns:1fr 1fr;overflow:visible;gap:4px}
+  .v3-section-tabs button{white-space:normal;min-width:0;padding:8px 6px;font-size:12px;line-height:1.25}
 }

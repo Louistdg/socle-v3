@@ -88,7 +88,7 @@ function ensure(container){
   var bulk=document.createElement('div');bulk.className='sx-table-bulk';bulk.hidden=true;
   bulk.innerHTML='<span class="sx-table-bulk-count">0 sélectionnée</span><button type="button" class="sx-table-bulk-export">Exporter la sélection</button><button type="button" class="sx-table-bulk-clear">Tout désélectionner</button>';
   tools.append(filter,count,columns,select,pdfButton,exportButton);
-  container.prepend(tools,bulk);
+  if(container.parentNode){container.parentNode.insertBefore(tools,container);container.parentNode.insertBefore(bulk,container);}else{container.prepend(tools,bulk);}
 
   function visibleRows(){var q=String(filter.value||'').trim().toLocaleLowerCase('fr');return rows.filter(function(row){return !q||String(row.innerText||'').toLocaleLowerCase('fr').includes(q);});}
   function updateCount(){
