@@ -373,3 +373,73 @@ globalThis.render=function(){
   return result;
 };
 })();
+
+(function () {
+  var taskMenu = null;
+  function closeTaskMenu() { if (taskMenu) { taskMenu.remove(); taskMenu = null; } }
+  function taskItem(label, action) { var button = document.createElement('button'); button.type = 'button'; button.setAttribute('role', 'menuitem'); button.textContent = label; button.dataset.taskContextAction = action; return button; }
+  function openTaskMenu(row, x, y) {
+    closeTaskMenu();
+    var source = row.dataset.taskSource === 'project' ? 'project' : 'reminder';
+    var taskId = String(row.dataset.taskId || '');
+    if (!taskId) return;
+    var title = row.querySelector('strong') ? row.querySelector('strong').textContent : 'Tâche';
+    var menu = document.createElement('div');
+    menu.className = 'ia-job-context ia-task-context';
+    menu.setAttribute('role', 'menu');
+    menu.setAttribute('aria-label', 'Actions de la tâche');
+    var head = document.createElement('div');
+    head.className = 'ia-job-context-title';
+    head.textContent = title;
+    var meta = document.createElement('small');
+    meta.textContent = source === 'project' ? 'Tâche chantier' : 'Tâche / alerte';
+    head.append(meta);
+    menu.append(head, taskItem('Ouvrir', 'open'), taskItem('Déplacer vers un dossier…', 'move'), taskItem(source === 'project' ? 'Marquer terminée' : 'Marquer traitée', 'done'), taskItem('Copier le titre', 'copy'));
+    menu.style.visibility = 'hidden';
+    document.body.append(menu);
+    menu.style.left = Math.max(8, Math.min(x, innerWidth - menu.offsetWidth - 8)) + 'px';
+    menu.style.top = Math.max(8, Math.min(y, innerHeight - menu.offsetHeight - 8)) + 'px';
+    menu.style.visibility = 'visible';
+    taskMenu = menu;
+    menu.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-task-context-action]');
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      var action = button.dataset.taskContextAction;
+      closeTaskMenu();
+      if (action === 'open') {
+        if (source === 'reminder' && typeof showReminder === 'function') showReminder(taskId);
+        if (source === 'project' && typeof openTaskComments === 'function') openTaskComments(taskId);
+      }
+      if (action === 'move' && typeof taskBoardMoveDialog === 'function') taskBoardMoveDialog(source === 'project' ? 'project:' + taskId : taskId);
+      if (action === 'done') {
+        if (source === 'reminder' && typeof changeReminder === 'function') changeReminder(taskId, 'done');
+        if (source === 'project' && typeof updateServerTask === 'function') updateServerTask(taskId, 'done');
+      }
+      if (action === 'copy') {
+        var value = String(title);
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(value).then(function () { if (typeof toast === 'function') toast('Titre copié.'); }).catch(function () {});
+      }
+    });
+  }
+  document.addEventListener('contextmenu', function (event) {
+    if (window.matchMedia && window.matchMedia('(pointer:coarse)').matches) return;
+    var row = event.target.closest ? event.target.closest('#main .batch-task[data-task-id],#main tr[data-task-source="project"][data-task-id]') : null;
+    if (!row) return;
+    event.preventDefault();
+    openTaskMenu(row, event.clientX, event.clientY);
+  });
+  document.addEventListener('pointerdown', function (event) { if (taskMenu && !taskMenu.contains(event.target)) closeTaskMenu(); }, true);
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeTaskMenu();
+    if ((event.key === 'F10' && event.shiftKey) || event.key === 'ContextMenu') {
+      var row = event.target.closest ? event.target.closest('#main .batch-task[data-task-id],#main tr[data-task-source="project"][data-task-id]') : null;
+      if (!row) return;
+      event.preventDefault();
+      var box = row.getBoundingClientRect();
+      openTaskMenu(row, box.left + 40, box.top + 20);
+    }
+  });
+  window.addEventListener('scroll', closeTaskMenu, true);
+})();
