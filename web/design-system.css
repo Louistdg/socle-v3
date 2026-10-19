@@ -45,6 +45,12 @@ body.socle-v3 #main .eyebrow{font-size:var(--sx-label);letter-spacing:.12em;font
 .sx-table tbody tr:hover{background:var(--sx-raised)}
 .sx-table caption{text-align:left;color:var(--sx-muted);font-size:var(--sx-text-xs);padding:0 0 var(--sx-space-2)}
 
+body.socle-v3 .data-table table thead th{position:sticky;top:0;z-index:2;background:var(--sx-raised)}
+.sx-table-tools{display:flex;align-items:center;justify-content:space-between;gap:var(--sx-space-3);padding:4px 0 var(--sx-space-2);color:var(--sx-muted);font-size:var(--sx-text-xs)}
+.sx-table-count{font-variant-numeric:tabular-nums}
+.sx-table-export{min-height:28px;padding:0 9px;border:1px solid var(--sx-line);border-radius:var(--sx-radius-xs);background:var(--sx-surface);color:var(--sx-ink-soft);font:inherit;font-size:var(--sx-text-xs);cursor:pointer}
+.sx-table-export:hover{border-color:var(--sx-accent-line);background:var(--sx-raised)}
+
 .sx-dialog{border:1px solid var(--sx-line-strong);border-radius:var(--sx-radius-lg);background:var(--sx-surface);color:var(--sx-ink);padding:0;max-width:min(680px,calc(100vw - 24px));width:100%;box-shadow:var(--sx-shadow-3)}
 .sx-dialog::backdrop{background:rgba(0,0,0,.55)}
 .sx-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sx-space-4);padding:var(--sx-space-4);border-bottom:1px solid var(--sx-line)}
@@ -92,7 +98,7 @@ body.socle-v3 #main .eyebrow{font-size:var(--sx-label);letter-spacing:.12em;font
 #ia-command-dialog .ia-command-option strong{font-size:var(--sx-text-sm);font-weight:650}
 #ia-command-dialog .ia-command-option span{color:var(--sx-muted);font-size:var(--sx-text-xs);line-height:1.3}
 #ia-command-dialog .ia-command-results{max-height:52vh;overflow:auto}
-#ia-command-dialog .ia-command-count{margin:0 0 6px;color:var(--sx-muted);font-size:var(--sx-text-xs)}
+#ia-command-dialog .ia-command-count{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;margin:-1px;padding:0;border:0}
 #ia-command-dialog input{width:100%;min-height:var(--sx-control)}
 
 @media(max-width:760px){
