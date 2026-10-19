@@ -127,3 +127,128 @@ function iaCServerDirectoryPanel(){
   });
   window.addEventListener('scroll', closeContactMenu, true);
 })();
+
+(function () {
+  var drawer = null;
+  function closeDrawer() { if (drawer) { drawer.remove(); drawer = null; } }
+  function jobById(id) { return (typeof jobs !== 'undefined' && Array.isArray(jobs)) ? jobs.find(function (job) { return String(job.id) === String(id); }) : null; }
+  function linked(job, contactId) { return (job.contactIds || []).map(String).includes(String(contactId)); }
+  function associate(job, contactId) {
+    if (!job || linked(job, contactId)) return false;
+    var previous = (job.contactIds || []).slice();
+    job.contactIds = (job.contactIds || []).concat([contactId]);
+    if (typeof scheduleSave === 'function') scheduleSave();
+    if (typeof render === 'function') render();
+    var contact = (typeof contacts !== 'undefined' ? contacts : []).find(function (item) { return String(item.id) === String(contactId); });
+    if (typeof toast === 'function') toast((contact ? contact.name : 'Contact') + ' associé au chantier.', 'Annuler', function () {
+      job.contactIds = previous;
+      if (typeof scheduleSave === 'function') scheduleSave();
+      if (typeof render === 'function') render();
+    });
+    return true;
+  }
+  function rowFor(contact, job) {
+    var row = document.createElement('div');
+    row.className = 'job-contact-row' + (linked(job, contact.id) ? ' is-linked' : '');
+    row.draggable = !linked(job, contact.id);
+    row.dataset.contactId = contact.id;
+    row.setAttribute('role', 'button');
+    row.tabIndex = 0;
+    var name = document.createElement('strong');
+    name.textContent = contact.name || 'Contact';
+    var meta = document.createElement('small');
+    meta.textContent = [contact.company, contact.phone, contact.email].filter(Boolean).join(' · ') || (contact.roles || []).join(' · ');
+    row.append(name, meta);
+    if (linked(job, contact.id)) {
+      var badge = document.createElement('span');
+      badge.className = 'job-contact-linked';
+      badge.textContent = 'Associé';
+      row.append(badge);
+    }
+    row.addEventListener('click', function () { if (!linked(job, contact.id) && associate(job, contact.id)) closeDrawer(); });
+    row.addEventListener('keydown', function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); if (!linked(job, contact.id) && associate(job, contact.id)) closeDrawer(); } });
+    row.addEventListener('dragstart', function (event) {
+      if (linked(job, contact.id)) { event.preventDefault(); return; }
+      if (event.dataTransfer) {
+        event.dataTransfer.effectAllowed = 'copy';
+        try { event.dataTransfer.setData('text/plain', 'contact:' + contact.id); } catch (error) {}
+      }
+      row.classList.add('is-dragging');
+    });
+    row.addEventListener('dragend', function () { row.classList.remove('is-dragging'); });
+    return row;
+  }
+  function openDrawer(jobId) {
+    closeDrawer();
+    var job = jobById(jobId);
+    if (!job) return;
+    var panel = document.createElement('aside');
+    panel.className = 'job-contact-drawer';
+    panel.setAttribute('aria-label', 'Contacts du chantier');
+    var head = document.createElement('div');
+    head.className = 'job-contact-drawer-head';
+    var title = document.createElement('div');
+    var eyebrow = document.createElement('p'); eyebrow.className = 'eyebrow'; eyebrow.textContent = 'CONTACTS DU CHANTIER';
+    var heading = document.createElement('h2'); heading.textContent = job.name || 'Chantier';
+    title.append(eyebrow, heading);
+    var close = document.createElement('button'); close.type = 'button'; close.className = 'btn'; close.textContent = 'Fermer'; close.addEventListener('click', closeDrawer);
+    head.append(title, close);
+    var hint = document.createElement('p');
+    hint.className = 'job-contact-drawer-hint';
+    hint.textContent = 'Glissez un contact sur la zone ci-dessous, ou cliquez pour l’associer.';
+    var drop = document.createElement('div');
+    drop.className = 'job-contact-drop';
+    drop.dataset.jobContactDrop = '';
+    drop.textContent = 'Déposez un contact ici';
+    var search = document.createElement('input');
+    search.type = 'search'; search.placeholder = 'Rechercher un contact…'; search.setAttribute('aria-label', 'Rechercher un contact à associer');
+    var list = document.createElement('div');
+    list.className = 'job-contact-list';
+    var sorted = (typeof contacts !== 'undefined' && Array.isArray(contacts) ? contacts.slice() : []).sort(function (a, b) { return String(a.name || '').localeCompare(String(b.name || ''), 'fr', { sensitivity: 'base' }); });
+    sorted.forEach(function (contact) { list.append(rowFor(contact, job)); });
+    if (!sorted.length) { var empty = document.createElement('p'); empty.className = 'empty'; empty.textContent = 'Aucun contact dans l’annuaire.'; list.append(empty); }
+    search.addEventListener('input', function () {
+      var value = String(search.value || '').toLocaleLowerCase('fr');
+      Array.prototype.forEach.call(list.querySelectorAll('.job-contact-row'), function (row) {
+        row.hidden = Boolean(value) && !row.textContent.toLocaleLowerCase('fr').includes(value);
+      });
+    });
+    drop.addEventListener('dragover', function (event) { event.preventDefault(); drop.classList.add('is-over'); if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy'; });
+    drop.addEventListener('dragleave', function () { drop.classList.remove('is-over'); });
+    drop.addEventListener('drop', function (event) {
+      event.preventDefault();
+      drop.classList.remove('is-over');
+      var contactId = '';
+      try { contactId = String(event.dataTransfer.getData('text/plain') || '').replace('contact:', ''); } catch (error) {}
+      if (contactId && associate(job, contactId)) closeDrawer();
+    });
+    panel.append(head, hint, drop, search, list);
+    var backdrop = document.createElement('button');
+    backdrop.type = 'button'; backdrop.className = 'job-contact-backdrop'; backdrop.setAttribute('aria-label', 'Fermer');
+    backdrop.addEventListener('click', closeDrawer);
+    var host = document.createElement('div');
+    host.className = 'job-contact-layer';
+    host.append(backdrop, panel);
+    document.body.append(host);
+    drawer = host;
+    var escape = function (event) { if (event.key === 'Escape') { closeDrawer(); document.removeEventListener('keydown', escape); } };
+    document.addEventListener('keydown', escape);
+    search.focus();
+  }
+  function enhanceJobWorkspace() {
+    var head = document.querySelector('#main .job-workspace-head');
+    if (!head || head.querySelector('[data-job-contacts-button]')) return;
+    if (typeof currentJobId === 'undefined' || !currentJobId) return;
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn job-contacts-button';
+    button.dataset.jobContactsButton = '';
+    button.textContent = 'Contacts';
+    button.addEventListener('click', function () { openDrawer(currentJobId); });
+    head.append(button);
+  }
+  var observer = new MutationObserver(function () { enhanceJobWorkspace(); });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+  document.addEventListener('DOMContentLoaded', enhanceJobWorkspace);
+  globalThis.openJobContactsDrawer = openDrawer;
+})();

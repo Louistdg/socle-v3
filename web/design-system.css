@@ -218,6 +218,26 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
 .sx-form-summary dt{color:var(--sx-muted);min-width:0}
 .sx-form-summary dd{margin:0;text-align:right;font-weight:650;min-width:0;overflow-wrap:anywhere}
 .sx-form-summary-empty{margin:0;padding:2px 0;color:var(--sx-muted);font-size:var(--sx-text-xs)}
+.job-contacts-button{position:absolute;top:18px;right:18px;min-height:36px;padding:0 12px}
+.job-workspace-head{position:relative}
+.job-contact-layer{position:fixed;inset:0;z-index:6000;pointer-events:none}
+.job-contact-backdrop{position:absolute;inset:0;border:0;background:rgba(0,0,0,.44);pointer-events:auto;cursor:pointer}
+.job-contact-drawer{position:absolute;right:0;top:0;bottom:0;width:min(390px,92vw);display:flex;flex-direction:column;gap:10px;padding:18px;background:color-mix(in srgb,var(--sx-overlay) 95%,transparent);color:var(--sx-ink);border-left:1px solid var(--sx-line-strong);box-shadow:-18px 0 60px rgba(0,0,0,.28);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);pointer-events:auto}
+.job-contact-drawer-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.job-contact-drawer-head h2{font-size:18px;margin:2px 0 0}
+.job-contact-drawer-hint{margin:0;color:var(--sx-muted);font-size:var(--sx-text-xs);line-height:1.45}
+.job-contact-drop{display:grid;place-items:center;min-height:58px;border:1px dashed var(--sx-line-strong);border-radius:10px;color:var(--sx-muted);font-size:var(--sx-text-xs);font-weight:650;transition:border-color .15s,background .15s,color .15s}
+.job-contact-drop.is-over{border-color:var(--sx-accent);background:var(--sx-accent-soft);color:var(--sx-accent-ink)}
+.job-contact-list{display:grid;gap:5px;overflow:auto;padding-right:2px}
+.job-contact-row{position:relative;display:grid;gap:2px;padding:9px 10px;border:1px solid var(--sx-line);border-radius:8px;background:var(--sx-surface);cursor:grab;transition:border-color .14s,background .14s,transform .14s}
+.job-contact-row:hover,.job-contact-row:focus-visible{border-color:var(--sx-line-strong);background:var(--sx-raised);outline:none}
+.job-contact-row:active{cursor:grabbing}
+.job-contact-row strong{font-size:var(--sx-text-sm);line-height:1.3}
+.job-contact-row small{font-size:var(--sx-text-xs);color:var(--sx-muted);overflow-wrap:anywhere}
+.job-contact-row.is-linked{cursor:default;opacity:.62}
+.job-contact-row.is-dragging{opacity:.4}
+.job-contact-linked{position:absolute;right:8px;top:8px;padding:2px 6px;border-radius:999px;background:var(--sx-ok-soft);color:var(--sx-ok);font-size:10px;font-weight:700}
+@media(max-width:899px){.job-contacts-button{position:static}.job-contact-drawer{width:100%;border-left:0}}
 @media(min-width:900px){
   body.socle-v3 #nav{background:color-mix(in srgb,var(--sx-canvas) 82%,transparent);backdrop-filter:blur(20px) saturate(135%);-webkit-backdrop-filter:blur(20px) saturate(135%)}
   body.socle-v3 .panel,body.socle-v3 .task-folders-bar,body.socle-v3 .team-overview-card,body.socle-v3 .ia-b-planning-head{box-shadow:0 1px 0 rgba(255,255,255,.03),0 10px 30px rgba(0,0,0,.07);transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease}
