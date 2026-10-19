@@ -79,7 +79,7 @@ body.socle-v3 .data-table table thead th{position:sticky;top:0;z-index:2;backgro
 .sx-trust-links{display:flex;justify-content:flex-end;align-items:center;gap:var(--sx-space-3);flex-wrap:wrap;padding:var(--sx-space-3) 0}
 .sx-trust-links button{border:0;background:transparent;color:var(--sx-muted);font:inherit;font-size:var(--sx-text-xs);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .sx-trust-links button:hover{color:var(--sx-ink)}
-body.socle-v3 #main .ia-home-portal-mark{background:var(--portal-color,var(--sx-accent-soft))!important;color:var(--portal-on-color,var(--sx-accent-ink))!important}
+body.socle-v3[data-audit-route="home"] #main .ia-home-portal-mark{background:var(--portal-color,var(--sx-accent-soft))!important;color:var(--portal-on-color,var(--sx-accent-ink))!important}
 body.socle-v3 #main .ia-home-portal-links a[data-portal="fgtb"]{--portal-color:#b5122b!important;--portal-on-color:#fff!important}
 body.socle-v3 #main .ia-home-portal-links a[data-portal="career"]{--portal-color:#0b5cab!important;--portal-on-color:#fff!important}
 body.socle-v3 #main .ia-home-portal-links a[data-portal="forem"]{--portal-color:#08733d!important;--portal-on-color:#fff!important}
