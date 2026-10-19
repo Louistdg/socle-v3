@@ -444,3 +444,25 @@ body.socle-v3 #main .asset-table small { font-size: 11.5px; }
 body.socle-v3 .header-right { flex-wrap: nowrap; white-space: nowrap; }
 body.socle-v3 .header-right form,
 body.socle-v3 .header-right button { white-space: nowrap; }
+
+/* 31. Téléphone : la barre du bas, le bandeau et les cartes respirent sans
+   se chevaucher. Les libellés trop longs sont tronqués, jamais superposés. */
+@media(max-width:899px){
+  body[data-mobile-nav="true"]{padding-bottom:calc(112px + env(safe-area-inset-bottom,0px))}
+  .socle-mobile-nav button{min-width:0;overflow:hidden;gap:2px;padding:4px 0;font-size:10px;letter-spacing:-.02em}
+  .socle-mobile-nav button>span:last-child{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;line-height:1.1}
+  .socle-mobile-nav-icon{font-size:17px;line-height:17px}
+  #saveStatus{width:100%;max-width:100%;box-sizing:border-box;min-height:16px;padding:2px 8px;justify-content:center;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:9px}
+  .ia-back-to-top{display:none!important}
+  body.socle-v3 #main .heading{margin-bottom:10px}
+  body.socle-v3 #main .heading h1{font-size:22px;line-height:1.12}
+  body.socle-v3 #main .heading p:not(.eyebrow){font-size:12px;margin-top:2px}
+  body.socle-v3 .v3-intro{margin-bottom:10px}
+  body.socle-v3 .v3-intro h1{font-size:22px;line-height:1.12}
+  body.socle-v3 .v3-shortcuts{gap:6px;margin-top:8px}
+  body.socle-v3 .v3-shortcuts .btn{min-height:40px;padding:8px 6px;font-size:11px}
+  body.socle-v3 #main .panel-head{padding:10px 12px}
+  body.socle-v3 #main .official-grid{grid-template-columns:1fr}
+  body.socle-v3 #main .official-grid a{min-height:0;padding:10px}
+  body.socle-v3 #main .official-grid strong{font-size:12px;overflow-wrap:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
