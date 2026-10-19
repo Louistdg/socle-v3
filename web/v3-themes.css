@@ -120,7 +120,7 @@ body.socle-v3[data-v3-theme="craie"]{
 body.socle-v3[data-v3-theme="comete"]{
   color-scheme:dark;
   --sx-canvas:#181817;--sx-surface:#20201e;--sx-raised:#292927;--sx-overlay:#242422;--sx-sunken:#131312;
-  --sx-line:#30302e;--sx-line-strong:#454542;
+  --sx-line:#30302e;--sx-line-strong:#707068;
   --sx-soft:var(--sx-raised);
   --sx-ink:#f4f1ea;--sx-ink-soft:#d8d4cb;--sx-muted:#a6a29a;--sx-faint:#7d7972;
   --sx-accent:#e8e1d3;--sx-accent-hover:#f5efe2;--sx-accent-ink:#f4f1ea;--sx-accent-soft:rgba(232,225,211,.12);--sx-accent-line:#e8e1d3;

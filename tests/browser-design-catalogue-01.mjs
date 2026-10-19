@@ -47,7 +47,7 @@ try{
   for(const width of [1440,900]){
     await tab.call('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:false,screenWidth:width,screenHeight:1000});
     const shell=await tab.evaluate(`(async()=>{navigate('permissions');const deadline=Date.now()+6000;while(Date.now()<deadline&&(!document.querySelector('#main h1')||view!=='permissions'))await new Promise(resolve=>setTimeout(resolve,25));const main=document.querySelector('#main'),nav=document.querySelector('#nav'),mainRect=main.getBoundingClientRect(),navRect=nav.getBoundingClientRect(),style=getComputedStyle(main),x=mainRect.left+parseFloat(style.borderLeftWidth)+parseFloat(style.paddingLeft)+1,y=mainRect.top+parseFloat(style.borderTopWidth)+parseFloat(style.paddingTop)+1,hit=document.elementFromPoint(x,y);return{width:innerWidth,mainLeft:mainRect.left,navRight:navRect.right,navWidth:navRect.width,point:{x,y},hit:hit&&{tag:hit.tagName,id:hit.id,insideMain:main.contains(hit)},mainContainsHit:Boolean(hit&&main.contains(hit))}})()`,'desktop-main-hit-'+width);
-    assert.ok(shell.navWidth<=72,'La barre d’icônes reste étroite à '+width+' px: '+JSON.stringify(shell));
+    assert.ok(shell.navWidth>=160&&shell.navWidth<=220,'La colonne de navigation porte les libellés et reste lisible à '+width+' px: '+JSON.stringify(shell));
     assert.ok(shell.mainLeft>=shell.navRight,'Le contenu commence après la navigation à '+width+' px: '+JSON.stringify(shell));
     assert.equal(shell.mainContainsHit,true,'Le premier pixel utile appartient à #main à '+width+' px: '+JSON.stringify(shell));
     results.push({shell});

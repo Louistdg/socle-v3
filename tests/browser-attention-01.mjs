@@ -60,8 +60,9 @@ try{
   await tab.evaluate(`iaAAttentionFilter='all';document.querySelector('.ia-attention').outerHTML=iaAAttentionRender(iaAAttentionBuild(${JSON.stringify(fixture)}));document.querySelector('.ia-attention-filter select').value='orders';iaAAttentionSetFilter('orders')`,'attention-filter');
   const filtered=await tab.evaluate(`({selected:document.querySelector('.ia-attention-filter select')?.value,heading:document.querySelector('.ia-attention h2')?.textContent,rows:[...document.querySelectorAll('.ia-attention-row')].map(row=>row.innerText)})`,'attention-filter-proof');assert.equal(filtered.selected,'orders');assert.equal(filtered.rows.length,1);assert.equal(filtered.heading,'1 chose à traiter');assert.match(filtered.rows[0],/BC-RETARD/);await capture('attention-filtre-commandes.png');
   await tab.evaluate(`navigate=route=>{globalThis.__attentionActivated=route};document.querySelector('.ia-attention-filter select')?.focus()`,'attention-keyboard-start');
+  await new Promise(resolve=>setTimeout(resolve,100));
   let focus=null,guideSeen=false;
-  for(let step=0;step<4;step++){
+  for(let step=0;step<6;step++){
     await key('Tab');
     const current=await tab.evaluate(`({tag:document.activeElement?.tagName,className:document.activeElement?.className,action:document.activeElement?.getAttribute('onclick')||'',text:document.activeElement?.textContent||''})`,'attention-keyboard-step');
     if(current.tag==='SUMMARY'&&/Comment ces vérifications/.test(current.text))guideSeen=true;
