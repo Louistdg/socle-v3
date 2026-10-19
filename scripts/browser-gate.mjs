@@ -208,10 +208,15 @@ async function runMultiOrgBrowserTest(suiteName,index,env,children,runDirectory)
     probe.listen(0,'127.0.0.1',()=>{const selected=probe.address().port;probe.close(error=>error?reject(error):resolvePromise(selected))});
   });
   const databasePath=join(runDirectory,'multi-org.sqlite');
-  const fixture=spawnSync(process.execPath,[join(root,'tests','fixtures','create-multi-org-isolation-db.mjs'),databasePath],{cwd:root,encoding:'utf8',windowsHide:true,timeout:120000,maxBuffer:8*1024*1024});
   const fixtureLog=join(artifactsPath,'multi-org-fixture-'+index+'.log');
-  writeFileSync(fixtureLog,String(fixture.stdout||'')+String(fixture.stderr||''));
-  if(fixture.error||fixture.status!==0)throw new Error('Fixture navigateur multi-organisation en échec ; voir '+fixtureLog);
+  let fixture;
+  for(let attempt=1;attempt<=2;attempt++){
+    fixture=spawnSync(process.execPath,[join(root,'tests','fixtures','create-multi-org-isolation-db.mjs'),databasePath],{cwd:root,encoding:'utf8',windowsHide:true,timeout:180000,maxBuffer:8*1024*1024});
+    writeFileSync(fixtureLog,String(fixture.stdout||'')+String(fixture.stderr||''));
+    if(!fixture.error&&fixture.status===0)break;
+    if(attempt<2)await new Promise(resolve=>setTimeout(resolve,2000));
+  }
+  if(fixture.error||fixture.status!==0)throw new Error('Fixture navigateur multi-organisation en échec ; voir '+fixtureLog+' ; signal='+(fixture.signal||'aucun')+' ; erreur='+(fixture.error?fixture.error.message:'aucune'));
   const isolatedBase='http://127.0.0.1:'+port;
   const server=startLogged(process.execPath,[join(root,'scripts','local.mjs'),'--port='+port,'--db-path='+databasePath],join(artifactsPath,'multi-org-serveur-'+index+'.log'));
   children.push(server);
