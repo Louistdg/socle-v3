@@ -209,3 +209,11 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
 .personnel-row.is-person-dragging{opacity:.45}
 .team-overview-card.is-person-drop-target{outline:2px solid var(--sx-accent);outline-offset:2px;background:var(--sx-accent-soft)}
 @media(max-width:899px){.person-drag-grip{display:none}}
+@media(min-width:900px){
+  body.socle-v3 #nav{background:color-mix(in srgb,var(--sx-canvas) 82%,transparent);backdrop-filter:blur(20px) saturate(135%);-webkit-backdrop-filter:blur(20px) saturate(135%)}
+  body.socle-v3 .panel,body.socle-v3 .task-folders-bar,body.socle-v3 .team-overview-card,body.socle-v3 .ia-b-planning-head{box-shadow:0 1px 0 rgba(255,255,255,.03),0 10px 30px rgba(0,0,0,.07);transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease}
+  body.socle-v3 .panel:hover,body.socle-v3 .team-overview-card:hover{box-shadow:0 1px 0 rgba(255,255,255,.04),0 14px 38px rgba(0,0,0,.10)}
+  body.socle-v3 .data-table tbody tr{transition:background-color .14s ease}
+  body.socle-v3 ::selection{background:var(--sx-accent-soft);color:var(--sx-ink)}
+  body.socle-v3 *{scrollbar-width:thin;scrollbar-color:var(--sx-line-strong) transparent}
+}
