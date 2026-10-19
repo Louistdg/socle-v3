@@ -58,6 +58,10 @@ function hideNoise(main){
     var node=main.querySelector(selector);
     if(node)node.hidden=true;
   });
+  ['#socleMasthead','#saveStatus'].forEach(function(selector){
+    var node=document.querySelector(selector);
+    if(node)node.hidden=true;
+  });
 }
 function enhance(){
   if(typeof view==='undefined'||view!=='home')return;
