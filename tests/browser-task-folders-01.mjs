@@ -20,7 +20,7 @@ const tasks=[
   {id:'test-task-folder-3',title:'Classer les factures fournisseurs',date:'2026-10-18',kind:'Administratif',owner:'Louis',state:'todo',note:''}
 ];
 async function injectTasks(){
-  await tab.evaluate(`(()=>{scheduleSave=()=>{};const fixtures=${JSON.stringify(tasks)};fixtures.forEach(item=>{if(!reminders.some(r=>r.id===item.id))reminders.push({...item})});alertTab='todo';navigate('actions');return true})()`,'task-folders-inject');
+  await tab.evaluate(`(()=>{scheduleSave=()=>{};const fixtures=${JSON.stringify(tasks)};fixtures.forEach(item=>{if(!reminders.some(r=>r.id===item.id))reminders.push({...item,date:reference})});alertTab='todo';navigate('actions');return true})()`,'task-folders-inject');
   await waitFor(()=>tab.evaluate("Boolean(document.querySelector('[data-task-folders-bar]'))&&document.querySelectorAll('.batch-task[data-task-id]').length>=3",'task-folders-ready'),'dossiers de tâches prêts',12000);
 }
 try{
