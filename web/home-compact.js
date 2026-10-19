@@ -88,6 +88,7 @@ function hideNoise(main){
 }
 function enhance(){
   if(typeof view==='undefined'||view!=='home')return;
+  document.body.dataset.auditRoute='home';
   var main=document.querySelector('#main');
   if(!main)return;
   var intro=main.querySelector('.v3-intro');
