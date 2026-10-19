@@ -79,7 +79,9 @@
       var cible = row.querySelector('.ia-job-identity') || row;
       var wrap = document.createElement('span');
       wrap.className = 'ia-job-order-inline';
-      wrap.innerHTML = '<span role="button" tabindex="0" data-job-move="up" aria-label="Monter ce chantier">▲</span>' +
+      var jobId = idOf(row) || '';
+      wrap.innerHTML = '<span class="ia-job-order-grip" draggable="true" data-job-drag="' + jobId + '" role="button" tabindex="0" aria-label="Glisser pour déplacer ce chantier" title="Glisser pour déplacer">⠿</span>' +
+        '<span role="button" tabindex="0" data-job-move="up" aria-label="Monter ce chantier">▲</span>' +
         '<span role="button" tabindex="0" data-job-move="down" aria-label="Descendre ce chantier">▼</span>';
       cible.append(wrap);
     });
@@ -136,6 +138,55 @@
     event.stopPropagation();
     move(row, trigger.dataset.jobMove);
   }, true);
+
+  var draggedJobRow = null;
+  var draggedJobOrderBefore = null;
+  function clearJobDrag() {
+    draggedJobRow = null;
+    Array.prototype.forEach.call(document.querySelectorAll('.ia-jobs-table tr.is-job-dragging,.ia-jobs-table tr.is-job-drop-target'), function (row) {
+      row.classList.remove('is-job-dragging', 'is-job-drop-target');
+    });
+  }
+  document.addEventListener('dragstart', function (event) {
+    var grip = event.target.closest ? event.target.closest('[data-job-drag]') : null;
+    if (!grip || !table() || !table().contains(grip)) return;
+    draggedJobRow = grip.closest('tr');
+    if (!draggedJobRow) return;
+    draggedJobOrderBefore = ids();
+    draggedJobRow.classList.add('is-job-dragging');
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      try { event.dataTransfer.setData('text/plain', 'job-order:' + grip.dataset.jobDrag); } catch (error) {}
+    }
+  });
+  document.addEventListener('dragover', function (event) {
+    if (!draggedJobRow) return;
+    var row = event.target.closest ? event.target.closest('tr') : null;
+    if (!row || row === draggedJobRow || row.parentNode !== draggedJobRow.parentNode) return;
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    Array.prototype.forEach.call(document.querySelectorAll('.ia-jobs-table tr.is-job-drop-target'), function (item) {
+      item.classList.remove('is-job-drop-target');
+    });
+    row.classList.add('is-job-drop-target');
+  });
+  document.addEventListener('drop', function (event) {
+    if (!draggedJobRow) return;
+    var row = event.target.closest ? event.target.closest('tr') : null;
+    if (!row || row === draggedJobRow || row.parentNode !== draggedJobRow.parentNode) return;
+    event.preventDefault();
+    var box = row.getBoundingClientRect();
+    var after = event.clientY > box.top + box.height / 2;
+    row.parentNode.insertBefore(draggedJobRow, after ? row.nextSibling : row);
+    var beforeOrder = draggedJobOrderBefore;
+    clearJobDrag();
+    refresh();
+    persist();
+    if (typeof toast === 'function') toast('Ordre des chantiers enregistré.', 'Annuler', function () {
+      if (beforeOrder && globalThis.socleJobsOrder) globalThis.socleJobsOrder.setOrder(beforeOrder);
+    });
+  });
+  document.addEventListener('dragend', clearJobDrag);
 
   var observer = new MutationObserver(function () {
     if (silent) return;

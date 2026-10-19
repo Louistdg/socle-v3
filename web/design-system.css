@@ -177,3 +177,10 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
 .v3-theme-extra>summary::-webkit-details-marker{display:none}
 .v3-theme-extra[open]>summary{color:var(--sx-ink);border-color:var(--sx-line-strong);margin-bottom:4px}
 .v3-theme-extra-grid{display:grid;gap:2px}
+.ia-job-order-inline{display:inline-flex;align-items:center;gap:3px;margin-left:6px;vertical-align:middle}
+.ia-job-order-grip{cursor:grab;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;color:var(--sx-muted);font-size:14px;line-height:1;user-select:none}
+.ia-job-order-grip:hover,.ia-job-order-grip:focus-visible{background:var(--sx-raised);color:var(--sx-ink);outline:none}
+.ia-job-order-grip:active{cursor:grabbing}
+.ia-jobs-table tr.is-job-dragging{opacity:.45}
+.ia-jobs-table tr.is-job-drop-target td{box-shadow:inset 0 2px 0 var(--sx-accent);background:var(--sx-accent-soft)}
+@media(max-width:899px){.ia-job-order-grip{display:none}}
