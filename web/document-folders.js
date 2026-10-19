@@ -20,11 +20,11 @@ function normalized(value){var source=value&&typeof value==='object'?value:{},ra
 function value(){return{folders:foldersCopy(state.folders),assignments:Object.assign({},state.assignments)}}
 function escapeHtml(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]})}
 function escapeJs(v){return String(v==null?'':v).replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
-function chip(label,value,count,extra){return '<div class="task-folder-chip'+(filter===value?' is-active':'')+'" data-document-folder-chip="'+escapeHtml(value)+'">'+(extra||'')+'<button type="button" class="task-folder-select" onclick="documentFolderFilter(\''+escapeJs(value)+'\')"'+(filter===value?' aria-current="true"':'')+'><span>'+escapeHtml(label)+'</span><b>'+count+'</b></button></div>'}
+function chip(label,value,count,before,after){return '<div class="task-folder-chip'+(filter===value?' is-active':'')+'" data-document-folder-chip="'+escapeHtml(value)+'">'+(before||'')+'<button type="button" class="task-folder-select" onclick="documentFolderFilter(\''+escapeJs(value)+'\')"'+(filter===value?' aria-current="true"':'')+'><span>'+escapeHtml(label)+'</span><b>'+count+'</b></button>'+(after||'')+'</div>'}
 function barMarkup(){
   var list=chip('Toutes','all',documentsList().length)+chip('Sans dossier','__inbox__',countFor(''));
   state.folders.forEach(function(folder){
-    list+=chip(folder.name,folder.id,countFor(folder.id),'<span class="task-folder-grip" draggable="true" data-document-folder-drag="'+escapeHtml(folder.id)+'" role="button" tabindex="0" aria-label="Déplacer le dossier '+escapeHtml(folder.name)+'">⠿</span><button type="button" class="task-folder-menu" onclick="documentFolderMenu(\''+escapeJs(folder.id)+'\')" aria-label="Options du dossier '+escapeHtml(folder.name)+'">⋯</button>');
+    list+=chip(folder.name,folder.id,countFor(folder.id),'<span class="task-folder-grip" draggable="true" data-document-folder-drag="'+escapeHtml(folder.id)+'" role="button" tabindex="0" aria-label="Déplacer le dossier '+escapeHtml(folder.name)+'">⠿</span>','<button type="button" class="task-folder-menu" onclick="documentFolderMenu(\''+escapeJs(folder.id)+'\')" aria-label="Options du dossier '+escapeHtml(folder.name)+'">⋯</button>');
   });
   list+='<button type="button" class="btn task-folder-add" onclick="documentFolderForm()">+ Dossier</button>';
   var undo=state.undo?'<div class="task-board-undo" role="status"><span>'+escapeHtml(state.undo.label)+'</span><button type="button" class="link" onclick="documentFolderUndo()">Annuler</button></div>':'';
