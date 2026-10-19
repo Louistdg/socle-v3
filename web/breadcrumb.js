@@ -4,6 +4,8 @@
 var pending=false;
 function esc(value){return String(value==null?'':value).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function currentLabel(){
+  var heading=document.querySelector('#main h1');
+  if(heading&&String(heading.textContent||'').trim())return String(heading.textContent).trim();
   var nav=globalThis.SOCLE_NAVIGATION;
   if(nav&&typeof nav.item==='function'&&typeof view!=='undefined'){
     var entry=nav.item(view);
