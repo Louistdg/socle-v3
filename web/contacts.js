@@ -33,7 +33,7 @@ contactsView=function(){
     `<div class="catalogue-tools"><input placeholder="Rechercher un contact…" value="${esc(contactQuery)}" oninput="contactQuery=this.value;iaCContactVisibleCount=5;render()"><label class="btn upload">Importer CSV<input type="file" accept=".csv,text/csv" onchange="importContactsCsv(event)"></label><button class="btn primary" onclick="contactForm()">+ Nouveau contact</button></div>
     <div class="filter-pills">${['Tous',...roles].map(r=>`<button class="${contactRole===r?'selected':''}" onclick="contactRole='${jsString(r)}';iaCContactVisibleCount=5;render()">${r}</button>`).join('')}</div>
     <section class="panel"><div class="panel-head"><div><p class="eyebrow">ANNUAIRE COMMERCIAL</p><h2>${filtered.length} contact(s)</h2></div><span class="subtle">A→Z · recherche · filtre · fiche détaillée</span></div>
-    ${visible.map(c=>`<button class="task" onclick="openContact('${jsString(c.id)}')"><span class="task-text"><strong>${esc(c.name)}</strong><small>${esc(c.company||c.roles.join(' · '))} · ${esc(c.phone||c.email||'Coordonnées à renseigner')}</small></span><span class="badge">${esc(c.roles.join(' · '))}</span></button>`).join('')||'<div class="empty">Aucun contact ne correspond à la recherche.</div>'}
+    ${visible.map(c=>`<button class="task" data-contact-id="${esc(c.id)}" onclick="openContact('${jsString(c.id)}')"><span class="task-text"><strong>${esc(c.name)}</strong><small>${esc(c.company||c.roles.join(' · '))} · ${esc(c.phone||c.email||'Coordonnées à renseigner')}</small></span><span class="badge">${esc(c.roles.join(' · '))}</span></button>`).join('')||'<div class="empty">Aucun contact ne correspond à la recherche.</div>'}
     ${remaining>0?`<div class="ia-c-list-more"><button class="btn" onclick="iaCContactVisibleCount=contacts.length;render()">Afficher les ${remaining} autres</button></div>`:''}</section>`;
 };
 
@@ -61,3 +61,69 @@ function iaCServerDirectoryPanel(){
   const supplierRows=suppliers.slice(0,25).map(v=>'<div class="detail-row"><span><strong>'+esc(v.name)+'</strong><small>'+esc(v.vatNumber||v.email||v.phone||'Coordonnées à renseigner')+'</small></span><span class="badge">Serveur</span></div>').join('');
   return '<section class="panel ia-c-server-directory"><div class="panel-head"><div><p class="eyebrow">DONNÉES COMMERCIALES · SERVEUR</p><h2>Clients '+customers.length+' · Fournisseurs '+suppliers.length+'</h2><span>Tenant-scoped · persisté côté serveur</span></div></div><div class="ia-c-directory-columns"><div><h3>Clients</h3>'+(customerRows||'<div class="empty">Aucun client serveur.</div>')+'</div><div><h3>Fournisseurs</h3>'+(supplierRows||'<div class="empty">Aucun fournisseur serveur.</div>')+'</div></div></section>';
 }
+
+(function () {
+  var contactMenu = null;
+  function closeContactMenu() { if (contactMenu) { contactMenu.remove(); contactMenu = null; } }
+  function contactById(id) { return (typeof contacts !== 'undefined' && Array.isArray(contacts)) ? contacts.find(function (item) { return String(item.id) === String(id); }) : null; }
+  function contactItem(label, action) { var button = document.createElement('button'); button.type = 'button'; button.setAttribute('role', 'menuitem'); button.textContent = label; button.dataset.contactAction = action; return button; }
+  function openContactMenu(row, x, y) {
+    closeContactMenu();
+    var contact = row ? contactById(row.dataset.contactId) : null;
+    if (!contact) return;
+    var menu = document.createElement('div');
+    menu.className = 'ia-job-context ia-contact-context';
+    menu.setAttribute('role', 'menu');
+    menu.setAttribute('aria-label', 'Actions du contact');
+    var title = document.createElement('div');
+    title.className = 'ia-job-context-title';
+    title.textContent = contact.name || 'Contact';
+    var meta = document.createElement('small');
+    meta.textContent = [contact.company, contact.phone, contact.email].filter(Boolean).join(' · ') || (contact.roles || []).join(' · ');
+    title.append(meta);
+    menu.append(title, contactItem('Ouvrir la fiche', 'open'));
+    if (contact.phone) menu.append(contactItem('Appeler', 'call'));
+    if (contact.email) menu.append(contactItem('Écrire un e-mail', 'mail'));
+    menu.append(contactItem('Modifier', 'edit'), contactItem('Fusionner un doublon', 'merge'));
+    if (contact.email) menu.append(contactItem('Copier l’e-mail', 'copy'));
+    menu.style.visibility = 'hidden';
+    document.body.append(menu);
+    menu.style.left = Math.max(8, Math.min(x, innerWidth - menu.offsetWidth - 8)) + 'px';
+    menu.style.top = Math.max(8, Math.min(y, innerHeight - menu.offsetHeight - 8)) + 'px';
+    menu.style.visibility = 'visible';
+    contactMenu = menu;
+    menu.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-contact-action]');
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      var action = button.dataset.contactAction;
+      closeContactMenu();
+      if (action === 'open' && typeof openContact === 'function') openContact(contact.id);
+      if (action === 'call' && contact.phone) window.location.href = 'tel:' + contact.phone;
+      if (action === 'mail' && contact.email) window.location.href = 'mailto:' + contact.email;
+      if (action === 'edit' && typeof contactForm === 'function') contactForm(contact.id);
+      if (action === 'merge' && typeof mergeContactForm === 'function') mergeContactForm(contact.id);
+      if (action === 'copy' && contact.email && navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(contact.email).then(function () { if (typeof toast === 'function') toast('E-mail copié.'); }).catch(function () {});
+    });
+  }
+  document.addEventListener('contextmenu', function (event) {
+    if (window.matchMedia && window.matchMedia('(pointer:coarse)').matches) return;
+    var row = event.target.closest ? event.target.closest('#main [data-contact-id]') : null;
+    if (!row) return;
+    event.preventDefault();
+    openContactMenu(row, event.clientX, event.clientY);
+  });
+  document.addEventListener('pointerdown', function (event) { if (contactMenu && !contactMenu.contains(event.target)) closeContactMenu(); }, true);
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeContactMenu();
+    if ((event.key === 'F10' && event.shiftKey) || event.key === 'ContextMenu') {
+      var row = event.target.closest ? event.target.closest('#main [data-contact-id]') : null;
+      if (!row) return;
+      event.preventDefault();
+      var box = row.getBoundingClientRect();
+      openContactMenu(row, box.left + 40, box.top + 20);
+    }
+  });
+  window.addEventListener('scroll', closeContactMenu, true);
+})();
