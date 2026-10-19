@@ -258,5 +258,6 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
   body.socle-v3 .data-table tbody tr{transition:background-color .14s ease}
   body.socle-v3 ::selection{background:var(--sx-accent-soft);color:var(--sx-ink)}
   body.socle-v3 *{scrollbar-width:thin;scrollbar-color:var(--sx-line-strong) transparent}
+  body.socle-v3 .data-table table thead th,body.socle-v3 .ia-jobs-table thead th{position:sticky;top:var(--sx-topbar);z-index:3;background:var(--sx-surface)}
 }
 @media(prefers-reduced-motion:reduce){body.socle-v3 #main,body.socle-v3 #main>*{animation:none!important}}
