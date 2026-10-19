@@ -172,3 +172,8 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
   .v3-section-tabs{display:grid;grid-template-columns:1fr 1fr;overflow:visible;gap:4px}
   .v3-section-tabs button{white-space:normal;min-width:0;padding:8px 6px;font-size:12px;line-height:1.25}
 }
+.v3-theme-extra{grid-column:1/-1;margin:6px 0 2px}
+.v3-theme-extra>summary{cursor:pointer;list-style:none;padding:8px 10px;border:1px dashed var(--sx-line);border-radius:var(--sx-radius-sm);color:var(--sx-muted);font-size:var(--sx-text-xs);font-weight:650}
+.v3-theme-extra>summary::-webkit-details-marker{display:none}
+.v3-theme-extra[open]>summary{color:var(--sx-ink);border-color:var(--sx-line-strong);margin-bottom:4px}
+.v3-theme-extra-grid{display:grid;gap:2px}
