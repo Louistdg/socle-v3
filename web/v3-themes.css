@@ -90,7 +90,6 @@ body.socle-v3[data-v3-theme] :is(th,td){border-color:var(--sx-line)}body.socle-v
 .v3-theme-swatch[data-palette=cuivre]{background:linear-gradient(135deg,#1E1712 0 50%,#E8A273 50% 100%)}
 .v3-theme-swatch[data-palette]{border-color:var(--sx-line-strong)}
 
-/* Encre : charbon doux, blanc cassé, turquoise discret. */
 body.socle-v3[data-v3-theme="encre"]{
   color-scheme:dark;
   --sx-canvas:#191919;--sx-surface:#202020;--sx-raised:#2a2a2a;--sx-overlay:#262626;--sx-sunken:#141414;
@@ -104,7 +103,6 @@ body.socle-v3[data-v3-theme="encre"],body.socle-v3[data-v3-theme="craie"]{
   --ia-bg:var(--sx-canvas);--ia-shell:var(--sx-surface);--ia-surface:var(--sx-surface);--ia-surface-soft:var(--sx-raised);--ia-surface-raised:var(--sx-overlay);--ia-text:var(--sx-ink);--ia-muted:var(--sx-muted);--ia-line:var(--sx-line);--ia-control-line:var(--sx-line-strong);--ia-accent:var(--sx-accent);--ia-focus:var(--sx-accent);--ia-shell-text:var(--sx-ink);
 }
 
-/* Craie : papier clair, encre noire, vert profond. */
 body.socle-v3[data-v3-theme="craie"]{
   color-scheme:light;
   --sx-canvas:#f7f7f4;--sx-surface:#ffffff;--sx-raised:#ecece8;--sx-overlay:#ffffff;--sx-sunken:#f1f1ed;

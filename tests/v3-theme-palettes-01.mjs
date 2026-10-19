@@ -5,16 +5,16 @@ const js=readFileSync(new URL('../web/v3-themes.js',import.meta.url),'utf8');
 const css=readFileSync(new URL('../web/v3-themes.css',import.meta.url),'utf8');
 const v3css=readFileSync(new URL('../web/v3.css',import.meta.url),'utf8');
 const tokenCss=readFileSync(new URL('../web/design-tokens.css',import.meta.url),'utf8');
-const paletteIds=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre'];
+const paletteIds=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre','encre','craie'];
 const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-ink','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft','--sx-info-soft'];
 const themeRules=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)];
 const blocks=themeRules.filter(([,selector])=>/^body\.socle-v3\[data-v3-theme="[^"]+"\]$/.test(selector.trim()));
 function declarations(block){return Object.fromEntries([...block.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+)\s*;/g)].map(match=>[match[1],match[2].trim()]));}
 function effectiveTheme(id){const result={};for(const [,selectorText,block] of themeRules){const selectors=selectorText.split(',').map(value=>value.trim());if(selectors.includes('body.socle-v3[data-v3-theme]')||selectors.includes(`body.socle-v3[data-v3-theme="${id}"]`))Object.assign(result,declarations(block));}return result;}
 const mobileMenu=[...css.matchAll(/\.v3-theme-menu\{([^}]+)\}/g)].map(match=>match[1]).find(rule=>rule.includes('100dvh'))||'';
-const registeredIds=[...js.matchAll(/\['([^']+)','([^']+)'/g)].slice(0,13).map(match=>match[1]);
-assert.deepEqual(registeredIds,paletteIds,'les treize palettes gardent leurs identifiants et leur ordre');
-assert.equal(blocks.length,13,'treize règles de palette conservent un point d’entrée dédié');
+const registeredIds=[...js.matchAll(/\['([^']+)','([^']+)'/g)].slice(0,15).map(match=>match[1]);
+assert.deepEqual(registeredIds,paletteIds,'les quinze palettes gardent leurs identifiants et leur ordre');
+assert.equal(blocks.length,15,'quinze règles de palette conservent un point d’entrée dédié');
 for(const id of paletteIds){
   const theme=effectiveTheme(id);
   for(const role of roles)assert.ok(role in theme,`${id}: jeton ${role} présent dans la cascade partagée`);
