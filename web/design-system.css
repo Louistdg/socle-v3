@@ -36,6 +36,8 @@ body.socle-v3 #main .eyebrow{font-size:var(--sx-label);letter-spacing:.12em;font
 .sx-field[aria-invalid="true"],body.socle-v3 [aria-invalid="true"]{border-color:var(--sx-danger)!important;box-shadow:0 0 0 1px var(--sx-danger)}
 .sx-field-error{margin:4px 0 0;color:var(--sx-danger)!important;font-size:var(--sx-text-xs);line-height:1.35}
 .sx-field-error[hidden]{display:none}
+.sx-form-state{display:inline-flex;align-items:center;min-height:22px;margin-left:auto;padding:0 7px;border:1px solid var(--sx-line);border-radius:var(--sx-radius-pill);background:var(--sx-warn-soft);color:var(--sx-warn);font-size:var(--sx-text-2xs);font-weight:650;white-space:nowrap}
+.sx-form-state[hidden]{display:none}
 
 .sx-badge{display:inline-flex;align-items:center;gap:4px;min-height:22px;padding:0 7px;border:1px solid var(--sx-line);border-radius:var(--sx-radius-pill);background:var(--sx-raised);color:var(--sx-ink-soft);font-size:var(--sx-text-2xs);font-weight:700;white-space:nowrap}
 .sx-badge.ok{background:var(--sx-ok-soft);border-color:transparent;color:var(--sx-ok)}
@@ -117,4 +119,6 @@ body.socle-v3 .data-table table thead th{position:sticky;top:0;z-index:2;backgro
   .sx-command{width:100%;max-width:none;max-height:92dvh;margin:auto 0 0;border-radius:var(--sx-radius-lg) var(--sx-radius-lg) 0 0}
   #ia-command-dialog{width:100%;max-height:92dvh;margin:auto 0 0;border-radius:var(--sx-radius-lg) var(--sx-radius-lg) 0 0}
   #ia-command-dialog .ia-command-option{grid-template-columns:minmax(0,1fr);gap:2px}
+  body.socle-v3 dialog:not(.socle-mobile-sheet){inset:auto 0 0 0!important;margin:0!important;width:100%!important;max-width:100%!important;height:auto!important;max-height:92dvh!important;border-radius:18px 18px 0 0!important;padding-bottom:env(safe-area-inset-bottom,0px)}
+  body.socle-v3 dialog:not(.socle-mobile-sheet) .modal-inner{max-height:92dvh;overflow:auto}
 }

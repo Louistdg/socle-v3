@@ -37,9 +37,21 @@ function validateField(field,show){
   return !message;
 }
 function fields(form){return Array.from(form.querySelectorAll('input,select,textarea')).filter(function(field){return field.willValidate&&field.type!=='hidden'&&field.type!=='submit'&&field.type!=='button'});}
+function stateNode(form){
+  var host=form.closest('dialog,#modal');
+  if(!host)return null;
+  var head=host.querySelector('.modal-top,.sx-dialog-head')||host;
+  var node=head.querySelector('.sx-form-state');
+  if(!node){node=document.createElement('span');node.className='sx-form-state';node.setAttribute('role','status');head.append(node);}
+  return node;
+}
 function trackDirty(form){
   form.dataset.sxDirty='1';
-  if(form.closest('#modal,dialog'))dirtyForms.add(form);
+  if(form.closest('#modal,dialog')){
+    dirtyForms.add(form);
+    var node=stateNode(form);
+    if(node){node.hidden=false;node.textContent='Modifications non enregistrées';}
+  }
 }
 function enhanceForm(form){
   if(form.dataset.sxForm==='1')return;
@@ -51,7 +63,7 @@ function enhanceForm(form){
   form.addEventListener('submit',function(event){
     var invalid=fields(form).filter(function(field){field.dataset.sxTouched='1';return !validateField(field,true)});
     if(invalid.length){event.preventDefault();event.stopImmediatePropagation();invalid[0].focus();}
-    else{form.dataset.sxDirty='';dirtyForms.delete(form)}
+    else{form.dataset.sxDirty='';dirtyForms.delete(form);var state=stateNode(form);if(state){state.hidden=true;state.textContent='';}}
   },true);
   fields(form).forEach(function(field){if(field.required)field.setAttribute('aria-required','true')});
 }
