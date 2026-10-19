@@ -8,7 +8,7 @@ import {createHash} from 'node:crypto';
 import {productionConfig} from './production-config.mjs';
 import {openProductionDatabase} from './production-db.mjs';
 import {productionAuth} from './production-auth.mjs';
-import {prepareAssetResponse} from './http-assets.mjs';
+import {prepareAssetResponse,compressTextResponse} from './http-assets.mjs';
 import {backupConfig,createProductionBackup} from './production-backup.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -306,14 +306,14 @@ export async function startProduction({env = process.env, logger = console, invi
   const server = http.createServer((incoming, outgoing) => {
     const task = (async () => {
       try {
-        const result = await prepareAssetResponse(incoming, await dispatch(incoming));
+        const result = await prepareAssetResponse(incoming, await compressTextResponse(incoming, await dispatch(incoming)));
         const headers = Object.fromEntries(result.headers);
         Object.assign(headers, {'cache-control': result.headers.get('etag') ? headers['cache-control'] : 'no-store', 'x-content-type-options': 'nosniff', 'referrer-policy': headers['referrer-policy'] || 'same-origin', 'strict-transport-security': 'max-age=31536000', 'x-frame-options': 'DENY'});
         outgoing.writeHead(result.status, headers);
         if (incoming.method === 'HEAD' || !result.body) outgoing.end();
         else await pipeline(Readable.fromWeb(result.body), outgoing);
       } catch (error) {
-        logger.error('Production request failed', {status: error.status || 500, name: error.name});
+        logger.error('Production request failed', {status: error.status || 500, name: error.name, message: error.message});
         if (!outgoing.headersSent) { outgoing.writeHead(error.status || 500, {'content-type': 'application/json', 'cache-control': 'no-store'}); outgoing.end('{"error":"Request failed"}'); }
         else outgoing.destroy();
       }
