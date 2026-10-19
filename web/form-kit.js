@@ -4,7 +4,12 @@
 var pending=false, dirtyForms=new Set(), drafts=new Map(), sequence=0;
 function fieldLabel(field){
   var label=field.closest('label');
-  if(label&&String(label.textContent||'').trim())return String(label.textContent).replace(field.value||'','').trim();
+  if(label){
+    var clone=label.cloneNode(true);
+    clone.querySelectorAll('input,select,textarea,button,small').forEach(function(node){node.remove()});
+    var text=String(clone.textContent||'').replace(/\s+/g,' ').trim();
+    if(text)return text;
+  }
   return field.getAttribute('aria-label')||field.name||'Ce champ';
 }
 function messageFor(field){
