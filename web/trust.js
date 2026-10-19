@@ -27,6 +27,12 @@ function status(){
     body.innerHTML='<p><span class="sx-badge danger">Service indisponible</span></p><p class="sx-muted">Impossible de joindre /health pour le moment. Vos modifications restent dans cette page.</p>';
   });
 }
+function actionLabel(action){
+  var names={member:'Membre',planning:'Planning',assignment:'Affectation',purchase_order:'Commande',invoice:'Facture',expense:'Dépense',document:'Document',time_entry:'Pointage',asset:'Matériel',supplier_allocation:'Ventilation',supplier_invoice_match:'Rapprochement',simulation:'Simulation'};
+  var parts=String(action||'action').split('.'),prefix=names[parts[0]]||parts[0].replace(/_/g,' ');
+  var rest=parts.slice(1).map(function(part){return part.replace(/_/g,' ');}).join(' · ');
+  return prefix+(rest?' · '+rest:'');
+}
 function journal(){
   body.innerHTML='<p class="sx-muted">Chargement du journal…</p>';
   fetch('/api/audit-log?limit=40',{cache:'no-store',credentials:'same-origin'}).then(function(response){
@@ -35,8 +41,7 @@ function journal(){
   }).then(function(data){
     var events=data.events||[];
     body.innerHTML=events.length?events.map(function(event){
-      var label=String(event.action||'action').replace(/[._]/g,' ');
-      return '<div class="detail-row"><span><strong>'+esc(label)+'</strong><small>'+esc(event.entityType||'')+' · '+esc(String(event.entityId||''))+'</small></span><span><b>'+esc(event.actorName||'Utilisateur')+'</b><small>'+esc(new Date(event.createdAt).toLocaleString('fr-BE'))+'</small></span></div>';
+      return '<div class="detail-row"><span><strong>'+esc(actionLabel(event.action))+'</strong><small>'+esc(event.entityType||'')+' · '+esc(String(event.entityId||''))+'</small></span><span><b>'+esc(event.actorName||'Utilisateur')+'</b><small>'+esc(new Date(event.createdAt).toLocaleString('fr-BE'))+'</small></span></div>';
     }).join(''):'<div class="empty">Aucune action enregistrée pour le moment.</div>';
   }).catch(function(error){
     body.innerHTML='<p class="sx-badge danger">'+esc(error.message)+'</p><p class="sx-muted">Le journal est accessible aux personnes qui ont le droit de consultation.</p>';
