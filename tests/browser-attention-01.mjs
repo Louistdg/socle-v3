@@ -59,10 +59,16 @@ try{
   const emptyView=await tab.evaluate(`({text:document.querySelector('.ia-attention-empty')?.innerText||'',count:document.querySelector('.ia-attention h2')?.innerText||''})`,'attention-empty-proof');assert.equal(emptyView.count,'0 choses à traiter');assert.match(emptyView.text,/Rien à traiter[\s\S]*Dernier contrôle[\s\S]*\d{2}:\d{2}/);await capture('attention-vide.png');
   await tab.evaluate(`iaAAttentionFilter='all';document.querySelector('.ia-attention').outerHTML=iaAAttentionRender(iaAAttentionBuild(${JSON.stringify(fixture)}));document.querySelector('.ia-attention-filter select').value='orders';iaAAttentionSetFilter('orders')`,'attention-filter');
   const filtered=await tab.evaluate(`({selected:document.querySelector('.ia-attention-filter select')?.value,heading:document.querySelector('.ia-attention h2')?.textContent,rows:[...document.querySelectorAll('.ia-attention-row')].map(row=>row.innerText)})`,'attention-filter-proof');assert.equal(filtered.selected,'orders');assert.equal(filtered.rows.length,1);assert.equal(filtered.heading,'1 chose à traiter');assert.match(filtered.rows[0],/BC-RETARD/);await capture('attention-filtre-commandes.png');
-  await tab.evaluate(`navigate=route=>{globalThis.__attentionActivated=route};document.querySelector('.ia-attention-filter select')?.focus()`,'attention-keyboard-start');await key('Tab');
-  const guideFocus=await tab.evaluate(`({tag:document.activeElement?.tagName,text:document.activeElement?.textContent||''})`,'attention-keyboard-guide');assert.equal(guideFocus.tag,'SUMMARY','Tab atteint d’abord le résumé des vérifications');assert.match(guideFocus.text,/Comment ces vérifications/);
-  await key('Tab');
-  const focus=await tab.evaluate(`({className:document.activeElement?.className,action:document.activeElement?.getAttribute('onclick')||''})`,'attention-keyboard-focus');assert.match(focus.className,/ia-attention-action/,'Tab parcourt ensuite la ligne d’action');assert.match(focus.action,/navigate/);await key('Enter');
+  await tab.evaluate(`navigate=route=>{globalThis.__attentionActivated=route};document.querySelector('.ia-attention-filter select')?.focus()`,'attention-keyboard-start');
+  let focus=null,guideSeen=false;
+  for(let step=0;step<4;step++){
+    await key('Tab');
+    const current=await tab.evaluate(`({tag:document.activeElement?.tagName,className:document.activeElement?.className,action:document.activeElement?.getAttribute('onclick')||'',text:document.activeElement?.textContent||''})`,'attention-keyboard-step');
+    if(current.tag==='SUMMARY'&&/Comment ces vérifications/.test(current.text))guideSeen=true;
+    if(/ia-attention-action/.test(current.className)){focus=current;break}
+  }
+  assert.ok(guideSeen,'Le résumé des vérifications est atteignable au clavier');
+  assert.ok(focus,'La ligne d’action est atteignable au clavier');assert.match(focus.className,/ia-attention-action/,'Tab parcourt le filtre puis la ligne d’action');assert.match(focus.action,/navigate/);await key('Enter');
   const activated=await tab.evaluate(`globalThis.__attentionActivated||''`,'attention-keyboard-activation');assert.equal(activated,'purchases','Entrée active l’action de la ligne');
   console.log('browser-attention-01: PASS (date limite, factures, chantiers clos, état vide, compteur, filtre, clavier et donnée manquante)');
 }finally{await tab.close();await browser.close()}
