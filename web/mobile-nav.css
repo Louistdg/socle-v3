@@ -532,7 +532,7 @@
   body[data-mobile-nav="true"][data-ia-a-role] .ia-b-planning-head strong{
     font-size:.82rem;
   }
-  body[data-mobile-nav="true"][data-ia-a-role] .ia-b-filters + .section-heading{
+  body[data-mobile-nav="true"][data-ia-a-role] .ia-b-filters ~ .section-heading{
     margin:var(--sx-space-3) 0;
     padding:var(--sx-space-3) var(--sx-space-3);
   }

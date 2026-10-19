@@ -103,7 +103,7 @@ const restoreRefinementBase=restoreWorkspace;
 restoreWorkspace=function(s){restoreRefinementBase(s);ensureRefinementData()};
 
 function personnelTable(list){
-  return list.length?`<div class="data-table people-table"><table><thead><tr><th>Personne</th><th>Fonction</th><th>Métier</th><th>Équipe / statut</th><th></th></tr></thead><tbody>${list.map(p=>{const id=typeof p.id==='number'&&Number.isSafeInteger(p.id)?String(p.id):JSON.stringify(String(p.id)).replaceAll('"','&quot;'),teamNames=(teams||[]).filter(team=>(team.members||[]).map(String).includes(String(p.id))).map(team=>team.name),status=p.inactiveAt?'Inactif':'Actif';return `<tr class="personnel-row" role="button" tabindex="0" onclick="showPersonDossier(${id})" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();showPersonDossier(${id})}"><td><span class="person-cell">${face(p)}<span><strong>${esc(p.name)}</strong><small>Entrée le ${fullDate(p.start)}</small></span></span></td><td>${esc(p.role||'À définir')}</td><td><strong>${esc(p.trade||'À définir')}</strong>${p.otherTrades?.length?`<small>+ ${esc(p.otherTrades.join(', '))}</small>`:''}</td><td>${esc(teamNames.join(', ')||'Sans équipe')} · ${status}</td><td><span class="link">Dossier ↗</span></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">Aucune personne dans cette sélection.</div>';
+  return list.length?`<div class="data-table people-table"><table><thead><tr><th>Personne</th><th>Fonction</th><th>Métier</th><th>Équipe / statut</th><th></th></tr></thead><tbody>${list.map(p=>{const id=typeof p.id==='number'&&Number.isSafeInteger(p.id)?String(p.id):JSON.stringify(String(p.id)).replaceAll('"','&quot;'),teamNames=(teams||[]).filter(team=>(team.members||[]).map(String).includes(String(p.id))).map(team=>team.name),status=p.inactiveAt?'Inactif':'Actif';return `<tr class="personnel-row" data-person-id="${id}" role="button" tabindex="0" onclick="showPersonDossier(${id})" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();showPersonDossier(${id})}"><td><span class="person-cell">${face(p)}<span><strong>${esc(p.name)}</strong><small>Entrée le ${fullDate(p.start)}</small></span></span></td><td>${esc(p.role||'À définir')}</td><td><strong>${esc(p.trade||'À définir')}</strong>${p.otherTrades?.length?`<small>+ ${esc(p.otherTrades.join(', '))}</small>`:''}</td><td>${esc(teamNames.join(', ')||'Sans équipe')} · ${status}</td><td><span class="person-drag-grip" draggable="true" data-person-drag="${id}" role="button" tabindex="0" aria-label="Glisser ${esc(p.name)} dans une équipe" title="Glisser dans une équipe"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="5" cy="3.5" r="1.3"/><circle cx="11" cy="3.5" r="1.3"/><circle cx="5" cy="8" r="1.3"/><circle cx="11" cy="8" r="1.3"/><circle cx="5" cy="12.5" r="1.3"/><circle cx="11" cy="12.5" r="1.3"/></svg></span><span class="link">Dossier ↗</span></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">Aucune personne dans cette sélection.</div>';
 }
 
 peopleView=function(){
@@ -121,7 +121,7 @@ peopleView=function(){
       <section class="panel"><div class="panel-head"><div><p class="eyebrow">DOSSIERS INDIVIDUELS</p><h2>${filtered.length} personne(s)</h2></div><span class="subtle">Cliquez sur une ligne pour ouvrir l’historique complet.</span></div>${personnelTable(filtered)}</section>
     `:`
       <div class="section-heading"><div><p class="eyebrow">ORGANISATION DU TERRAIN</p><h2>Équipes attitrées</h2></div><button class="btn primary" onclick="teamForm()">+ Créer une équipe</button></div>
-      <div class="team-overview">${teams.map(t=>`<section class="panel team-overview-card"><div class="panel-head"><div><p class="eyebrow">ÉQUIPE</p><h2>${esc(t.name)} <span class="count">${t.members.length}</span></h2></div><button class="btn" onclick="teamForm(${t.id})">Composer</button></div>${personnelTable(t.members.map(getPerson).filter(Boolean))}</section>`).join('')}<section class="panel team-overview-card"><div class="panel-head"><div><p class="eyebrow">DISPONIBLES</p><h2>Sans équipe attitrée</h2></div></div>${personnelTable(people.filter(p=>!assigned.has(p.id)))}</section></div>
+      <div class="team-overview">${teams.map(t=>`<section class="panel team-overview-card" data-team-drop="${esc(t.id)}"><div class="panel-head"><div><p class="eyebrow">ÉQUIPE</p><h2>${esc(t.name)} <span class="count">${t.members.length}</span></h2></div><button class="btn" onclick="teamForm(${t.id})">Composer</button></div>${personnelTable(t.members.map(getPerson).filter(Boolean))}</section>`).join('')}<section class="panel team-overview-card" data-team-drop=""><div class="panel-head"><div><p class="eyebrow">DISPONIBLES</p><h2>Sans équipe attitrée</h2></div></div>${personnelTable(people.filter(p=>!assigned.has(p.id)))}</section></div>
     `}`;
 };
 
@@ -255,3 +255,73 @@ newsView=function(){
 };
 
 render=function(){document.querySelector('#nav').innerHTML=tabs2.map(([v,l])=>`<button class="${view===v?'active':''}" ${view===v?'aria-current="page"':''} onclick="navigate('${v}')">${l}</button>`).join('');document.querySelector('#main').innerHTML=({planning,home:planning,people:peopleView,jobs:jobsView,fleet:fleetView,quotes:quotesView,accounting:accountingView,news:newsView,actions,documents,company:companyView,dossiers:dossierView}[view]||planning)();scheduleSave()};
+
+(function () {
+  var draggedPersonId = null;
+  var dragSnapshot = null;
+  function teamsCopy() {
+    return (typeof teams !== 'undefined' ? teams : []).map(function (team) {
+      return { id: team.id, members: (team.members || []).slice() };
+    });
+  }
+  function clearPersonDrag() {
+    draggedPersonId = null;
+    Array.prototype.forEach.call(document.querySelectorAll('.personnel-row.is-person-dragging,.team-overview-card.is-person-drop-target'), function (node) {
+      node.classList.remove('is-person-dragging', 'is-person-drop-target');
+    });
+  }
+  function movePersonToTeam(personId, teamId) {
+    if (typeof teams === 'undefined' || !Array.isArray(teams)) return;
+    var previous = teamsCopy();
+    teams.forEach(function (team) {
+      team.members = (team.members || []).filter(function (member) { return String(member) !== String(personId); });
+    });
+    var target = teamId ? teams.find(function (team) { return String(team.id) === String(teamId); }) : null;
+    if (target) target.members = (target.members || []).concat([personId]);
+    if (typeof scheduleSave === 'function') scheduleSave();
+    if (typeof render === 'function') render();
+    if (typeof toast === 'function') toast(target ? 'Personne ajoutée à ' + target.name + '.' : 'Personne retirée de son équipe.', 'Annuler', function () {
+      previous.forEach(function (saved) {
+        var team = teams.find(function (item) { return String(item.id) === String(saved.id); });
+        if (team) team.members = saved.members.slice();
+      });
+      if (typeof scheduleSave === 'function') scheduleSave();
+      if (typeof render === 'function') render();
+    });
+  }
+  document.addEventListener('dragstart', function (event) {
+    var grip = event.target.closest ? event.target.closest('[data-person-drag]') : null;
+    if (!grip) return;
+    var row = grip.closest('.personnel-row');
+    if (!row) return;
+    draggedPersonId = grip.dataset.personDrag;
+    dragSnapshot = teamsCopy();
+    row.classList.add('is-person-dragging');
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      try { event.dataTransfer.setData('text/plain', 'person:' + draggedPersonId); } catch (error) {}
+    }
+  });
+  document.addEventListener('dragover', function (event) {
+    if (!draggedPersonId) return;
+    var target = event.target.closest ? event.target.closest('[data-team-drop]') : null;
+    if (!target) return;
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    Array.prototype.forEach.call(document.querySelectorAll('.team-overview-card.is-person-drop-target'), function (node) {
+      node.classList.remove('is-person-drop-target');
+    });
+    target.classList.add('is-person-drop-target');
+  });
+  document.addEventListener('drop', function (event) {
+    if (!draggedPersonId) return;
+    var target = event.target.closest ? event.target.closest('[data-team-drop]') : null;
+    if (!target) return;
+    event.preventDefault();
+    var personId = draggedPersonId;
+    var teamId = target.dataset.teamDrop || '';
+    clearPersonDrag();
+    movePersonToTeam(personId, teamId);
+  });
+  document.addEventListener('dragend', clearPersonDrag);
+})();

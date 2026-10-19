@@ -1432,7 +1432,7 @@ body[data-ia-a-role] .official-grid a b{color:var(--sx-accent-ink)}
   }
   body[data-ia-a-role] .ia-b-planning-head,
   body[data-ia-a-role] .toolbar.ia-b-filters,
-  body[data-ia-a-role] .ia-b-filters + .section-heading,
+  body[data-ia-a-role] .ia-b-filters ~ .section-heading,
   body[data-ia-a-role] .personal-head{
     background:var(--ia-surface);
     color:var(--ia-text);
@@ -1446,7 +1446,7 @@ body[data-ia-a-role] .official-grid a b{color:var(--sx-accent-ink)}
   body[data-ia-a-role] .toolbar.ia-b-filters{
     padding:12px;
   }
-  body[data-ia-a-role] .ia-b-filters + .section-heading{
+  body[data-ia-a-role] .ia-b-filters ~ .section-heading{
     margin:12px 0;
     padding:12px 14px;
   }

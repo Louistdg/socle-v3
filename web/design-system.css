@@ -202,3 +202,10 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
 .ia-job-context-phases button{width:auto;flex:1 1 auto;justify-content:center;min-height:30px;padding:4px 7px;border:1px solid var(--sx-line);border-radius:999px;color:var(--sx-muted);font-size:var(--sx-text-xs);font-weight:650}
 .ia-job-context-phases button:hover,.ia-job-context-phases button:focus-visible{color:var(--sx-accent-ink);border-color:var(--sx-accent);background:var(--sx-accent-soft)}
 @media(max-width:899px){.ia-job-context{display:none}}
+.person-drag-grip{cursor:grab;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;margin-right:6px;border-radius:5px;color:var(--sx-muted);vertical-align:middle}
+.person-drag-grip svg{width:13px;height:13px;fill:currentColor}
+.person-drag-grip:hover,.person-drag-grip:focus-visible{background:var(--sx-raised);color:var(--sx-ink);outline:none}
+.person-drag-grip:active{cursor:grabbing}
+.personnel-row.is-person-dragging{opacity:.45}
+.team-overview-card.is-person-drop-target{outline:2px solid var(--sx-accent);outline-offset:2px;background:var(--sx-accent-soft)}
+@media(max-width:899px){.person-drag-grip{display:none}}

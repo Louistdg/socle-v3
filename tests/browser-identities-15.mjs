@@ -86,7 +86,7 @@ async function captureVisual(tab,role){
       const jobsAllowed=canViewModule('jobs');
       if(!jobsAllowed)return{jobsAllowed:false};
       navigate('jobs');await wait();
-      const filters=document.querySelector('#main .ia-b-filters'),counter=document.querySelector('#main .ia-b-filters + .section-heading'),list=document.querySelector('#main .ia-jobs-list'),row=document.querySelector('#main .ia-job-row');
+      const filters=document.querySelector('#main .ia-b-filters'),counter=document.querySelector('#main .ia-b-filters ~ .section-heading'),list=document.querySelector('#main .ia-jobs-list'),row=document.querySelector('#main .ia-job-row');
       return{jobsAllowed:true,overflow:document.documentElement.scrollWidth>window.innerWidth,surface:{bodyBackground:getComputedStyle(document.body).backgroundColor,mainBackground:getComputedStyle(document.querySelector('main')).backgroundColor,filtersBackground:filters?getComputedStyle(filters).backgroundColor:'',counterBackground:counter?getComputedStyle(counter).backgroundColor:'',listBackground:list?getComputedStyle(list).backgroundColor:'',rowBackground:row?getComputedStyle(row).backgroundColor:''}};
     })()`,'visual-jobs:'+role+':'+viewport.name);
     if(jobs.jobsAllowed){
