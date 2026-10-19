@@ -509,6 +509,7 @@ body.socle-v3[data-audit-route="home"] .ia-attention{order:3;margin-bottom:12px}
 body.socle-v3[data-audit-route="home"] .home-top-grid{order:2;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:12px;margin-bottom:12px}
 body.socle-v3[data-audit-route="home"] .home-top-grid>:is(.ia-home-weather,.ia-home-portals){margin:0;height:100%}
 body.socle-v3[data-audit-route="home"] .ia-owner-dashboard{order:4;margin-bottom:12px}
+body.socle-v3[data-audit-route="home"] #main .ia-home-portal-mark{background:var(--sx-accent-soft)!important;color:var(--sx-accent-ink)!important}
 body.socle-v3[data-audit-route="home"] .v3-jobs{order:5;margin-bottom:12px}
 body.socle-v3[data-audit-route="home"] :is(.ia-job-canvas-shell,.ia-quick-actions,.ia-screen-purpose){display:none!important}
 @media(max-width:899px){
