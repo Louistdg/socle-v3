@@ -517,5 +517,8 @@ body.socle-v3[data-audit-route="home"] :is(.ia-job-canvas-shell,.ia-quick-action
   body.socle-v3[data-audit-route="home"] .v3-intro .v3-shortcuts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
   body.socle-v3[data-audit-route="home"] .home-kpis{grid-template-columns:1fr 1fr;margin-top:8px}
   body.socle-v3[data-audit-route="home"] .home-top-grid{grid-template-columns:1fr;gap:8px}
+  body.socle-v3[data-audit-route="home"] .ia-home-portal-links{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  body.socle-v3[data-audit-route="home"] .ia-home-portal-links a{grid-template-columns:24px minmax(0,1fr) 10px;gap:6px;min-height:48px;padding:6px}
+  body.socle-v3[data-audit-route="home"] .ia-home-portal-mark{width:24px;height:24px;font-size:8px;border-radius:7px}
   body.socle-v3[data-audit-route="home"] .v3-jobs{grid-template-columns:1fr 1fr;gap:8px}
 }
