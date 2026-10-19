@@ -149,6 +149,7 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
 .ia-b-weekday-settings>summary::after{content:'⌄';margin-left:6px;color:var(--sx-muted)}
 .ia-b-weekday-settings[open]>summary{border-color:var(--sx-accent-line)}
 .ia-b-weekday-settings>form{position:absolute;right:0;top:calc(100% + 6px);z-index:35;display:grid;gap:10px;width:min(360px,calc(100vw - 24px));padding:12px;border:1px solid var(--sx-line-strong);border-radius:var(--sx-radius-md);background:var(--sx-overlay);box-shadow:var(--sx-shadow-2);color:var(--sx-ink)}
+.ia-b-weekday-settings:not([open])>form{display:none!important}
 .ia-b-weekday-settings>form>div{display:grid;gap:3px}
 .ia-b-weekday-settings>form small{color:var(--sx-muted);font-size:var(--sx-text-xs);line-height:1.4}
 .ia-b-weekday-settings>form label{display:flex;align-items:center;gap:8px;color:var(--sx-ink);font-size:var(--sx-text-sm);font-weight:650}
