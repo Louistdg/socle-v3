@@ -80,8 +80,25 @@ body.socle-v3 #main .eyebrow{font-size:var(--sx-label);letter-spacing:.12em;font
 .sx-command-option small{margin-left:auto;color:var(--sx-muted);font-size:var(--sx-text-2xs)}
 .sx-command-empty{padding:var(--sx-space-5);color:var(--sx-muted);text-align:center}
 
+#ia-command-dialog{width:min(620px,calc(100vw - 24px));max-width:none;max-height:min(680px,88dvh);padding:0;border:1px solid var(--sx-line-strong);border-radius:var(--sx-radius-lg);background:var(--sx-surface);color:var(--sx-ink);box-shadow:var(--sx-shadow-3);overflow:hidden}
+#ia-command-dialog .ia-command-panel{display:flex;flex-direction:column;max-height:min(680px,88dvh)}
+#ia-command-dialog .ia-command-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sx-space-4);padding:var(--sx-space-4);border-bottom:1px solid var(--sx-line)}
+#ia-command-dialog .ia-command-head h2{margin:0;font-size:var(--sx-title-section)}
+#ia-command-dialog .ia-command-close{min-height:30px;padding:0 10px;border:1px solid var(--sx-line);border-radius:var(--sx-radius-sm);background:var(--sx-raised);color:var(--sx-ink-soft);font:inherit;font-size:var(--sx-text-xs);cursor:pointer}
+#ia-command-dialog .ia-command-content{padding:var(--sx-space-4);overflow:auto}
+#ia-command-dialog .ia-command-label{display:block;margin-bottom:6px;color:var(--sx-muted);font-size:var(--sx-text-xs)}
+#ia-command-dialog .ia-command-option{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:var(--sx-space-4);align-items:center;padding:9px 10px;border:0;border-radius:var(--sx-radius-sm);cursor:pointer}
+#ia-command-dialog .ia-command-option[aria-selected="true"]{background:var(--sx-raised)}
+#ia-command-dialog .ia-command-option strong{font-size:var(--sx-text-sm);font-weight:650}
+#ia-command-dialog .ia-command-option span{color:var(--sx-muted);font-size:var(--sx-text-xs);line-height:1.3}
+#ia-command-dialog .ia-command-results{max-height:52vh;overflow:auto}
+#ia-command-dialog .ia-command-count{margin:0 0 6px;color:var(--sx-muted);font-size:var(--sx-text-xs)}
+#ia-command-dialog input{width:100%;min-height:var(--sx-control)}
+
 @media(max-width:760px){
   body.socle-v3 #main h1,body.socle-v3 #main .heading h1,body.socle-v3 #main .ia-role-head h1{font-size:22px}
   body.socle-v3 #main h2{font-size:16px}
   .sx-command{width:100%;max-width:none;max-height:92dvh;margin:auto 0 0;border-radius:var(--sx-radius-lg) var(--sx-radius-lg) 0 0}
+  #ia-command-dialog{width:100%;max-height:92dvh;margin:auto 0 0;border-radius:var(--sx-radius-lg) var(--sx-radius-lg) 0 0}
+  #ia-command-dialog .ia-command-option{grid-template-columns:minmax(0,1fr);gap:2px}
 }
