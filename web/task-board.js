@@ -44,11 +44,16 @@ function normalized(value){
   return{folders:folders,assignments:assignments};
 }
 function value(){return{folders:cloneFolders(state.folders),assignments:Object.assign({},state.assignments)}}
-function countFor(folderId){
-  var selected=alertState();
-  return taskList().filter(function(task){return effectiveState(task)===selected&&folderOf(task.id)===folderId}).length;
+function serverTasks(){try{return typeof serverProjectTasks!=='undefined'&&Array.isArray(serverProjectTasks)?serverProjectTasks:[]}catch{return[]}}
+function allTasks(){
+  var list=[];
+  taskList().forEach(function(task){list.push({key:String(task.id),source:'reminder',title:String(task.title||'Tâche'),state:effectiveState(task),task:task})});
+  serverTasks().forEach(function(task){list.push({key:'project:'+String(task.id),source:'project',title:String(task.title||'Tâche chantier'),state:task.status==='done'?'done':task.status==='blocked'?'problem':'todo',task:task})});
+  return list;
 }
-function totalForView(){return taskList().filter(function(task){return effectiveState(task)===alertState()}).length}
+function taskByKey(key){return allTasks().find(function(item){return item.key===String(key)})||null}
+function countFor(folderId){return allTasks().filter(function(item){return folderOf(item.key)===folderId}).length}
+function totalForView(){return allTasks().length}
 function activeFilter(){return filter}
 function chip(label,value,count,extra){
   var active=filter===value?' is-active':'';
@@ -135,57 +140,73 @@ function persist(previous,label,options){
   });
 }
 
+function setupRow(row,key,title,textHost,folderHost,asTable){
+  var handle=row.querySelector('.task-drag-handle');
+  if(!handle){
+    handle=document.createElement('span');
+    handle.className='task-drag-handle';
+    handle.draggable=true;
+    handle.dataset.taskDrag=key;
+    handle.setAttribute('role','button');
+    handle.tabIndex=0;
+    handle.setAttribute('aria-label','Déplacer '+title+' vers un dossier');
+    handle.title='Glisser vers un dossier';
+    handle.textContent='⠿';
+    if(asTable){var cell=row.querySelector('.task-drag-cell');if(cell)cell.append(handle)}
+    else row.insertBefore(handle,row.children[1]||null);
+  }
+  var folderId=folderOf(key),tag=null;
+  if(textHost){
+    tag=textHost.querySelector('.task-folder-tag');
+    if(folderId){
+      if(!tag){tag=document.createElement('span');tag.className='task-folder-tag';textHost.append(tag)}
+      tag.textContent='📁 '+folderName(folderId);
+    }else if(tag){tag.remove()}
+  }else if(folderHost){
+    folderHost.replaceChildren();
+    if(folderId){tag=document.createElement('span');tag.className='task-folder-tag';tag.textContent='📁 '+folderName(folderId);folderHost.append(tag)}
+  }
+  var move=row.querySelector('.task-move');
+  if(!move){
+    move=document.createElement('button');
+    move.type='button';move.className='btn task-move';
+    move.setAttribute('aria-label','Déplacer '+title+' vers un dossier');
+    move.title='Déplacer vers un dossier';
+    move.innerHTML='<span class="task-move-label">Déplacer</span><span class="task-move-icon" aria-hidden="true">⇢</span>';
+    move.addEventListener('click',function(event){event.preventDefault();event.stopPropagation();taskBoardMoveDialog(key)});
+    if(asTable&&folderHost)folderHost.append(move);else row.append(move);
+  }else if(asTable&&folderHost&&move.parentElement!==folderHost)folderHost.append(move);
+  row.hidden=filter!=='all'&&(filter==='__inbox__'?folderOf(key)!=='':folderOf(key)!==filter);
+}
 function enhanceRows(){
   var rows=document.querySelectorAll('.batch-task[data-task-id]');
   Array.prototype.forEach.call(rows,function(row){
-    var taskId=String(row.dataset.taskId||'');
+    var key=String(row.dataset.taskId||'');
     var text=row.querySelector('.task-text');
     var title=text&&text.querySelector('strong')?text.querySelector('strong').textContent:'tâche';
-    if(!row.querySelector('.task-drag-handle')){
-      var handle=document.createElement('span');
-      handle.className='task-drag-handle';
-      handle.draggable=true;
-      handle.dataset.taskDrag=taskId;
-      handle.setAttribute('role','button');
-      handle.tabIndex=0;
-      handle.setAttribute('aria-label','Déplacer '+title+' vers un dossier');
-      handle.title='Glisser vers un dossier';
-      handle.textContent='⠿';
-      row.insertBefore(handle,row.children[1]||null);
-    }
-    if(text){
-      var folderId=folderOf(taskId),tag=text.querySelector('.task-folder-tag');
-      if(folderId){
-        if(!tag){tag=document.createElement('span');tag.className='task-folder-tag';text.append(tag)}
-        tag.textContent='📁 '+folderName(folderId);
-      }else if(tag){tag.remove()}
-    }
-    if(!row.querySelector('.task-move')){
-      var move=document.createElement('button');
-      move.type='button';move.className='btn task-move';
-      move.setAttribute('aria-label','Déplacer '+title+' vers un dossier');
-      move.title='Déplacer vers un dossier';
-      move.innerHTML='<span class="task-move-label">Déplacer</span><span class="task-move-icon" aria-hidden="true">⇢</span>';
-      move.addEventListener('click',function(event){event.preventDefault();event.stopPropagation();taskBoardMoveDialog(taskId)});
-      row.append(move);
-    }
-    var hidden=filter!=='all'&&(filter==='__inbox__'?folderOf(taskId)!=='':folderOf(taskId)!==filter);
-    row.hidden=hidden;
+    setupRow(row,key,title,text,null,false);
   });
-  applyFilterLabel(rows);
+  var serverRows=document.querySelectorAll('tr[data-task-source="project"][data-task-id]');
+  Array.prototype.forEach.call(serverRows,function(row){
+    var key='project:'+String(row.dataset.taskId||'');
+    var strong=row.querySelector('strong');
+    setupRow(row,key,strong?strong.textContent:'tâche chantier',null,row.querySelector('.task-folder-cell'),true);
+  });
+  applyFilterLabel(rows,serverRows);
 }
-function applyFilterLabel(rows){
-  var list=rows||document.querySelectorAll('.batch-task[data-task-id]');
+function applyFilterLabel(rows,serverRows){
+  var list=rows?Array.prototype.slice.call(rows).concat(Array.prototype.slice.call(serverRows||[])):document.querySelectorAll('.batch-task[data-task-id],tr[data-task-source="project"][data-task-id]');
   var visible=0;Array.prototype.forEach.call(list,function(row){if(!row.hidden)visible++});
   var subtle=document.querySelector('#main .section-heading .subtle');
-  if(subtle&&/tâche\(s\)/.test(subtle.textContent||'')){
+  if(subtle&&/(tâche|élément)\(s\)/.test(subtle.textContent||'')){
     var label=filter==='all'?'cette vue':filter==='__inbox__'?'Sans dossier':folderName(filter)||'ce dossier';
-    subtle.textContent=visible+' tâche(s) dans '+label;
+    subtle.textContent=visible+' élément(s) dans '+label;
   }
   var panel=document.querySelector('.task-batch-list');
   if(!panel)return;
   var empty=panel.querySelector('.task-board-filter-empty');
-  var listEmpty=!list.length;
+  var batchRows=document.querySelectorAll('.batch-task[data-task-id]');
+  var listEmpty=!batchRows.length;
   if(!empty){empty=document.createElement('div');empty.className='empty task-board-filter-empty';empty.hidden=true;panel.append(empty)}
   empty.textContent='Aucune tâche dans ce dossier pour cette vue.';
   empty.hidden=listEmpty||visible>0;
@@ -261,8 +282,8 @@ globalThis.taskBoardAssign=function(taskId,folderId){
   persist(previous,target?'Tâche rangée dans '+folderName(target)+'.':'Tâche remise dans Sans dossier.');
 };
 globalThis.taskBoardMoveDialog=function(taskId){
-  var task=taskList().find(function(item){return String(item.id)===String(taskId)});if(!task)return;
-  var current=folderOf(taskId);
+  var task=taskByKey(taskId);if(!task)return;
+  var current=folderOf(task.key);
   var choices='<button class="btn'+(current===''?' primary':'')+'" type="button" onclick="closeModal();taskBoardAssign(\''+escapeJs(String(taskId))+'\',\'\')">Sans dossier</button>';
   state.folders.forEach(function(folder){
     choices+='<button class="btn'+(current===folder.id?' primary':'')+'" type="button" onclick="closeModal();taskBoardAssign(\''+escapeJs(String(taskId))+'\',\''+escapeJs(folder.id)+'\')">'+escapeHtml(folder.name)+'</button>';

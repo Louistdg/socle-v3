@@ -68,6 +68,20 @@ try{
   await waitFor(async()=>{const value=await tab.evaluate("serverJson('/api/me/preferences/dashboard/task-folders').then(data=>data.preference?.value||null)",'task-folders-undo-read');return value&&!value.assignments[tasks[1].id]},'task-folders-undo-persisted');
   assert.equal(await tab.evaluate("document.querySelector('.batch-task[data-task-id="+JSON.stringify(tasks[1].id)+"] .task-folder-tag')?.textContent.includes('À faire cette semaine')||false",'task-folders-undo-tag'),false,'L’annulation retire l’étiquette.');
 
+  let hasServerTasks=false;
+  try{
+    await waitFor(()=>tab.evaluate("document.querySelectorAll('tr[data-task-source=\"project\"]').length>0",'task-folders-server-tasks',5000),'tâches chantier chargées',5000);
+    hasServerTasks=true;
+  }catch{console.log('browser-task-folders-01: aucune tâche chantier dans cette base, contrôle serveur réservé à la CI')}
+  if(hasServerTasks){
+    const serverTask=await tab.evaluate(`(()=>{const row=document.querySelector('tr[data-task-source="project"]');return{id:row.dataset.taskId,handle:Boolean(row.querySelector('.task-drag-handle')),cell:Boolean(row.querySelector('.task-folder-cell')),title:row.querySelector('strong')?.textContent||''}})()`,'task-folders-server-row');
+    assert.equal(serverTask.handle,true,'Une tâche chantier reçoit sa poignée de déplacement.');
+    assert.equal(serverTask.cell,true,'Une tâche chantier reçoit sa cellule de dossier.');
+    await tab.evaluate(`(()=>{const row=document.querySelector('tr[data-task-source="project"]'),handle=row.querySelector('.task-drag-handle'),chip=[...document.querySelectorAll('.task-folder-chip')].find(node=>node.dataset.taskFolderChip===${JSON.stringify(folderId)}),dt=new DataTransfer();handle.dispatchEvent(new DragEvent('dragstart',{bubbles:true,dataTransfer:dt}));chip.dispatchEvent(new DragEvent('dragover',{bubbles:true,cancelable:true,dataTransfer:dt}));chip.dispatchEvent(new DragEvent('drop',{bubbles:true,cancelable:true,dataTransfer:dt}));handle.dispatchEvent(new DragEvent('dragend',{bubbles:true,dataTransfer:dt}));return true})()`,'task-folders-server-drag');
+    await waitFor(async()=>{const value=await tab.evaluate("serverJson('/api/me/preferences/dashboard/task-folders').then(data=>data.preference?.value||null)",'task-folders-server-read');return value&&value.assignments['project:'+serverTask.id]===folderId},'task-folders-server-persisted',12000);
+    assert.match(await tab.evaluate("document.querySelector('tr[data-task-source=\"project\"] .task-folder-tag')?.textContent||''",'task-folders-server-tag'),/À faire cette semaine/,'Le dossier de la tâche chantier est visible.');
+  }
+
   await tab.call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true,screenWidth:390,screenHeight:844});
   await tab.evaluate("scrollTo(0,0)",'task-folders-mobile-top');
   await new Promise(resolve=>setTimeout(resolve,250));

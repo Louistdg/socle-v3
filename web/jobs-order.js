@@ -105,6 +105,8 @@
     return serverJson('/api/me/preferences/' + SCOPE + '/' + KEY, {
       method: 'PUT',
       body: JSON.stringify({ schemaVersion: 1, value: { order: next } })
+    }).then(function () {
+      if (typeof globalThis.iaCanvasOrderChanged === 'function') globalThis.iaCanvasOrderChanged();
     }).catch(function () {
       order = null;
       return readOrder().then(applyOrder);
@@ -146,7 +148,10 @@
   observer.observe(document.documentElement, { childList: true, subtree: true });
 
   function enhance() {
-    if (!table()) return;
+    if (!table()) {
+      readOrder().then(function () { if (typeof globalThis.iaCanvasOrderChanged === 'function') globalThis.iaCanvasOrderChanged(); });
+      return;
+    }
     var actionHead = table().querySelector('th.ia-job-col-actions');
     if (actionHead) actionHead.textContent = 'Ordre';
     rows().forEach(idOf);
@@ -160,6 +165,7 @@
   globalThis.socleJobsOrder = {
     order: function () { return order ? order.slice() : null; },
     ids: ids,
+    setOrder: function (next) { if (!Array.isArray(next) || !next.length) return; order = next.map(String).slice(); applyOrder(); refresh(); return persist(); },
     reset: function () { order = null; }
   };
 })();

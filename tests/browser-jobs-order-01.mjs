@@ -59,6 +59,15 @@ try{
   assert.equal(afterReload[0],initial[2],'L’ordre est retenu apres rechargement : '+JSON.stringify(afterReload.slice(0,4)));
   await screenshot('02-ordre-retenu');
 
+  // 3b. le canevas de l'accueil lit le même ordre
+  await tab.evaluate("navigate('home')",'go-home-canvas-order');
+  await waitFor(()=>tab.evaluate("document.querySelectorAll('.ia-job-canvas .ia-job-card').length>0",'canvas-order-ready',8000),'cartes du canevas',12000);
+  await new Promise(r=>setTimeout(r,500));
+  const firstCanvas=await tab.evaluate("document.querySelector('.ia-job-canvas .ia-job-card')?.dataset.jobId||''",'canvas-order-first');
+  const expectedCanvas=await tab.evaluate(`(()=>{const ref=${JSON.stringify(initial[2])};const job=jobs.find(item=>String(item.reference||'')===ref||String(item.id)===ref);return job?String(job.id):''})()`,'canvas-order-expected');
+  assert.equal(firstCanvas,expectedCanvas,'Le canevas reprend l’ordre de la liste : first='+firstCanvas+' expected='+expectedCanvas+' initial='+initial[2]);
+  await tab.evaluate("navigate('jobs')",'back-to-jobs-order');
+
   // 4. les fleches se desactivent aux bords
   const bords=await tab.evaluate("({firstUp:document.querySelector('#main .ia-jobs-table tbody tr [data-job-move=up]').getAttribute('aria-disabled'),lastDown:[...document.querySelectorAll('#main .ia-jobs-table tbody tr')].at(-1).querySelector('[data-job-move=down]').getAttribute('aria-disabled')})",'edges');
   assert.equal(bords.firstUp,'true','La fleche haut est desactivee en tete');

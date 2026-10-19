@@ -51,6 +51,17 @@
 .task-drag-handle:active{cursor:grabbing}
 .task-drag-handle:focus-visible{outline:2px solid var(--sx-accent);outline-offset:-2px;border-radius:6px}
 .batch-task[hidden]{display:none!important}
+.server-project-tasks .task-drag-cell{width:34px;padding:0 4px!important;text-align:center}
+.server-project-tasks .task-drag-cell .task-drag-handle{margin:0 auto}
+.server-project-tasks .task-folder-cell{min-width:150px}
+.server-project-tasks .task-folder-cell .task-folder-tag{margin:0 0 4px}
+.server-project-tasks .task-folder-cell .task-move{margin:0;min-height:34px}
+.document-folder-row{display:flex;align-items:center;border-bottom:1px solid var(--line)}
+.document-folder-row:last-child{border-bottom:0}
+.document-folder-row .document-secure-row{flex:1;min-width:0;border-bottom:0}
+.document-folder-row .task-drag-handle{flex:0 0 30px;width:30px}
+.document-folder-row .document-move{align-self:center;min-height:36px}
+.document-folder-row[hidden]{display:none!important}
 .task-board-filter-empty{margin:0}
 
 @media(max-width:899px){
