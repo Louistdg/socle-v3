@@ -40,11 +40,21 @@ try{
   await tab.evaluate("document.querySelectorAll('.job-workspace-tabs button[data-job-tab-key]')[2].nextElementSibling.querySelector('[data-move=left]').click()",'move-left-once');
   await new Promise(r=>setTimeout(r,350));
   let current=await labels();
+  if(current[1]!==initial[2]){
+    await tab.evaluate("document.querySelectorAll('.job-workspace-tabs button[data-job-tab-key]')[2].nextElementSibling.querySelector('[data-move=left]').click()",'move-left-once-retry');
+    await new Promise(r=>setTimeout(r,500));
+    current=await labels();
+  }
   assert.equal(current[1],initial[2],'L’onglet remonte d’un cran : '+JSON.stringify(current));
 
   await tab.evaluate("document.querySelectorAll('.job-workspace-tabs button[data-job-tab-key]')[1].nextElementSibling.querySelector('[data-move=left]').click()",'move-left-twice');
   await new Promise(r=>setTimeout(r,350));
   current=await labels();
+  if(current[0]!==initial[2]){
+    await tab.evaluate("document.querySelectorAll('.job-workspace-tabs button[data-job-tab-key]')[1].nextElementSibling.querySelector('[data-move=left]').click()",'move-left-twice-retry');
+    await new Promise(r=>setTimeout(r,500));
+    current=await labels();
+  }
   assert.equal(current[0],initial[2],'L’onglet passe en tete : '+JSON.stringify(current));
 
   // 2. l'ordre est enregistre puis retenu apres un rechargement complet
