@@ -37,8 +37,9 @@ try{
   await tab.reload();await waitForApp(tab);await tab.evaluate("navigate('home')",'canvas-open-home');
   await waitFor(()=>tab.evaluate("Boolean(document.querySelector('.ia-job-canvas-shell'))&&typeof iaACanvasRender==='function'",'canvas-shell-ready',5000),'canevas de la direction monté',15000);
   await tab.evaluate("serverJson('/api/me/preferences/dashboard/canvas',{method:'DELETE'})",'canvas-reset-preference');
+  const canvasVisible='(()=>{const show=()=>{const style=document.createElement("style");style.textContent="body.socle-v3[data-audit-route=home] .ia-job-canvas-shell{display:block!important}";document.head.append(style)};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",show,{once:true});else show()})();';
   const preload='(()=>{const fixture='+fixtureJson+';let tries=0;const timer=setInterval(()=>{tries++;try{if(typeof jobs!=="undefined"&&storageReady&&typeof iaACanvasRender==="function"){jobs=fixture;savedSnapshot=workspaceSnapshot();navigate("home");clearInterval(timer)}}catch{}if(tries>600)clearInterval(timer)},50)})();';
-  await tab.call('Page.addScriptToEvaluateOnNewDocument',{source:preload});
+  await tab.call('Page.addScriptToEvaluateOnNewDocument',{source:canvasVisible+preload});
   await tab.reload();await waitForApp(tab);
   await waitFor(()=>tab.evaluate("typeof iaACanvasState!=='undefined'&&!iaACanvasState.loading&&document.querySelectorAll('.ia-job-canvas .ia-job-card').length===3",'canvas-fixture-ready',5000),'trois cartes de test disponibles',15000);
   const initial=await tab.evaluate("(()=>{const canvas=document.querySelector('.ia-job-canvas'),cards=[...canvas.querySelectorAll('.ia-job-card')];return{count:cards.length,grid:getComputedStyle(canvas).backgroundImage,shadows:cards.map(card=>getComputedStyle(card).boxShadow),positions:cards.map(card=>({id:card.dataset.jobId,x:parseFloat(card.style.left),y:parseFloat(card.style.top)}))}})()",'canvas-initial-proof');
