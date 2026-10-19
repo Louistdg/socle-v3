@@ -112,10 +112,10 @@ try{
         assert.equal(out.personal.themeCount,0,'Moi ne contient plus le grand catalogue Thème '+width);
         assert.equal(out.personal.headerThemeVisible,true,'Thème reste accessible dans le header depuis Moi '+width);
         assert.equal(out.themeMenu.open,true,'Le bouton Thème ouvre le sélecteur '+width);
-        assert.equal(out.themeMenu.count,15,'Le sélecteur expose les quinze thèmes V3 '+width);
+        assert.equal(out.themeMenu.count,16,'Le sélecteur expose les seize thèmes V3 '+width);
         assert.ok(out.themeMenu.ids.includes('carmin'),'Le thème Carmin est proposé par le sélecteur '+width);
         assert.equal(new Set(out.themeMenu.ids).size,out.themeMenu.ids.length,'Aucun identifiant de thème n’est dupliqué '+width);
-        assert.deepEqual([...out.themeMenu.ids].sort(),['ardoise','atelier','beton','bordeaux','carmin','ciel','contraste','craie','cuivre','encre','foret','graphite','lin','nuit','terre'],'Le sélecteur expose exactement les quinze thèmes V3 '+width);
+        assert.deepEqual([...out.themeMenu.ids].sort(),['ardoise','atelier','beton','bordeaux','carmin','ciel','comete','contraste','craie','cuivre','encre','foret','graphite','lin','nuit','terre'],'Le sélecteur expose exactement les seize thèmes V3 '+width);
         assert.equal(out.themeMenu.changed,true,'Le choix de thème fonctionne '+width);
         assert.equal(out.themeMenu.persisted,true,'Le thème choisi persiste '+width);
       }

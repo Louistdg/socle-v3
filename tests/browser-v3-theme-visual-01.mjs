@@ -5,7 +5,7 @@ import {contrastRatio,parseColor,rgbColor} from './helpers/color-contrast.mjs';
 if(!process.env.SOCLE_CDP_URL){console.log('browser-v3-theme-visual-01: SKIP hors Browser Gate');process.exit(0)}
 
 const base=(process.env.SOCLE_TEST_URL||'http://127.0.0.1:4386').replace(/\/$/,'');
-const themes=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre','encre','craie'];
+const themes=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre','encre','craie','comete'];
 const routes=[['home','.ia-role-head'],['planning','.ia-b-week-board'],['accounting','.server-finance']];
 const widths=[[1440,1000],[390,844],[375,667]];
 const browser=await connectBrowser(base),tab=await browser.createSession(base),results=[];
