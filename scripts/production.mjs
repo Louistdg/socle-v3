@@ -125,7 +125,8 @@ export async function startProduction({env = process.env, logger = console, invi
   const storage = openProductionDatabase({databasePath: config.databasePath, migrationsDirectory: join(root, 'drizzle')});
   if(!backupDestination)logger.error('ÉCHEC SAUVEGARDE SQLite — destination indisponible; aucune copie automatique ne sera créée.');
   let backupTimer, backupBusy=false;
-  const runBackup=async()=>{if(!backupDestination||backupBusy)return;backupBusy=true;try{await createProductionBackup({database:storage.database,databasePath:config.databasePath,config:backupDestination,logger});}catch{}finally{backupBusy=false;}};
+  const backupState={enabled:Boolean(backupDestination),lastAt:null,lastError:''};
+  const runBackup=async()=>{if(!backupDestination||backupBusy)return;backupBusy=true;try{await createProductionBackup({database:storage.database,databasePath:config.databasePath,config:backupDestination,logger});backupState.lastAt=new Date().toISOString();backupState.lastError='';}catch(error){backupState.lastError=String(error&&error.message||'Sauvegarde impossible.');}finally{backupBusy=false;}};
   const auth = productionAuth(storage.database, config.sessionSecret);
   const mailer = createInvitationMailer(env, invitationMailer);
   const workerEnv = {DB: storage.DB, SOCLE_ALLOW_BOOTSTRAP: '0', SOCLE_INVITATION_TEST_MODE: env.SOCLE_INVITATION_TEST_MODE === '1' ? '1' : '0', SOCLE_V3_MANUAL_INVITATIONS: env.SOCLE_V3_MANUAL_INVITATIONS === '1' ? '1' : '0', SOCLE_V3_MANUAL_ORGANIZATION_ID: env.SOCLE_V3_MANUAL_ORGANIZATION_ID || '', RAILWAY_PROJECT_ID: env.RAILWAY_PROJECT_ID || '', ...(mailer ? {sendInvitationEmail: mailer} : {})};
@@ -141,7 +142,7 @@ export async function startProduction({env = process.env, logger = console, invi
     if (path === '/health') {
       if (!['GET', 'HEAD'].includes(incoming.method)) return errorResponse(405, 'Method not allowed');
       storage.database.prepare('SELECT 1').get();
-      return response(incoming.method === 'HEAD' ? null : '{"status":"ok"}');
+      return response(incoming.method === 'HEAD' ? null : JSON.stringify({status:'ok',backup:backupState}));
     }
     if (unsafeMethods.has(incoming.method) && !config.trustedOrigins.has(incoming.headers.origin)) return errorResponse(403, 'Origin refused');
     const identity = auth.session(incoming.headers.cookie);
