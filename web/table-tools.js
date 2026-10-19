@@ -58,11 +58,15 @@ function ensure(container){
     var label=document.createElement('label');
     var input=document.createElement('input');input.type='checkbox';input.checked=hidden.indexOf(index)<0;
     input.addEventListener('change',function(){
-      var next=readHidden(container);
+      var previous=readHidden(container),next=previous.slice();
       if(input.checked)next=next.filter(function(value){return value!==index;});
       else if(next.indexOf(index)<0)next.push(index);
       try{sessionStorage.setItem(columnKey(container),JSON.stringify(next));}catch(error){}
       applyHidden(table,next);
+      if(typeof globalThis.sxToast==='function')globalThis.sxToast('Colonnes mises à jour','Annuler',function(){
+        try{sessionStorage.setItem(columnKey(container),JSON.stringify(previous));}catch(error){}
+        applyHidden(table,previous);
+      });
     });
     label.append(input,document.createTextNode(String(cell.innerText).trim()));menu.append(label);
   });

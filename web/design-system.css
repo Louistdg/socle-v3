@@ -79,6 +79,18 @@ body.socle-v3 .data-table table thead th{position:sticky;top:0;z-index:2;backgro
 .sx-trust-links{display:flex;justify-content:flex-end;align-items:center;gap:var(--sx-space-3);flex-wrap:wrap;padding:var(--sx-space-3) 0}
 .sx-trust-links button{border:0;background:transparent;color:var(--sx-muted);font:inherit;font-size:var(--sx-text-xs);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .sx-trust-links button:hover{color:var(--sx-ink)}
+.sx-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:300;display:flex;align-items:center;gap:var(--sx-space-3);max-width:min(560px,calc(100vw - 24px));padding:9px 10px 9px 14px;border:1px solid var(--sx-line-strong);border-radius:var(--sx-radius-pill);background:var(--sx-overlay);color:var(--sx-ink);box-shadow:var(--sx-shadow-2)}
+.sx-toast[hidden]{display:none}
+.sx-toast-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--sx-text-xs)}
+.sx-toast-action{min-height:28px;padding:0 9px;border:1px solid var(--sx-accent-line);border-radius:var(--sx-radius-pill);background:var(--sx-accent);color:var(--sx-on-accent);font:inherit;font-size:var(--sx-text-xs);font-weight:650;cursor:pointer}
+.sx-toast-close{width:28px;height:28px;border:0;border-radius:50%;background:transparent;color:var(--sx-muted);font:inherit;font-size:18px;line-height:1;cursor:pointer}
+.sx-toast-close:hover{background:var(--sx-raised);color:var(--sx-ink)}
+@media(max-width:899px){.sx-toast{bottom:calc(78px + env(safe-area-inset-bottom,0px));width:calc(100vw - 20px);max-width:none}}
+
+.loading-card{position:relative;min-height:58px;overflow:hidden}
+.loading-card>strong,.loading-card>p:only-child{display:block;width:min(240px,55%);height:13px;overflow:hidden;color:transparent!important;border-radius:6px;background:linear-gradient(90deg,var(--sx-raised) 20%,var(--sx-line) 50%,var(--sx-raised) 80%);background-size:220% 100%;animation:sx-shimmer 1.4s linear infinite}
+@keyframes sx-shimmer{from{background-position:180% 0}to{background-position:-40% 0}}
+@media(prefers-reduced-motion:reduce){.loading-card>strong,.loading-card>p:only-child{animation:none;background:var(--sx-raised)}}
 body.socle-v3[data-audit-route="home"] #main .ia-home-portal-mark{background:var(--portal-color,var(--sx-accent-soft))!important;color:var(--portal-on-color,var(--sx-accent-ink))!important}
 body.socle-v3 #main .ia-home-portal-links a[data-portal="fgtb"]{--portal-color:#b5122b!important;--portal-on-color:#fff!important}
 body.socle-v3 #main .ia-home-portal-links a[data-portal="career"]{--portal-color:#0b5cab!important;--portal-on-color:#fff!important}
