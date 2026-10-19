@@ -141,10 +141,33 @@
 
   var draggedJobRow = null;
   var draggedJobOrderBefore = null;
+  var draggedJobId = null;
+  globalThis.iaBSetJobPhase = function (jobId, status) {
+    var list = (typeof jobs !== 'undefined' && Array.isArray(jobs)) ? jobs : [];
+    var job = list.find(function (item) { return String(item.id) === String(jobId); });
+    if (!job) return false;
+    var labels = { preparation: 'Préparation', planned: 'Planifié', in_progress: 'En cours', blocked: 'Bloqué', completed: 'Terminé' };
+    var next = labels[status];
+    if (!next) return false;
+    var current = typeof iaBJobStatus === 'function' ? iaBJobStatus(job) : '';
+    if (current === status) return false;
+    var previous = job.phase;
+    job.phase = next;
+    if (typeof scheduleSave === 'function') scheduleSave();
+    if (typeof render === 'function') render();
+    if (typeof toast === 'function') toast('Chantier déplacé · ' + next, 'Annuler', function () {
+      job.phase = previous;
+      if (typeof scheduleSave === 'function') scheduleSave();
+      if (typeof render === 'function') render();
+    });
+    return true;
+  };
+
   function clearJobDrag() {
     draggedJobRow = null;
-    Array.prototype.forEach.call(document.querySelectorAll('.ia-jobs-table tr.is-job-dragging,.ia-jobs-table tr.is-job-drop-target'), function (row) {
-      row.classList.remove('is-job-dragging', 'is-job-drop-target');
+    draggedJobId = null;
+    Array.prototype.forEach.call(document.querySelectorAll('.ia-jobs-table tr.is-job-dragging,.ia-jobs-table tr.is-job-drop-target,.ia-jobs-phase-drops .is-job-phase-target'), function (row) {
+      row.classList.remove('is-job-dragging', 'is-job-drop-target', 'is-job-phase-target');
     });
   }
   document.addEventListener('dragstart', function (event) {
@@ -152,6 +175,7 @@
     if (!grip || !table() || !table().contains(grip)) return;
     draggedJobRow = grip.closest('tr');
     if (!draggedJobRow) return;
+    draggedJobId = grip.dataset.jobDrag || '';
     draggedJobOrderBefore = ids();
     draggedJobRow.classList.add('is-job-dragging');
     if (event.dataTransfer) {
@@ -161,6 +185,16 @@
   });
   document.addEventListener('dragover', function (event) {
     if (!draggedJobRow) return;
+    var phaseTarget = event.target.closest ? event.target.closest('[data-job-phase-drop]') : null;
+    if (phaseTarget) {
+      event.preventDefault();
+      if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+      Array.prototype.forEach.call(document.querySelectorAll('.ia-jobs-phase-drops .is-job-phase-target'), function (item) {
+        item.classList.remove('is-job-phase-target');
+      });
+      phaseTarget.classList.add('is-job-phase-target');
+      return;
+    }
     var row = event.target.closest ? event.target.closest('tr') : null;
     if (!row || row === draggedJobRow || row.parentNode !== draggedJobRow.parentNode) return;
     event.preventDefault();
@@ -172,6 +206,15 @@
   });
   document.addEventListener('drop', function (event) {
     if (!draggedJobRow) return;
+    var phaseTarget = event.target.closest ? event.target.closest('[data-job-phase-drop]') : null;
+    if (phaseTarget) {
+      event.preventDefault();
+      var jobId = draggedJobId;
+      var phase = phaseTarget.dataset.jobPhaseDrop;
+      clearJobDrag();
+      globalThis.iaBSetJobPhase(jobId, phase);
+      return;
+    }
     var row = event.target.closest ? event.target.closest('tr') : null;
     if (!row || row === draggedJobRow || row.parentNode !== draggedJobRow.parentNode) return;
     event.preventDefault();
