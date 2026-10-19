@@ -4,7 +4,7 @@ import {isAbsolute, join, dirname, basename, relative, sep} from 'node:path';
 export function productionConfig(env = process.env) {
   const fail = message => { throw new Error('Production configuration: ' + message); };
   const [major, minor] = process.versions.node.split('.').map(Number);
-  if (major < 22 || (major === 22 && minor < 13)) fail('Node 22.13+ required.');
+  if (major < 22 || (major === 22 && minor < 23)) fail('Node 22.23+ required for the SQLite backup API.');
   if (env.LOCAL_TEST_MODE !== undefined) fail('LOCAL_TEST_MODE must be absent.');
   if (env.DATABASE_URL) fail('PostgreSQL DATABASE_URL is unsupported; configure the persistent SQLite volume.');
   for (const key of ['RAILWAY_REPLICA_COUNT', 'WEB_CONCURRENCY']) {
