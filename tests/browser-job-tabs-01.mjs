@@ -22,7 +22,7 @@ try{
   await tab.reload();
   await waitForApp(tab,'local-owner');
 
-  await tab.evaluate("serverJson('/api/me/preferences/dashboard/job-tabs',{method:'PUT',body:JSON.stringify({schemaVersion:1,value:{order:[]}})}).catch(()=>{})",'reset-preference');
+  await tab.evaluate("serverJson('/api/me/preferences/dashboard/job-tabs',{method:'PUT',body:JSON.stringify({schemaVersion:1,value:{order:[]}})}).then(r=>r.status)",'reset-preference');
 
   const jobId=await tab.evaluate("String(jobs.filter(job=>String(job.phase||job.status||'')!=='Archivé')[0].id)",'first-job');
   await tab.evaluate(`openJobWorkspace(${JSON.stringify(jobId)})`,'open-job');
