@@ -55,18 +55,20 @@ function taskByKey(key){return allTasks().find(function(item){return item.key===
 function countFor(folderId){return allTasks().filter(function(item){return folderOf(item.key)===folderId}).length}
 function totalForView(){return allTasks().length}
 function activeFilter(){return filter}
-function chip(label,value,count,extra){
+function chip(label,value,count,before,after){
   var active=filter===value?' is-active':'';
   return '<div class="task-folder-chip'+active+'" data-task-folder-chip="'+escapeAttr(value)+'">'+
-    (extra||'')+
+    (before||'')+
     '<button type="button" class="task-folder-select" onclick="taskBoardFilter(\''+escapeJs(value)+'\')" '+(filter===value?'aria-current="true"':'')+'>'+
       '<span>'+escapeHtml(label)+'</span><b>'+count+'</b>'+
-    '</button></div>';
+    '</button>'+
+    (after||'')+
+  '</div>';
 }
 function folderChip(folder){
   var grip='<span class="task-folder-grip" draggable="true" data-task-folder-drag="'+escapeAttr(folder.id)+'" role="button" tabindex="0" aria-label="Déplacer le dossier '+escapeAttr(folder.name)+'" title="Glisser pour déplacer">⠿</span>';
   var menu='<button type="button" class="task-folder-menu" onclick="taskFolderMenu(\''+escapeJs(folder.id)+'\')" aria-label="Options du dossier '+escapeAttr(folder.name)+'">⋯</button>';
-  return chip(folder.name,folder.id,countFor(folder.id),grip+menu);
+  return chip(folder.name,folder.id,countFor(folder.id),grip,menu);
 }
 function barMarkup(){
   var undo=state.undo?'<div class="task-board-undo" role="status"><span>'+escapeHtml(state.undo.label||undoMessage||'Dossier mis à jour.')+'</span><button type="button" class="link" onclick="taskBoardUndoMove()">Annuler</button></div>':'';

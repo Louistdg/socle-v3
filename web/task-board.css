@@ -64,7 +64,11 @@
 .document-folder-row[hidden]{display:none!important}
 .task-board-filter-empty{margin:0}
 
+/* Les vues enregistrées ne doivent pas rogner le dernier onglet d'état. */
+.saved-view-bar .filter-pills{flex:1;min-width:0;padding-right:8px}
+
 @media(max-width:899px){
+  .saved-view-bar .filter-pills{width:100%;flex-wrap:wrap;overflow:visible}
   .task-folders-bar{padding:9px 10px;border-radius:10px;margin-bottom:10px}
   .task-folders-head{flex-direction:row;align-items:center;gap:6px;margin-bottom:5px}
   .task-folders-head .eyebrow{display:none}
