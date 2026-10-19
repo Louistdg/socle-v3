@@ -64,6 +64,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 var main=document.querySelector('#main'),modal=document.querySelector('#modal');
 if(main)new MutationObserver(schedule).observe(main,{childList:true});
 if(modal)new MutationObserver(schedule).observe(modal,{childList:true});
+if(document.body)new MutationObserver(schedule).observe(document.body,{childList:true,subtree:true});
 window.addEventListener('beforeunload',function(event){
   if(!dirtyForms.size)return;
   event.preventDefault();event.returnValue='';
