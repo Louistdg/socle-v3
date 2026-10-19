@@ -42,7 +42,7 @@ function ensure(container){
   var table=container.querySelector('table');
   if(!table||!table.tBodies.length)return;
   var rows=bodyRows(table);
-  if(!rows.length)return;
+  if(!rows.length||!rows.some(function(row){return String(row.innerText||'').trim();}))return;
   container.dataset.sxTools='1';
   container.classList.add('sx-data-table');
   var hidden=readHidden(container);
