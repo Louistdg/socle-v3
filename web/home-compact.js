@@ -60,7 +60,7 @@ function hideNoise(main){
   });
   ['#socleMasthead','#saveStatus'].forEach(function(selector){
     var node=document.querySelector(selector);
-    if(node)node.hidden=true;
+    if(node){node.hidden=true;node.style.display='none';}
   });
 }
 function enhance(){
