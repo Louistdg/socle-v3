@@ -209,6 +209,10 @@ body.socle-v3 #main .ia-home-portal-links a[data-portal="csc"]{--portal-color:#0
 .personnel-row.is-person-dragging{opacity:.45}
 .team-overview-card.is-person-drop-target{outline:2px solid var(--sx-accent);outline-offset:2px;background:var(--sx-accent-soft)}
 @media(max-width:899px){.person-drag-grip{display:none}}
+.home-customize{min-height:34px;padding:0 10px;font-size:var(--sx-text-xs)}
+.home-widget-list{display:grid;gap:6px;margin:10px 0}
+.home-widget-check{display:flex;align-items:center;gap:9px;padding:9px 10px;border:1px solid var(--sx-line);border-radius:8px;background:var(--sx-surface);font-size:var(--sx-text-sm);cursor:pointer}
+.home-widget-check input{width:17px;height:17px;margin:0;accent-color:var(--sx-accent)}
 .sx-form-summary{margin:10px 0 12px;border:1px solid var(--sx-line);border-radius:var(--sx-radius-sm);background:var(--sx-raised);color:var(--sx-ink);overflow:hidden}
 .sx-form-summary>summary{cursor:pointer;list-style:none;padding:9px 11px;font-size:var(--sx-text-xs);font-weight:700;color:var(--sx-muted)}
 .sx-form-summary>summary::-webkit-details-marker{display:none}

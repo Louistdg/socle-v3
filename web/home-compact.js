@@ -109,4 +109,57 @@ var main=document.querySelector('#main');
 if(main)new MutationObserver(schedule).observe(main,{childList:true});
 if(document.body)new MutationObserver(schedule).observe(document.body,{childList:true});
 window.addEventListener('resize',schedule,{passive:true});
+
+var homeWidgetDefs=[
+  {id:'weather',label:'Météo',selector:'.ia-home-weather'},
+  {id:'portals',label:'Portails officiels',selector:'.ia-home-portals'},
+  {id:'attention',label:'Centre de contrôle',selector:'.ia-attention'},
+  {id:'messages',label:'Messages récents',selector:'.ia-owner-messages'},
+  {id:'tasks',label:'Priorités',selector:'.ia-owner-tasks'},
+  {id:'calendar',label:'Calendrier',selector:'.ia-owner-week'},
+  {id:'jobs',label:'Chantiers',selector:'.v3-jobs'}
+];
+var homeWidgetHidden=[],homeWidgetsReady=false,homeWidgetsLoading=false;
+function applyHomeWidgets(){
+  if(typeof view==='undefined'||view!=='home')return;
+  homeWidgetDefs.forEach(function(def){
+    var node=document.querySelector('#main '+def.selector);
+    if(node)node.hidden=homeWidgetHidden.indexOf(def.id)>=0;
+  });
+}
+function loadHomeWidgets(){
+  if(homeWidgetsReady||homeWidgetsLoading||typeof serverJson!=='function')return;
+  homeWidgetsLoading=true;
+  serverJson('/api/me/preferences/dashboard/home-widgets').then(function(data){
+    var value=data&&data.preference&&data.preference.value;
+    homeWidgetHidden=value&&Array.isArray(value.hidden)?value.hidden.map(String):[];
+    homeWidgetsReady=true;homeWidgetsLoading=false;applyHomeWidgets();
+  }).catch(function(){homeWidgetsLoading=false;});
+}
+function openHomeWidgetsForm(){
+  if(typeof modal!=='function')return;
+  var checks=homeWidgetDefs.map(function(def){
+    return '<label class="home-widget-check"><input type="checkbox" name="widget" value="'+def.id+'" '+(homeWidgetHidden.indexOf(def.id)<0?'checked':'')+'> <span>'+def.label+'</span></label>';
+  }).join('');
+  modal('Personnaliser l’accueil','<form onsubmit="homeWidgetsSave(event)"><p class="help-line">Choisissez les blocs visibles sur l’accueil. Le réglage est conservé pour votre compte.</p><div class="home-widget-list">'+checks+'</div><div class="modal-actions"><button class="btn" type="button" onclick="closeModal()">Annuler</button><button class="btn primary">Enregistrer</button></div></form>');
+}
+globalThis.homeWidgetsSave=function(event){
+  event.preventDefault();
+  var checked={};Array.prototype.forEach.call(event.target.querySelectorAll('input[name="widget"]'),function(input){checked[input.value]=input.checked;});
+  homeWidgetHidden=homeWidgetDefs.filter(function(def){return !checked[def.id];}).map(function(def){return def.id;});
+  applyHomeWidgets();closeModal();
+  if(typeof serverJson==='function')serverJson('/api/me/preferences/dashboard/home-widgets',{method:'PUT',body:JSON.stringify({schemaVersion:1,value:{hidden:homeWidgetHidden}})}).then(function(){toast('Accueil personnalisé.')}).catch(function(){toast('Réglage local appliqué, sauvegarde serveur indisponible.')});else toast('Accueil personnalisé.');
+};
+function mountHomeCustomizer(){
+  if(typeof view==='undefined'||view!=='home')return;
+  var intro=document.querySelector('#main .v3-intro');
+  if(!intro||intro.querySelector('[data-home-customize]'))return;
+  var button=document.createElement('button');button.type='button';button.className='btn home-customize';button.dataset.homeCustomize='';button.textContent='Personnaliser';
+  button.addEventListener('click',openHomeWidgetsForm);
+  var shortcuts=intro.querySelector('.v3-shortcuts');
+  if(shortcuts)shortcuts.append(button);else intro.append(button);
+  loadHomeWidgets();applyHomeWidgets();
+}
+var originalEnhance=enhance;
+enhance=function(){originalEnhance();mountHomeCustomizer();};
 })();
