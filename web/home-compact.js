@@ -60,7 +60,7 @@ function hideNoise(main){
   });
   ['#socleMasthead','#saveStatus'].forEach(function(selector){
     var node=document.querySelector(selector);
-    if(node){node.hidden=true;node.style.display='none';}
+    if(node){node.hidden=true;node.style.setProperty('display','none','important');}
   });
 }
 function enhance(){
@@ -82,4 +82,5 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 else schedule();
 var main=document.querySelector('#main');
 if(main)new MutationObserver(schedule).observe(main,{childList:true});
+if(document.body)new MutationObserver(schedule).observe(document.body,{childList:true});
 })();
