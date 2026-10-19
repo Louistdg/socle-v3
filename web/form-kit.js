@@ -53,19 +53,69 @@ function trackDirty(form){
     if(node){node.hidden=false;node.textContent='Modifications non enregistrées';}
   }
 }
+function draftKey(form){
+  if(form.dataset.sxDraftKey)return form.dataset.sxDraftKey;
+  var host=form.closest('#modal,dialog');
+  var title=(host&&host.querySelector('h1,h2,h3')?.textContent)||form.id||form.getAttribute('action')||'formulaire';
+  form.dataset.sxDraftKey='sx-draft:'+String(title).trim().toLocaleLowerCase('fr').replace(/[^a-z0-9]+/g,'-');
+  return form.dataset.sxDraftKey;
+}
+function draftFields(form){
+  return fields(form).filter(function(field){return field.name&&!['password','file','hidden'].includes(field.type);});
+}
+function saveDraft(form){
+  if(!form.closest('#modal,dialog'))return;
+  var values={};
+  draftFields(form).forEach(function(field){
+    if(field.type==='checkbox'||field.type==='radio')values[field.name]=field.checked;
+    else if(field.multiple)values[field.name]=Array.from(field.selectedOptions).map(function(option){return option.value;});
+    else values[field.name]=field.value;
+  });
+  try{sessionStorage.setItem(draftKey(form),JSON.stringify({at:Date.now(),values:values}));}catch(error){}
+}
+function restoreDraft(form){
+  if(!form.closest('#modal,dialog'))return false;
+  var raw='';
+  try{raw=sessionStorage.getItem(draftKey(form))||'';}catch(error){return false;}
+  if(!raw)return false;
+  var draft;
+  try{draft=JSON.parse(raw);}catch(error){return false;}
+  if(!draft||!draft.values||Date.now()-Number(draft.at||0)>86400000){try{sessionStorage.removeItem(draftKey(form));}catch(error){};return false;}
+  draftFields(form).forEach(function(field){
+    var value=draft.values[field.name];
+    if(value===undefined)return;
+    if(field.type==='checkbox'||field.type==='radio')field.checked=Boolean(value);
+    else if(field.multiple&&Array.isArray(value))Array.from(field.options).forEach(function(option){option.selected=value.includes(option.value);});
+    else field.value=String(value);
+  });
+  form.dataset.sxDirty='1';dirtyForms.add(form);
+  var state=stateNode(form);if(state){state.hidden=false;state.textContent='Brouillon restauré';}
+  return true;
+}
+function clearDraft(form){try{sessionStorage.removeItem(draftKey(form));}catch(error){}}
+var draftTimers=new WeakMap();
+function scheduleDraft(form){
+  clearTimeout(draftTimers.get(form));
+  draftTimers.set(form,setTimeout(function(){
+    saveDraft(form);
+    var state=stateNode(form);
+    if(state){state.hidden=false;state.textContent='Brouillon enregistré';}
+  },600));
+}
 function enhanceForm(form){
   if(form.dataset.sxForm==='1')return;
   form.dataset.sxForm='1';
   form.addEventListener('focusout',function(event){var field=event.target;if(field.matches&&field.matches('input,select,textarea')){field.dataset.sxTouched='1';validateField(field,true)}},true);
-  form.addEventListener('input',function(event){var field=event.target;if(field.matches&&field.matches('input,select,textarea')){trackDirty(form);if(field.dataset.sxTouched==='1'||field.getAttribute('aria-invalid')==='true')validateField(field,true)}},true);
-  form.addEventListener('change',function(){trackDirty(form)},true);
+  form.addEventListener('input',function(event){var field=event.target;if(field.matches&&field.matches('input,select,textarea')){trackDirty(form);scheduleDraft(form);if(field.dataset.sxTouched==='1'||field.getAttribute('aria-invalid')==='true')validateField(field,true)}},true);
+  form.addEventListener('change',function(){trackDirty(form);scheduleDraft(form)},true);
   form.addEventListener('keydown',function(event){if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();if(typeof form.requestSubmit==='function')form.requestSubmit();else form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));}},true);
   form.addEventListener('submit',function(event){
     var invalid=fields(form).filter(function(field){field.dataset.sxTouched='1';return !validateField(field,true)});
     if(invalid.length){event.preventDefault();event.stopImmediatePropagation();invalid[0].focus();}
-    else{form.dataset.sxDirty='';dirtyForms.delete(form);var state=stateNode(form);if(state){state.hidden=true;state.textContent='';}}
+    else{form.dataset.sxDirty='';dirtyForms.delete(form);clearDraft(form);var state=stateNode(form);if(state){state.hidden=true;state.textContent='';}}
   },true);
   fields(form).forEach(function(field){if(field.required)field.setAttribute('aria-required','true')});
+  restoreDraft(form);
 }
 function enhance(root){
   if(!root)return;
