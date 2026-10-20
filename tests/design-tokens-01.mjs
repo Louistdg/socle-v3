@@ -9,8 +9,8 @@ const themes=readFileSync(process.env.SOCLE_V3_THEMES_FILE||join(root,'web/v3-th
 const themeJs=readFileSync(join(root,'web/v3-themes.js'),'utf8');
 const index=readFileSync(join(root,'web/index.html'),'utf8');
 const production=readFileSync(join(root,'scripts/production.mjs'),'utf8');
-const paletteIds=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre','encre','craie','comete'];
-const paletteNames=['Ciment','Ardoise','Mousse','Bitume','Graphite','Grès','Chantier','Béton','Lin','Zinc','Sapin','Acajou','Cuivre','Encre','Craie','Comète'];
+const paletteIds=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre','encre','craie','comete','petrole'];
+const paletteNames=['Ciment','Ardoise','Mousse','Bitume','Graphite','Grès','Chantier','Béton','Lin','Zinc','Sapin','Acajou','Cuivre','Encre','Craie','Comète','Pétrole'];
 const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-ink','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft','--sx-info-soft'];
 const aliases={'--v3-bg':'--sx-canvas','--v3-paper':'--sx-surface','--v3-ink':'--sx-ink','--v3-muted':'--sx-muted','--v3-line':'--sx-line','--v3-accent':'--sx-accent','--v3-soft':'--sx-raised','--v3-selected':'--sx-overlay','--v3-control-line':'--sx-line-strong','--v3-accent-text':'--sx-on-accent','--v3-accent-text-on-tint':'--sx-accent-ink'};
 function declarations(block){return Object.fromEntries([...block.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+)\s*;/g)].map(m=>[m[1],m[2].trim()]));}
@@ -26,7 +26,7 @@ function ratio(a,b){const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.0
 function round(n){return Math.round(n*100)/100;}
 const themeRules=[...themes.matchAll(/([^{}]+)\{([^{}]*)\}/g)];
 const themeMatches=themeRules.filter(([,selector])=>/^body\.socle-v3\[data-v3-theme="[^"]+"\]$/.test(selector.trim()));
-assert.equal(themeMatches.length,16,'exactement seize blocs de palette complets');
+assert.equal(themeMatches.length,17,'exactement dix-sept blocs de palette complets');
 function effectiveTheme(id){
   const result={};
   for(const [,selectorText,body] of themeRules){
@@ -35,7 +35,7 @@ function effectiveTheme(id){
   }
   return result;
 }
-const jsNames=[...themeJs.matchAll(/\['([^']+)','([^']+)'/g)].slice(0,16);
+const jsNames=[...themeJs.matchAll(/\['([^']+)','([^']+)'/g)].slice(0,17);
 assert.deepEqual(jsNames.map(m=>[m[1],m[2]]),paletteIds.map((id,i)=>[id,paletteNames[i]]),'identifiants, libellés et ordre existants');
 assert(index.indexOf('href="design-tokens.css"')>=0&&index.indexOf('href="design-tokens.css"')<index.indexOf('href="style.css"'),'les jetons chargent avant les feuilles');
 const rootBlock=/\:root\s*\{([^}]*)\}/.exec(tokens)?.[1];
@@ -73,5 +73,5 @@ const allCss=cssFiles.map(f=>readFileSync(join(root,'web',f),'utf8')).join('\n')
 const defs=new Set([...tokens.matchAll(/(--(?:sx|v3)-[\w-]+)\s*:/g),...themes.matchAll(/(--(?:sx|v3)-[\w-]+)\s*:/g)].map(m=>m[1]));
 const refs=new Set([...allCss.matchAll(/var\(\s*(--(?:sx|v3)-[\w-]+)/g)].map(m=>m[1]));
 for(const ref of refs)assert(defs.has(ref),'jeton orphelin utilisé mais non défini: '+ref);
-console.log('design-tokens-01: PASS palettes=16 aliases=11 orphan-tokens=0');
+console.log('design-tokens-01: PASS palettes=17 aliases=11 orphan-tokens=0');
 console.log('CONTRAST_MATRIX='+JSON.stringify(matrix));
