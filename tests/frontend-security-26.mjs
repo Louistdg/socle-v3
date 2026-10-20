@@ -78,7 +78,7 @@ ok(/quoteFormFromDraft\('\$\{jsString\(draft\.id\)\}'\)/.test(quoteUi),'Draft co
 const webFiles=readdirSync(join(root,'web')).filter(name=>name.endsWith('.js')||name.endsWith('.html'));
 const webSource=webFiles.map(name=>read(`web/${name}`)).join('\n');
 const storageKeys=new Set([...webSource.matchAll(/localStorage\.(?:getItem|setItem|removeItem)\(['"]([^'"]+)['"]/g)].map(match=>match[1]));
-equal([...storageKeys].sort().join(','),'socle-personal-weather,socle-v3.theme,socle.activeOrganizationId,socle.sessionUserId,socle.time-report.','Only documented non-authentication localStorage keys are used');
+equal([...storageKeys].sort().join(','),'socle-personal-weather,socle-v3.theme,socle-v3.theme-choice,socle.activeOrganizationId,socle.sessionUserId,socle.time-report.','Only documented non-authentication localStorage keys are used');
 ok(!/\bsessionStorage\b/.test(webSource),'Frontend does not use sessionStorage');
 ok(!/\bdocument\.cookie\b/.test(webSource),'Frontend cannot read cookies through document.cookie');
 ok(!/(?:[?&#]|\\b)(?:access_token|auth_token|session_token|token)=/i.test(webSource),'No static frontend URL contains an authentication token parameter');

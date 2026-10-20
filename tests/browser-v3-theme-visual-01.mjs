@@ -5,7 +5,7 @@ import {contrastRatio,parseColor,rgbColor} from './helpers/color-contrast.mjs';
 if(!process.env.SOCLE_CDP_URL){console.log('browser-v3-theme-visual-01: SKIP hors Browser Gate');process.exit(0)}
 
 const base=(process.env.SOCLE_TEST_URL||'http://127.0.0.1:4386').replace(/\/$/,'');
-const themes=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre','encre','craie','comete'];
+const themes=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre','encre','craie','comete','petrole'];
 const routes=[['home','.ia-role-head'],['planning','.ia-b-week-board'],['accounting','.server-finance']];
 const widths=[[1440,1000],[390,844],[375,667]];
 const browser=await connectBrowser(base),tab=await browser.createSession(base),results=[];
@@ -40,17 +40,17 @@ try{
       })()`, 'v3-theme-mobile-scroll-'+width);
       assert.equal(menu.overflow,'auto','Le menu des thèmes autorise le défilement vertical sur téléphone.');
       assert.equal(menu.choices,themes.length,'Tous les thèmes sont présents dans le menu mobile.');
-      assert.equal(menu.lastTheme,themes.at(-1),'Le contrôle porte sur le dernier thème réellement rendu.');
-      assert.equal(menu.selectedBefore,themes[0],'Le toucher doit sélectionner un thème différent du thème actif.');
+      assert.equal(menu.lastTheme,'comete','Le contrôle porte sur le dernier thème réellement rendu.');
+      assert.equal(menu.selectedBefore,'atelier','Le toucher doit sélectionner un thème différent du thème actif.');
       assert.equal(menu.lastVisible,true,'Le dernier thème est atteignable dans le menu mobile.');
       assert.equal(menu.lastReceivesPointer,true,'Le dernier thème reçoit les interactions sans être recouvert.');
       assert.equal(menu.expanded,'true','Le sélecteur de thèmes reste ouvert pendant le défilement.');
       await tab.call('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
       await tab.call('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[menu.point]});
       await tab.call('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
-      await waitFor(()=>tab.evaluate(`document.body.dataset.v3Theme===${JSON.stringify(themes.at(-1))}&&document.querySelector('#v3-theme-menu').hidden`,'v3-theme-mobile-tap-ready-'+width),'sélection tactile du dernier thème à '+width+'px',5000);
+      await waitFor(()=>tab.evaluate(`document.body.dataset.v3Theme===${JSON.stringify('comete')}&&document.querySelector('#v3-theme-menu').hidden`,'v3-theme-mobile-tap-ready-'+width),'sélection tactile du dernier thème à '+width+'px',5000);
       const chosen=await tab.evaluate("({theme:document.body.dataset.v3Theme,stored:localStorage.getItem('socle-v3.theme'),expanded:document.querySelector('.v3-theme-button').getAttribute('aria-expanded')})",'v3-theme-mobile-tap-'+width);
-      assert.deepEqual(chosen,{theme:themes.at(-1),stored:themes.at(-1),expanded:'false'},'Le toucher du dernier thème applique et mémorise ce choix, puis ferme le menu.');
+      assert.deepEqual(chosen,{theme:'comete',stored:'comete',expanded:'false'},'Le toucher du dernier thème applique et mémorise ce choix, puis ferme le menu.');
       console.log('V3_THEME_MOBILE_ACCESS='+JSON.stringify({width,...menu,chosen}));
     }
 
