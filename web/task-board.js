@@ -219,6 +219,9 @@ globalThis.taskBoardFilter=function(id){
   if(filter!=='all'&&filter!=='__inbox__'&&!folderById(filter))filter='all';
   refreshBar();
 };
+globalThis.taskBoardSnapshot=function(){
+  return {folders:cloneFolders(state.folders),assignments:Object.assign({},state.assignments),tasks:allTasks().map(function(item){return{key:item.key,title:item.title,state:item.state}})};
+};
 globalThis.taskBoardClearFilter=function(){filter='all';refreshBar()};
 globalThis.taskBoardFolderForm=function(id){
   var folder=id?folderById(id):null;

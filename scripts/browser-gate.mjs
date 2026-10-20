@@ -35,6 +35,7 @@ const browserSuites=[
   {name:'browser-didactic-layer-01.mjs'},
   {name:'browser-attention-01.mjs'},
   {name:'browser-task-folders-01.mjs'},
+  {name:'browser-task-spatial-desk-01.mjs'},
   {name:'browser-document-folders-01.mjs'},
   {name:'browser-job-canvas-01.mjs'},
   {name:'browser-offline-01.mjs'},
