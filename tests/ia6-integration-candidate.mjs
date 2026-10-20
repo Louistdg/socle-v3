@@ -10,11 +10,11 @@ const migrations=readdirSync(new URL('../drizzle/',import.meta.url))
   .filter(name=>/^\d{4}_.+\.sql$/.test(name))
   .sort();
 
-eq(migrations.length,52,'52 migrations cumulatives 0000→0051');
+eq(migrations.length,53,'53 migrations cumulatives 0000→0052');
 eq(migrations[0],'0000_known_spot.sql','première migration 0000');
 eq(migrations[48],'0048_planning_integrity.sql','0048 conserve les garde-fous d’intégrité du planning');
 eq(migrations[49],'0049_time_entry_monthly_archive.sql','0049 ajoute l’archivage mensuel auditable des pointages');
-eq(migrations.at(-1),'0051_field_journal_category.sql','0051 ajoute la catégorie du carnet terrain');
+eq(migrations[51],'0051_field_journal_category.sql','0051 ajoute la catégorie du carnet terrain');
 eq(migrations[29],'0029_project_tenant_integrity.sql','IA4 conserve 0029');
 eq(migrations[30],'0030_document_registry_transversal.sql','IA5 suit IA4 en 0030');eq(migrations[31],'0031_supplier_payments.sql','0031 paiements fournisseurs');eq(migrations[32],'0032_project_field_operations.sql','0032 opérations terrain chantier');eq(migrations[33],'0033_production_auth.sql','0033 authentification production');eq(migrations[34],'0034_planning_operations.sql','0034 planning opérationnel');
 const numeric=migrations.map(name=>Number(name.slice(0,4)));
@@ -67,3 +67,5 @@ ok(workflow.includes('Browser / Chromium'),'gate navigateur');
 ok(workflow.includes('npm run build')||workflow.includes('node scripts/build.mjs'),'build depuis les sources dans la gate');
 
 console.log(`ia6-integration-candidate: ${n} assertions réussies.`);
+
+assert.equal(migrations.at(-1),'0052_team_composition.sql');
