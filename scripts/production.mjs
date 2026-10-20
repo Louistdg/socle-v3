@@ -145,7 +145,7 @@ export async function startProduction({env = process.env, logger = console, invi
       return response(incoming.method === 'HEAD' ? null : JSON.stringify({status:'ok',backup:backupState}));
     }
     if (unsafeMethods.has(incoming.method) && !config.trustedOrigins.has(incoming.headers.origin)) return errorResponse(403, 'Origin refused');
-    if (['/manifest.webmanifest','/apple-touch-icon.png','/icon-192.png','/icon-512.png'].includes(path)) return worker.fetch(new Request(url, {method: incoming.method}), workerEnv);
+    if (['/manifest.webmanifest','/apple-touch-icon.png','/icon-192.png','/icon-512.png','/favicon.ico','/favicon-32.png'].includes(path)) return worker.fetch(new Request(url, {method: incoming.method}), workerEnv);
     const identity = auth.session(incoming.headers.cookie);
     if (path === '/invite/activate') {
       if (incoming.method !== 'GET') return errorResponse(405, 'Method not allowed');
