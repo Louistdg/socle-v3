@@ -1,8 +1,13 @@
 # Page d’accueil O2switch — mode d’emploi
 
-## Fichier
+## Fichiers
 
 `index.html`
+`favicon.ico`
+`favicon-32.png`
+`SOCLE-180.png`
+
+Les quatre fichiers vont dans le même dossier que `index.html`.
 
 ## Où le déposer
 
