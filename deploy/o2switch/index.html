@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#181817">
+<meta name="description" content="Les outils SOCLE : gestion de chantier, arbre familial, protection anti-arnaque et Dioptre.">
+<title>SOCLE — Vos outils</title>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#181817;--surface:#20201e;--raised:#292927;--line:#30302e;--line-strong:#707068;
+  --ink:#f4f1ea;--soft:#d8d4cb;--muted:#a6a29a;--accent:#d8c7a3;--accent-ink:#181817;
+  --radius:14px;--max:1080px;
+  font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:radial-gradient(1100px 520px at 78% -12%,rgba(216,199,163,.10),transparent 62%),var(--bg);color:var(--ink);min-height:100dvh;display:flex;flex-direction:column}
+a{color:inherit}
+.topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:14px;min-height:64px;padding:0 max(20px,calc((100vw - var(--max))/2));border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;letter-spacing:-.04em;font-size:24px}
+.brandmark{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface);font-size:19px;font-weight:800;letter-spacing:-.08em}
+.brand small{display:block;margin-top:1px;color:var(--muted);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.topmeta{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+.dot{width:7px;height:7px;border-radius:50%;background:#9ec9a3;box-shadow:0 0 0 4px rgba(158,201,163,.10)}
+main{width:100%;max-width:var(--max);margin:0 auto;padding:56px 20px 48px;flex:1}
+.eyebrow{margin:0 0 10px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+h1{max-width:760px;margin:0;font-size:clamp(34px,5vw,58px);line-height:1.03;letter-spacing:-.055em;font-weight:800}
+.lede{max-width:650px;margin:16px 0 0;color:var(--soft);font-size:clamp(14px,1.6vw,17px);line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:36px}
+.card{position:relative;display:flex;flex-direction:column;min-height:190px;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),color-mix(in srgb,var(--surface) 88%,#000));text-decoration:none;overflow:hidden;transition:border-color .16s ease,transform .16s ease,box-shadow .16s ease}
+.card:hover,.card:focus-visible{border-color:var(--line-strong);transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.20);outline:none}
+.card.primary{border-color:color-mix(in srgb,var(--accent) 55%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 12%,var(--surface)),var(--surface))}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.icon{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--line);border-radius:11px;background:var(--raised);color:var(--accent)}
+.icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.arrow{color:var(--muted);font-size:18px;line-height:1}
+.card h2{margin:18px 0 4px;font-size:20px;letter-spacing:-.02em}
+.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.card .tag{margin-top:auto;padding-top:16px;color:var(--accent);font-size:11px;font-weight:750;letter-spacing:.06em;text-transform:uppercase}
+footer{width:100%;max-width:var(--max);margin:0 auto;padding:0 20px 28px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+footer a{text-decoration:none;border-bottom:1px solid var(--line)}
+@media(max-width:720px){
+  main{padding-top:38px}
+  .grid{grid-template-columns:1fr;margin-top:28px}
+  .card{min-height:168px}
+  .topmeta span:last-child{display:none}
+  footer{display:block;line-height:1.9}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/" aria-label="SOCLE, accueil">
+    <span class="brandmark" aria-hidden="true">s</span>
+    <span>socle. <small>Atelier de recherche</small></span>
+  </a>
+  <div class="topmeta"><span class="dot" aria-hidden="true"></span><span>Outils en ligne</span></div>
+</header>
+
+<main>
+  <p class="eyebrow">Espace de travail</p>
+  <h1>Vos outils,<br>au même endroit.</h1>
+  <p class="lede">Chantiers, familles, sécurité numérique et logiciel Dioptre. Choisissez l’espace qui vous concerne.</p>
+
+  <section class="grid" aria-label="Les outils SOCLE">
+    <a class="card primary" href="https://socle-v3-preview.up.railway.app" target="_blank" rel="noopener">
+      <div class="card-top">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V5h10v15M14 10h6v10M8 9h2M8 13h2M8 17h2M17 14h1M17 17h1"/></svg></span>
+        <span class="arrow" aria-hidden="true">↗</span>
+      </div>
+      <h2>SOCLE V3</h2>
+      <p>Gestion de chantier, planning, documents, équipes et comptabilité.</p>
+      <span class="tag">Ouvrir l’application</span>
+    </a>
+
+    <a class="card" href="https://berceau.socle-construction.be" target="_blank" rel="noopener">
+      <div class="card-top">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20v-5M12 15 7 10M12 15l5-5M6 6a3 3 0 1 0 0 .1M18 6a3 3 0 1 0 0 .1M12 5a3 3 0 1 0 0 .1"/></svg></span>
+        <span class="arrow" aria-hidden="true">↗</span>
+      </div>
+      <h2>Berceau</h2>
+      <p>L’arbre généalogique familial, à consulter et à transmettre.</p>
+      <span class="tag">Ouvrir l’arbre</span>
+    </a>
+
+    <a class="card" href="https://ptshield.socle-construction.be" target="_blank" rel="noopener">
+      <div class="card-top">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.7 3.7 8 7.5 9.5 3.8-1.5 7.5-4.8 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <span class="arrow" aria-hidden="true">↗</span>
+      </div>
+      <h2>PTShield</h2>
+      <p>Protection anti-arnaque, analyse locale et coffre de mots de passe.</p>
+      <span class="tag">Ouvrir la démo</span>
+    </a>
+
+    <a class="card" href="https://dioptre.socle-construction.be" target="_blank" rel="noopener">
+      <div class="card-top">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4M11 8v6M8 11h6"/></svg></span>
+        <span class="arrow" aria-hidden="true">↗</span>
+      </div>
+      <h2>Dioptre</h2>
+      <p>La vitrine Dioptre et son guide d’installation.</p>
+      <span class="tag">Ouvrir le site</span>
+    </a>
+  </section>
+</main>
+
+<footer>
+  <span>© 2026 SOCLE · socle-construction.be</span>
+  <span><a href="https://github.com/Louistdg/socle-v3" target="_blank" rel="noopener">Documentation</a> · <a href="https://socle-v3-preview.up.railway.app/status" target="_blank" rel="noopener">Statut</a></span>
+</footer>
+</body>
+</html>
