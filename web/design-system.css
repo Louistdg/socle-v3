@@ -273,3 +273,29 @@ body.socle-v3 .branddot{color:var(--sx-accent)!important}
   body.socle-v3 .data-table table thead th,body.socle-v3 .ia-jobs-table thead th{position:sticky;top:var(--sx-topbar);z-index:3;background:var(--sx-surface)}
 }
 @media(prefers-reduced-motion:reduce){body.socle-v3 #main,body.socle-v3 #main>*{animation:none!important}}
+
+/* Lisibilité des zones de navigation et des décisions à traiter. */
+@media(min-width:900px){
+ body.socle-v3 #nav{width:220px!important;padding-inline:12px!important}
+ body.socle-v3{padding-left:220px!important}
+ body.socle-v3 #nav button[data-nav-route]{gap:12px!important;padding:0 12px!important;font-size:13px!important;min-height:44px!important;height:44px!important;text-overflow:clip}
+ body.socle-v3 #nav button[data-nav-route] .nav-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ body.socle-v3 #nav button[data-nav-route]:hover .nav-label,body.socle-v3 #nav button[data-nav-route]:focus-visible .nav-label{white-space:normal;overflow:visible}
+ .quick-create{display:inline-flex!important;align-items:center;justify-content:center;gap:7px;min-width:82px!important;padding:0 12px!important;font-size:13px!important;font-weight:700}
+ .quick-create>span:first-child{font-size:19px;line-height:1}
+}
+body.socle-v3 #nav button[data-nav-route]::before{content:none!important;display:none!important}
+body.socle-v3 #nav button[data-nav-route] .nav-pictogram{width:19px;height:19px;flex:0 0 19px;color:var(--sx-ink-soft);stroke-width:1.9;vertical-align:middle}
+body.socle-v3 #nav button[data-nav-route].active .nav-pictogram{color:var(--sx-accent-ink)}
+body.socle-v3 #nav button[data-nav-route]:focus-visible{outline:3px solid var(--sx-accent-line)!important;outline-offset:-2px!important}
+body.socle-v3 #main .ia-attention-row{height:auto;min-height:66px;grid-template-columns:10px minmax(0,1fr) auto;gap:14px;padding:11px 18px}
+body.socle-v3 #main .ia-attention-copy strong{font-size:14px;line-height:1.32;white-space:normal;overflow:visible;text-overflow:clip}
+body.socle-v3 #main .ia-attention-copy small{font-size:12px;line-height:1.4;margin-top:3px;white-space:normal;overflow:visible;text-overflow:clip}
+body.socle-v3 #main .ia-attention-action{min-height:44px;padding:8px 12px;border:1px solid var(--sx-line-strong);border-radius:9px;color:var(--sx-ink);background:var(--sx-raised);font-size:12px}
+body.socle-v3 #main .ia-attention-mark{width:9px;height:9px}
+@media(max-width:899px){.quick-create-label{display:none}body.socle-v3 #nav button[data-nav-route] .nav-label{display:none}body.socle-v3 #nav button[data-nav-route] .nav-pictogram{width:22px;height:22px;flex-basis:22px;color:var(--sx-ink-soft)}}
+@media(max-width:600px){body.socle-v3 #main .ia-attention-row{grid-template-columns:8px minmax(0,1fr);padding:12px;gap:8px 12px}body.socle-v3 #main .ia-attention-action{grid-column:2;justify-self:start;padding-inline:10px}}
+
+@media(min-width:900px){body.socle-v3 #nav button:not([data-nav-route]):not(.v3-theme-button)::before{content:'✓';display:inline-grid;place-items:center;width:19px;height:19px;flex:0 0 19px;margin-right:12px;color:var(--sx-ink-soft);font-size:19px}}
+
+.v3-theme-button .v3-theme-icon{display:inline-block;width:18px;height:18px;flex:0 0 18px;vertical-align:-3px}

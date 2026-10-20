@@ -24,3 +24,9 @@
 .person-avatar-management .btn{flex:0 0 auto}
 @media(max-width:760px){.socle-avatar-gallery{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;max-height:56vh}.socle-avatar-choice .socle-avatar-character{width:62px;height:62px}}
 @media(max-width:460px){.socle-avatar-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.socle-avatar-choice{padding:6px 3px}.socle-avatar-choice .socle-avatar-character{width:60px;height:60px}.profile-avatar-edit{width:100%;text-align:left}.personal-head>div{flex-wrap:wrap}.profile-avatar-preview{width:96px;height:96px}.person-avatar-management>div{width:48px;height:48px;flex-basis:48px}}
+
+/* Professional identity: uploaded photos retain their original behaviour. */
+.header-right .avatar:not(.has-photo){background:transparent!important;border-radius:12px;overflow:hidden;padding:0!important;border:0!important}
+.socle-avatar-monogram{border-radius:0!important}
+.profile-avatar-preview:has(.socle-avatar-monogram){background:transparent;border-radius:0;overflow:visible}
+.socle-avatar-choice{min-height:104px}.socle-avatar-choice:focus-visible{outline:3px solid var(--sx-accent-line);outline-offset:2px}

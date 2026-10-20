@@ -11,6 +11,8 @@ const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const candidatePath=join(root,'data','socle.sqlite');
 const artifactsPath=join(root,'tests','artifacts','browser-gate');
 const browserSuites=[
+  {name:'browser-theme-restore-01.mjs'},
+  {name:'browser-team-composer.mjs'},
   {name:'browser-access-preview-theme-contrast-01.mjs'},
   {name:'browser-ui-frame-audit-01.mjs'},
   {name:'browser-v3-theme-visual-01.mjs'},
@@ -34,6 +36,7 @@ const browserSuites=[
   {name:'browser-didactic-layer-01.mjs'},
   {name:'browser-attention-01.mjs'},
   {name:'browser-task-folders-01.mjs'},
+  {name:'browser-task-spatial-desk-01.mjs'},
   {name:'browser-document-folders-01.mjs'},
   {name:'browser-job-canvas-01.mjs'},
   {name:'browser-offline-01.mjs'},

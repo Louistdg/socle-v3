@@ -11,7 +11,7 @@ const migrations=readdirSync(sourceDirectory).filter(name=>/^\d{4}_.+\.sql$/.tes
 const planning='0034_planning_operations.sql';
 const commercial='0035_ia_c_commercial_finance.sql';
 const formerCommercial='0034_ia_c_commercial_finance.sql';
-assert.equal(migrations.length,52,'La consolidation contient exactement 52 migrations.');
+assert.equal(migrations.length,53,'La consolidation contient exactement 53 migrations.');
 assert.equal(migrations[33],'0033_production_auth.sql');
 assert.equal(migrations[34],planning);
 assert.equal(migrations[35],commercial);
@@ -27,7 +27,7 @@ assert.equal(migrations[44],'0044_canonical_role_permission_defaults.sql');
 assert.equal(migrations[45],'0045_fuel_receipts.sql');
 assert.equal(migrations[46],'0046_quote_site_visits.sql');
 assert.equal(migrations[49],'0049_time_entry_monthly_archive.sql');
-assert.equal(new Set(migrations.map(name=>name.slice(0,4))).size,52);
+assert.equal(new Set(migrations.map(name=>name.slice(0,4))).size,53);
 for(let index=0;index<migrations.length;index++)assert.equal(Number(migrations[index].slice(0,4)),index);
 
 const temporaryRoot=realpathSync(tmpdir());
@@ -162,7 +162,7 @@ function upgrade(label,initialNames,withPlanning){
 
     runtime=openProductionDatabase({databasePath,migrationsDirectory:sourceDirectory});
     assertPreserved(runtime.database,before,label+' upgrade');
-    assert.deepEqual(journal(runtime.database),migrations,label+' : 52 migrations journalisées');
+    assert.deepEqual(journal(runtime.database),migrations,label+' : 53 migrations journalisées');
     integrity(runtime.database,label+' upgrade');
     assertPermissions(runtime.database);
     if(!withPlanning){
@@ -222,7 +222,7 @@ try{
   upgrade('main-0033',migrations.slice(0,34),false);
   upgrade('planning-0034',migrations.slice(0,35),true);
   historicalCommercialName();
-  console.log('abc-migration-upgrade: PASS main0033 + B0034, données des deux tenants conservées, 52 migrations, deux redémarrages, intégrité/FK, ancien nom C refusé avec rollback.');
+  console.log('abc-migration-upgrade: PASS main0033 + B0034, données des deux tenants conservées, 53 migrations, deux redémarrages, intégrité/FK, ancien nom C refusé avec rollback.');
 }finally{
   const actualDirectory=realpathSync(directory);
   assert.equal(dirname(actualDirectory),temporaryRoot,'Nettoyage limité au répertoire temporaire créé.');

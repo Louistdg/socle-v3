@@ -27,19 +27,19 @@ const sandbox={
 vm.runInNewContext(source,sandbox);
 
 const catalogue=vm.runInContext('socleAvatarCatalogue',sandbox);
-assert.equal(catalogue.length,36,'La galerie propose 36 personnages de base.');
+assert.equal(catalogue.length,36,'La galerie propose 36 monogrammes de base.');
 assert.equal(new Set(catalogue.map(item=>item.id)).size,36,'Chaque personnage a un identifiant stable unique.');
 assert.ok(catalogue.every(item=>/^classic-\d{2}$/.test(item.id)),'Les identifiants de la galerie respectent un format sûr.');
-assert.equal(new Set(catalogue.map(item=>vm.runInContext(`socleAvatarCharacter('${item.id}')`,sandbox))).size,36,'Les 36 personnages ont des portraits distincts.');
+assert.equal(new Set(catalogue.map(item=>vm.runInContext(`socleAvatarCharacter('${item.id}')`,sandbox))).size,36,'Les 36 monogrammes ont des signatures distinctes.');
 assert.ok(catalogue.every(item=>!/casque|bonnet|playmobil|chantier/i.test(item.label)),'Les portraits par défaut gardent un style professionnel sans accessoire fantaisie.');
 const defaultHtml=vm.runInContext('soclePersonAvatar(person)',sandbox);
 assert.match(defaultHtml,/data-avatar-id="classic-\d{2}"/,'Sans sélection, le personnage attribué par défaut est stable.');
 assert.ok(!defaultHtml.includes('undefined'),'Une personne sans initiales n’affiche plus undefined.');
 assert.ok(!defaultHtml.includes('${'),'Le rendu SVG ne contient pas de gabarit non résolu.');
-assert.ok(defaultHtml.indexOf('M10 64')<defaultHtml.indexOf('M20 25'),'Le vêtement est dessiné derrière le portrait.');
+assert.match(defaultHtml,/>AS<\/text>/,'Les initiales réelles remplacent le personnage.');assert.ok(!defaultHtml.includes('M10 64'),'Aucun petit personnage dessiné.');
 
 sandbox.openSoclePersonAvatarPicker(person.id);
-assert.equal(modalHtml.match(/class="socle-avatar-choice/g)?.length,36,'Le dossier ouvre les 36 choix.');
+assert.ok([6,7].includes(modalHtml.match(/class="socle-avatar-choice/g)?.length),'Le dossier montre six signatures et, si besoin, le choix actuel.');
 assert.match(modalHtml,/data-person-id="P-07"/,'La galerie garde le rattachement à la bonne personne.');
 galleryPersonId=person.id;
 sandbox.selectSoclePersonAvatar('classic-15');

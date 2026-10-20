@@ -63,7 +63,9 @@ function renderDesktop(){
   var nav=document.querySelector('#nav');if(!nav)return;
   nav.innerHTML=desktopEntries().map(function(entry){
     var active=typeof view!=='undefined'&&view===entry.route;
-    return '<button type="button" data-nav-route="'+entry.route+'" data-nav-type="'+entry.type+'" data-nav-group="'+entry.group+'" class="'+(active?'active':'')+'" '+(active?'aria-current="page"':'')+' onclick="navigate(\''+entry.route+'\')">'+entry.label+'</button>';
+    var symbols={home:'home',planning:'calendar',timeEntries:'clock',personal:'user',jobs:'briefcase',contacts:'user',messages:'message',people:'users',quotes:'file',gallery:'box',purchases:'cart',stock:'box',fleet:'tool',accounting:'euro',actions:'check',documents:'file',permissions:'shield',partners:'users',company:'settings'};
+    var pictogram=globalThis.sxIcon?globalThis.sxIcon(symbols[entry.route]||'box','nav-pictogram'):'';
+    return '<button type="button" data-nav-route="'+entry.route+'" data-nav-type="'+entry.type+'" data-nav-group="'+entry.group+'" class="'+(active?'active':'')+'" '+(active?'aria-current="page"':'')+' onclick="navigate(\''+entry.route+'\')">'+pictogram+'<span class="nav-label">'+entry.label+'</span></button>';
   }).join('');
 }
 function rootRoutes(){return roots().map(function(entry){return entry.route})}

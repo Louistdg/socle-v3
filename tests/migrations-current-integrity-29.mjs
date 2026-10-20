@@ -62,8 +62,8 @@ function insertExpense0026(db,{id='expense-old',org='org-a',project='legacy-orph
 equal(migrations[0],'0000_known_spot.sql','la chaîne commence à 0000');
 equal(migrations[48],'0048_planning_integrity.sql','0048 ajoute les garde-fous d’intégrité planning après le suivi des blocages');
 equal(migrations[49],'0049_time_entry_monthly_archive.sql','0049 ajoute l’archivage mensuel des pointages');
-equal(migrations.at(-1),'0051_field_journal_category.sql','0051 ajoute la catégorie des notes du carnet terrain');
-equal(migrations.length,52,'une migration numérotée unique existe pour chaque étape 0000→0051');
+equal(migrations[51],'0051_field_journal_category.sql','0051 ajoute la catégorie des notes du carnet terrain');
+equal(migrations.length,53,'une migration numérotée unique existe pour chaque étape 0000→0052');
 equal(migrations[31],'0031_supplier_payments.sql','0031 paiements fournisseurs présente');
 equal(migrations[32],'0032_project_field_operations.sql','0032 opérations terrain chantier présente');
 equal(migrations[33],'0033_production_auth.sql','0033 authentification production présente');
@@ -92,7 +92,7 @@ try{
       throw error;
     }
   }
-  equal(db.prepare('SELECT COUNT(*) n FROM local_migrations').get().n,52,'installation neuve journalise 52 migrations');
+  equal(db.prepare('SELECT COUNT(*) n FROM local_migrations').get().n,53,'installation neuve journalise 53 migrations');
   equal(db.prepare("SELECT COUNT(*) n FROM sqlite_master WHERE type='table' AND name='project_financial_baselines'").get().n,1,'0028 crée les baselines');
   equal(db.prepare("SELECT COUNT(*) n FROM sqlite_master WHERE type='trigger' AND name='project_financial_baseline_project_tenant_insert'").get().n,1,'0029 crée la garde tenant baseline');
   check(db,'installation neuve');
@@ -214,3 +214,5 @@ try{
 }
 
 console.log(`migrations-current-integrity-29: ${assertions} assertions réussies.`);
+
+assert.equal(migrations.at(-1),'0052_team_composition.sql');
