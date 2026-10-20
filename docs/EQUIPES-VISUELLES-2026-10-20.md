@@ -15,13 +15,15 @@ Accès : Personnel & équipes → Équipes attitrées.
 - `worker/index.js`, `drizzle/0052_team_composition.sql` : déplacement atomique, contrôle des droits/entreprises, conflit de composition, journal et rejeu.
 - `web/planning.js` : conserver les nouvelles équipes dans le formulaire d’affectation.
 - `web/shortcuts.js` : éviter deux fenêtres d’aide concurrentes et rendre le focus correctement.
+- Build : URL des styles et scripts versionnées par leur contenu pour éviter de mélanger ancienne et nouvelle interface dans une PWA déjà installée.
 - Index/build et scripts de tests : intégration des ressources et nouvelles suites ; compte de migrations actualisé.
 
 ## Vérification locale
 
 164 suites hermétiques réussies, contrôles de contraste inclus (Node 24.22, Linux).
-Cinq suites navigateur réussies : team-composer, planning-board, planning-drag-step2, mobile-navigation, didactic-layer.
+Six suites navigateur réussies : team-composer, planning-board, planning-drag-step2, mobile-navigation, didactic-layer, offline.
 Parcours vérifié : véritable geste souris, sauvegarde/rechargement, annulation, affectation/rechargement, réouverture avec la bonne équipe, refus de chevauchement, interactions tactiles aux largeurs Samsung 360 et 412 px.
+Le nouveau parcours passe aussi avec une ancienne feuille de style placée dans le cache PWA. Les 67 ressources statiques versionnées répondent avec l’empreinte de contenu attendue.
 Le téléphone Samsung physique et la totalité de la Browser Gate ne sont pas certifiés par ce lot.
 
 ## Sauvegarde et continuité

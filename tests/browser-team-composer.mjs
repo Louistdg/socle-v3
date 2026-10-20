@@ -13,7 +13,10 @@ try{
  await tab.navigate(base+'/');assert.equal(await ev("fetch('/__local-test/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'direction@batinova.example'})}).then(r=>r.status)"),204);
  await tab.reload();await waitForApp(tab);
  await tab.call('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+ await ev("navigator.serviceWorker.ready.then(()=>caches.open('socle-shell-v1')).then(c=>c.put('/socle.css',new Response('.tc-board{display:block!important}',{headers:{'Content-Type':'text/css'}})))");
+ await tab.reload();await waitForApp(tab);
  await open();
+ assert.equal(await ev("getComputedStyle(document.querySelector('.tc-board')).display"),'grid','old PWA stylesheet cannot mask the new board');
  const fixture=await ev(`(async()=>{const r=await serverJson('/api/hr/teams',{method:'POST',body:JSON.stringify({name:'0 · Équipe test '+(9999999999999-Date.now())})});return {team:r.team.id,person:(tc.people.find(p=>!tcPersonTeams(p.id).length)||tc.people[0]).id,job:jobs[0].id}})()`);
  await ev('tcLoad()');await ready();await capture('team-composer-before-drag');
  // Use a real mouse gesture: no direct call to tcMove or synthetic DragEvent.

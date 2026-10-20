@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import esbuild from 'esbuild';
+import {createHash} from 'node:crypto';
 
 await esbuild.build({entryPoints:['scripts/stock-zxing-entry.js'],bundle:true,minify:true,format:'iife',target:'es2020',legalComments:'inline',outfile:'web/stock-zxing.js'});
 await esbuild.build({entryPoints:['scripts/pdfjs-entry.js'],bundle:true,minify:true,format:'iife',target:'es2022',legalComments:'inline',outfile:'web/pdfjs.js'});
@@ -26,6 +27,14 @@ files['/catalogue']={...files['/catalogue.html']};
 const cssNames=[...files['/index.html'].body.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)].map(match=>'/'+match[1]);
 files['/socle.css']={body:(await esbuild.transform(cssNames.map(name=>files[name].body).join('\n'),{loader:'css',minify:true,legalComments:'inline'})).code,type:'text/css;charset=utf-8'};
 files['/index.html'].body=files['/index.html'].body.replace(/\s*<link rel="stylesheet" href="[^"]+">/g,'').replace('</head>','<link rel="stylesheet" href="/socle.css"></head>');
+// Version resource URLs so an already installed PWA cannot mix releases.
+const assetVersion=path=>createHash('sha256').update(files[path].body).digest('hex').slice(0,16);
+files['/index.html'].body=files['/index.html'].body
+  .replace('href="/socle.css"','href="/socle.css?v='+assetVersion('/socle.css')+'"')
+  .replace(/(<script\b[^>]*\bsrc=")([^"?]+)(")/g,(match,before,source,after)=>{
+    const path='/'+source.replace(/^\//,'');
+    return files[path]&&path!=='/production-runtime.js'?before+source+'?v='+assetVersion(path)+after:match;
+  });
 files['/tessdata/fra.traineddata.gz']={body:(await fs.readFile('web/tessdata/fra.traineddata.gz')).toString('base64'),type:'application/gzip',encoding:'base64'};
 await fs.rm('dist',{recursive:true,force:true});
 await fs.mkdir('dist/server',{recursive:true});
