@@ -5,16 +5,16 @@ const js=readFileSync(new URL('../web/v3-themes.js',import.meta.url),'utf8');
 const css=readFileSync(new URL('../web/v3-themes.css',import.meta.url),'utf8');
 const v3css=readFileSync(new URL('../web/v3.css',import.meta.url),'utf8');
 const tokenCss=readFileSync(new URL('../web/design-tokens.css',import.meta.url),'utf8');
-const paletteIds=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre','encre','craie','comete','petrole'];
+const paletteIds=['atelier','ardoise','terre','nuit','graphite','carmin','contraste','beton','lin','ciel','foret','bordeaux','cuivre','encre','craie','comete','petrole','petrole-signature','charbon-ivoire'];
 const roles=['--sx-canvas','--sx-surface','--sx-raised','--sx-overlay','--sx-sunken','--sx-line','--sx-line-strong','--sx-ink','--sx-ink-soft','--sx-muted','--sx-faint','--sx-on-accent','--sx-accent','--sx-accent-ink','--sx-accent-hover','--sx-accent-soft','--sx-accent-line','--sx-ok','--sx-warn','--sx-danger','--sx-info','--sx-ok-soft','--sx-warn-soft','--sx-danger-soft','--sx-info-soft'];
-const themeRules=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)];
+const themeRules=[...css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}]+)\{([^{}]*)\}/g)];
 const blocks=themeRules.filter(([,selector])=>/^body\.socle-v3\[data-v3-theme="[^"]+"\]$/.test(selector.trim()));
 function declarations(block){return Object.fromEntries([...block.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+)\s*;/g)].map(match=>[match[1],match[2].trim()]));}
 function effectiveTheme(id){const result={};for(const [,selectorText,block] of themeRules){const selectors=selectorText.split(',').map(value=>value.trim());if(selectors.includes('body.socle-v3[data-v3-theme]')||selectors.includes(`body.socle-v3[data-v3-theme="${id}"]`))Object.assign(result,declarations(block));}return result;}
 const mobileMenu=[...css.matchAll(/\.v3-theme-menu\{([^}]+)\}/g)].map(match=>match[1]).find(rule=>rule.includes('100dvh'))||'';
-const registeredIds=[...js.matchAll(/\['([^']+)','([^']+)'/g)].slice(0,17).map(match=>match[1]);
-assert.deepEqual(registeredIds,paletteIds,'les dix-sept palettes gardent leurs identifiants et leur ordre');
-assert.equal(blocks.length,17,'dix-sept règles de palette conservent un point d’entrée dédié');
+const registeredIds=[...js.matchAll(/\['([^']+)','([^']+)'/g)].slice(0,19).map(match=>match[1]);
+assert.deepEqual(registeredIds,paletteIds,'les dix-neuf palettes gardent leurs identifiants et leur ordre');
+assert.equal(new Set(blocks.map(([,selector])=>selector.trim())).size,19,'dix-neuf palettes ont leurs règles dédiées');
 for(const id of paletteIds){
   const theme=effectiveTheme(id);
   for(const role of roles)assert.ok(role in theme,`${id}: jeton ${role} présent dans la cascade partagée`);
@@ -38,4 +38,4 @@ assert.match(v3css,/\.v3-hero[^}]*background:var\(--sx-accent\)/,'le bandeau pri
 assert.match(v3css,/\.v3-note\{padding:var\(--sx-space-4\) var\(--sx-space-5\);background:var\(--v3-soft\)/,'les encarts suivent les couleurs et espacements du thème');
 assert.match(css,/@media\(max-width:899px\)\{body\.socle-v3 #main\{width:min\(100%,760px\)!important;max-width:760px!important;margin-inline:auto!important\}\}/,'le contenu reste centré dans la largeur disponible');
 assert.match(css,/@media\(min-width:900px\)\{body\.socle-v3 #main\{max-width:1480px!important;margin-inline:auto!important\}\}/,'les pages desktop restent centrées après la navigation');
-console.log(`v3-theme-palettes-01: ${blocks.length} palettes, aliases, navigation tactile et primitives vérifiés`);
+console.log(`v3-theme-palettes-01: ${paletteIds.length} palettes, aliases, navigation tactile et primitives vérifiés`);
