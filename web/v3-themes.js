@@ -9,7 +9,10 @@ try{if(typeof serverJson!=='function'&&localStorage.getItem(layoutKey)==='wide')
 function applyLayout(mode){mobileLayout=mode==='wide'?'wide':'standard';document.body.dataset.mobileLayout=mobileLayout;try{localStorage.setItem(layoutKey,mobileLayout);}catch{}document.querySelectorAll('.v3-layout-choice').forEach(b=>{b.setAttribute('aria-checked',String(b.dataset.layout===mobileLayout));b.tabIndex=b.dataset.layout===mobileLayout?0:-1;});}
 async function loadLayoutPreference(){if(typeof serverJson!=='function')return;try{const result=await serverJson('/api/me/preferences/dashboard/density');const value=result.preference?.value?.density;applyLayout(value==='wide'?'wide':'standard');}catch{}}
 async function saveLayoutPreference(mode){applyLayout(mode);if(typeof serverJson!=='function')return;try{await serverJson('/api/me/preferences/dashboard/density',{method:'PUT',body:JSON.stringify({schemaVersion:1,value:{density:mobileLayout}})});}catch{}}
+function paintBrand(){const mark=document.querySelector('.brandmark');if(!mark)return;const accent=getComputedStyle(document.body).getPropertyValue('--sx-accent').trim();if(!accent)return;mark.style.setProperty('color',accent,'important');mark.style.setProperty('border-color',accent,'important');mark.style.setProperty('background','var(--sx-surface)','important');mark.style.setProperty('box-shadow','inset 0 0 0 1px color-mix(in srgb,'+accent+' 22%,transparent)','important');mark.style.transition='color .2s ease,border-color .2s ease,background .2s ease';}
+const applyThemeBase=apply;apply=function(id){applyThemeBase(id);paintBrand();};
 apply(selected);
+document.addEventListener('DOMContentLoaded',paintBrand);
 document.addEventListener('DOMContentLoaded',()=>{
 const header=document.querySelector('.header-right');if(!header)return;
 const picker=document.createElement('div');picker.className='v3-theme-picker';
