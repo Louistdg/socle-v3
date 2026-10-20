@@ -11,7 +11,7 @@
     return Boolean(target.closest('input,textarea,select,[contenteditable="true"]'));
   }
   function modalOpen(){
-    var node=document.querySelector('#modal');
+    var node=document.querySelector('dialog[open]');
     return Boolean(node&&node.open);
   }
   function help(){
@@ -23,7 +23,7 @@
   }
   document.addEventListener('keydown',function(event){
     if(isTyping(event)||event.ctrlKey||event.metaKey||event.altKey)return;
-    if(event.key==='?'&&!modalOpen()){event.preventDefault();help();return;}
+    if(event.key==='?'&&!modalOpen()){if(document.querySelector('#ia-command-dialog'))return;event.preventDefault();help();return;}
     if(armed){
       armed=false;clearTimeout(timer);
       var route=routes[String(event.key||'').toLowerCase()];
