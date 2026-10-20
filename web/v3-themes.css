@@ -158,4 +158,12 @@ body.socle-v3[data-v3-theme="petrole"] .v3-theme-choice[aria-checked="true"],
 body.socle-v3[data-v3-theme="petrole"] #socleMobileNav button.active,
 body.socle-v3[data-v3-theme="petrole"] #socleMobileNav button[aria-current="page"]{color:var(--sx-on-accent)!important}
 body.socle-v3[data-v3-theme="petrole"] .v3-theme-choice[aria-checked="true"] small{color:#284c4c!important}
+body.socle-v3[data-v3-theme="petrole"] .v3-theme-choice[aria-checked="true"]{background:#add8cf!important}
+body.socle-v3[data-v3-theme="petrole"] .v3-theme-choice[aria-checked="true"] strong{color:#102d2e!important}
 body.socle-v3[data-v3-theme="petrole"] #socleMobileNav{background:#102123!important;border-color:#426365!important}
+/* Reference finish: deep petrol, charcoal edges and a restrained grain behind content. */
+@media(max-width:899px){.v3-theme-menu{max-height:calc(100dvh - 160px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));overflow-x:hidden}}
+body.socle-v3[data-v3-theme="petrole"] #main{
+  background-color:#0c1517!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='.045'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Cpath fill='white' filter='url(%23grain)' d='M0 0h180v180H0z'/%3E%3C/svg%3E"),radial-gradient(ellipse at 0 0,rgba(70,117,116,.34),transparent 62%),radial-gradient(ellipse at 95% 80%,rgba(88,61,40,.12),transparent 58%)!important;
+}

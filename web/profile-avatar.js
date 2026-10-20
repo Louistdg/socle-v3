@@ -14,8 +14,8 @@ function socleAvatarCharacter(seed){
   const person=typeof seed==='object'&&seed?seed:null;
   const id=person?socleAvatarIdForPerson(person):(/^classic-\d{2}$/.test(String(seed||''))?String(seed):'');
   const avatar=id?socleAvatarDefinition(id):socleAvatarCatalogue[socleAvatarHash(seed)%socleAvatarCatalogue.length];
-  const initials=socleAvatarInitials(person),radius=[14,20,32,10,16,24][avatar.style];
-  const mark=initials?`<text x="32" y="33" text-anchor="middle" dominant-baseline="central" fill="${avatar.ink}" font-family="system-ui,sans-serif" font-size="23" font-weight="650" letter-spacing="-1">${socleAvatarEscape(initials)}</text>`:`<circle cx="32" cy="25" r="7" fill="none" stroke="${avatar.ink}" stroke-width="2"/><path d="M19 47c0-8 5-12 13-12s13 4 13 12" fill="none" stroke="${avatar.ink}" stroke-width="2" stroke-linecap="round"/>`;
+  const initials=socleAvatarInitials(person),radius=14;
+  const mark=initials?`<text x="32" y="33" text-anchor="middle" dominant-baseline="central" fill="${avatar.ink}" font-family="system-ui,sans-serif" font-size="22" font-weight="600" letter-spacing="-1">${socleAvatarEscape(initials)}</text>`:`<circle cx="32" cy="25" r="7" fill="none" stroke="${avatar.ink}" stroke-width="2"/><path d="M19 47c0-8 5-12 13-12s13 4 13 12" fill="none" stroke="${avatar.ink}" stroke-width="2" stroke-linecap="round"/>`;
   return `<svg class="socle-avatar-character socle-avatar-monogram" data-avatar-id="${avatar.id}" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect x="1" y="1" width="62" height="62" rx="${radius}" fill="${avatar.bg}"/><rect x="3" y="3" width="58" height="58" rx="${Math.max(8,radius-2)}" fill="none" stroke="${avatar.ink}" stroke-opacity=".18"/>${mark}</svg>`;
 }
 function soclePersonAvatar(person){return socleAvatarCharacter(person||'SOCLE')}

@@ -41,7 +41,7 @@ try{
       assert.equal(menu.overflow,'auto','Le menu des thèmes autorise le défilement vertical sur téléphone.');
       assert.equal(menu.choices,themes.length,'Tous les thèmes sont présents dans le menu mobile.');
       assert.equal(menu.lastTheme,'comete','Le contrôle porte sur le dernier thème réellement rendu.');
-      assert.equal(menu.selectedBefore,'atelier','Le toucher doit sélectionner un thème différent du thème actif.');
+      assert.equal(menu.selectedBefore,'petrole','Le toucher doit sélectionner un thème différent du thème actif.');
       assert.equal(menu.lastVisible,true,'Le dernier thème est atteignable dans le menu mobile.');
       assert.equal(menu.lastReceivesPointer,true,'Le dernier thème reçoit les interactions sans être recouvert.');
       assert.equal(menu.expanded,'true','Le sélecteur de thèmes reste ouvert pendant le défilement.');
